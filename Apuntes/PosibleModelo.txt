@@ -1,0 +1,89 @@
+Para crear un modelo óptimo y normalizado que soporte estos indicadores académicos,
+ primero vamos a definir las entidades clave y sus relaciones. Basándonos en los primeros
+  indicadores y en las necesidades descritas, propongo las siguientes tablas principales:
+
+### Tablas Principales
+
+1. **Usuarios**: Para almacenar información sobre los profesores y coordinadores.
+    - `id` (PK)
+    - `nombre`
+    - `rol` (Profesor, Coordinador)
+    - `correo`
+    - `telefono`
+
+2. **Documentos**: Para almacenar información sobre los documentos requeridos.
+    - `id` (PK)
+    - `nombre`
+    - `descripcion`
+
+3. **EntregasDocumentos**: Para registrar el estado de entrega de los documentos.
+    - `id` (PK)
+    - `documento_id` (FK a Documentos)
+    - `usuario_id` (FK a Usuarios)
+    - `estado` (Entregado, No Entregado)
+    - `fecha_entrega`
+
+4. **PlanesCurriculares**: Para gestionar los planes curriculares.
+    - `id` (PK)
+    - `nombre`
+    - `descripcion`
+
+5. **EntregasPlanesCurriculares**: Para registrar la entrega de los planes curriculares por parte de los profesores.
+    - `id` (PK)
+    - `plan_curricular_id` (FK a PlanesCurriculares)
+    - `usuario_id` (FK a Usuarios)
+    - `estado` (Entregado, No Entregado)
+    - `fecha_entrega`
+
+6. **UnidadesCurriculares**: Para registrar las unidades curriculares por materia.
+    - `id` (PK)
+    - `nombre`
+    - `descripcion`
+    - `materia`
+    - `curso`
+    - `paralelo`
+
+7. **AvancesCurriculares**: Para registrar el avance de cada unidad curricular.
+    - `id` (PK)
+    - `unidad_curricular_id` (FK a UnidadesCurriculares)
+    - `fecha_inicio`
+    - `fecha_fin`
+    - `usuario_id` (FK a Usuarios)
+    - `estado` (Completado, Incompleto)
+    - `porcentaje_avance`
+
+8. **Notas**: Para registrar las notas de los estudiantes.
+    - `id` (PK)
+    - `usuario_id` (FK a Usuarios)
+    - `curso`
+    - `materia`
+    - `nota`
+    - `periodo`
+    - `estado` (Entregado, Incompleto, No Entregado, Retraso)
+
+### Relaciones Clave
+
+1. **Usuarios - Documentos**: Muchos a muchos a través de `EntregasDocumentos`.
+2. **Usuarios - PlanesCurriculares**: Muchos a muchos a través de `EntregasPlanesCurriculares`.
+3. **Usuarios - UnidadesCurriculares**: Muchos a muchos a través de `AvancesCurriculares`.
+4. **Usuarios - Notas**: Relación directa de uno a muchos (un profesor puede registrar múltiples notas).
+
+### Ejemplo de Consultas y Operaciones
+
+1. **Tasa de Cumplimiento en la Entrega de Documentos**:
+    - Consulta el porcentaje de documentos entregados por un profesor en un periodo de tiempo específico.
+
+2. **Avance Curricular por Períodos**:
+    - Registro del avance de las unidades curriculares por paralelos y cálculo del porcentaje de avance.
+
+3. **Entrega de Notas por Periodo**:
+    - Verificación del estado de entrega de las notas por parte de los profesores para cada uno de los seis periodos.
+
+### Consideraciones Adicionales
+
+- **Escalabilidad**: Asegurarse de que el diseño permita agregar nuevos indicadores y métricas sin necesidad de grandes cambios estructurales.
+- **Normalización**: Minimizar la redundancia y asegurar la integridad referencial entre las tablas.
+- **Performance**: Indices en campos utilizados frecuentemente en las consultas para mejorar el rendimiento.
+
+Este es un primer borrador del modelo de base de datos. Podemos ajustar los detalles
+ según las necesidades específicas y los datos adicionales que puedan surgir.

@@ -1,0 +1,29 @@
+//backend/
+│
+├── app/
+│   ├── __init__.py
+│   ├── config.py
+│   ├── resources/
+│   │   ├── __init__.py
+│   │   ├── archivos.xlsx
+│   ├── controllers/
+│   │   ├── __init__.py 
+│   │   ├── auth_controller.py
+│   ├── models/
+│   │   ├── __init__.py
+│   │   ├── user.py
+│   ├── routes/
+│   │   ├── __init__.py
+│   │   ├── auth_routes.py
+│   ├── services/
+│   │   ├── __init__.py
+│   │   ├── auth_service.py
+│   └── tests/
+│       ├── __init__.py
+│       ├── test_auth.py
+│
+├── venv/ (entorno virtual)
+├── .env
+├── .gitignore
+├── requirements.txt
+└── run.py

@@ -1,0 +1,35 @@
+
+
+
+1 - GARANTIZAR LA GESTIÓN ACADÉMICA (SGC).
+
+2 - CONSOLIDAR LOS PROYECTOS PESA+ EN FUNCIONAMIENTO Y GENERAR NUEVOS DE ACUERDO A LOS 5 COMPONENTES DEL PLAN ESTRATÉGICO (SGC).
+
+
+3 - OPTIMIZAR EL DESEMPEÑO HOLÍSTICO DEL DOCENTE (SGC).
+
+
+AFIANZAR LA FORMACIÓN INTEGRAL DE LOS ESTUDIANTES (SGC).
+ 
+1. Entregar todos la lista documentos tiquenado, y el programa podria calcular a que escala pertenece
+formulario apra ingresar datos, con nombre del cocumento, opcion entregado o no entregado y segun a eso sacar la cantidad de registrados, entregados y no entregados,
+
+------
+    2: Ingresar todos los nombres de los profesores, y señalar quienes an cumplido con la entregar
+    registrar entregado / no entregado ---> segun a eso debe salir en diferentes versiones, en % 98 % entrego y 2% no entrego, sacar la tasa aun no se definira => cual es la tasa de cumplimiento --
+----
+3: es lo mismo que 2
+ingresar todos los nombres de los profesores si el profesor cunmple con el plan curricular cumple para ambos cordinadores, o mas 
+------
+4: igual que el dos, si cumplio o no cumplio de cada trimestre, pero es por trimestre
+------
+5: este se vera despues
+----
+6: La planificacion que se proponieron en que nivel se ah cumplido => Cada trimestre se divide en dos, que es por peridod, el profesor registre
+el titulo de la unidad, de los temas, curso, materia, y luego tiene cuatro paraleleo
+y en cada paralelo registra la fecha de las que termino el avance, en los cuantro paralelos de cada tema => si encaso, de que el nomas llene registrar el procentaje
+y puede tener mas de una materia y sacar el promedio de eso, 
+y tamnien mostrar ya, en que paralelo dicta clase, y que materias dicta,  de acuerdo a los paralelos que tiene registrar, y , % se debe sacar
+-------
+7: Cada uno de los 6 periodos ponen notas, los profes y esas notas, los 3 cordinadores verifican si entregaron, como: su, Incompelto, No, Retraso , no corresponde,, seria
+registrar todos los prodfes si entrego o no, todos los profes
