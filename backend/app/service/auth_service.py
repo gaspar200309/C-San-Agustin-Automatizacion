@@ -1,30 +1,45 @@
-import jwt
-from datetime import datetime, timedelta, timezone
-from werkzeug.security import check_password_hash
-from app import db
-from models.usuario import Usuario
-from flask import current_app
+from app.models.user import User, Role, UserRole, db
+from flask_jwt_extended import create_access_token
+import os
+import secrets
 
-class AuthService:
-    @staticmethod
-    def verify_password(password_hash, password):
-        return check_password_hash(password_hash, password)
+def create_user(username, email, password, role_name):
+    print("Hola mundo")
+    existing_user = User.query.filter((User.username == username) | (User.email == email)).first()
+    if existing_user:
+        return None, "User with that username or email already exists."
+
+    user = User(username=username, email=email)
+    print(user, "Hola mundo")
+    user.set_password(password)
+    db.session.add(user)
+    db.session.commit()
+
+    role = Role.query.filter_by(name=role_name).first()
+    if not role:
+        return None, "Role not found."
+
+    user_role = UserRole(user_id=user.id, role_id=role.id)
+    db.session.add(user_role)
+    db.session.commit()
+
+    return user, "User created successfully."
+
+
+def authenticate_user(identifier, password):
+    user = User.query.filter((User.username == identifier) | (User.email == identifier)).first()
     
-    @staticmethod
-    def generate_jwt(user):
-        payload = {
-            'user_id': user.id,
-            'exp': datetime.now(timezone.utc) + timedelta(days=1),
-            'iat': datetime.now(timezone.utc)
-        }
-        return jwt.encode(payload, current_app.config['SECRET_KEY'], algorithm='HS256')
+    if user:
+        is_password_correct = user.check_password(password)
+        print(f"Password correct: {is_password_correct}")
+        if is_password_correct:
+            roles = [role.role.name for role in user.roles]
+            access_token = create_access_token(identity={'username': user.username, 'roles': roles})
+            return access_token, "Authentication successful."
+    return None, "Invalid username or password."
 
-    @staticmethod
-    def decode_jwt(token):
-        try:
-            payload = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
-            return payload['user_id']
-        except jwt.ExpiredSignatureError:
-            return None
-        except jwt.InvalidTokenError:
-            return None
+
+
+
+
+

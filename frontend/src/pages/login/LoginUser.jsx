@@ -10,7 +10,7 @@ import { saveToken, saveUser } from './authFunctions';
 export default function LoginUser() {
   const [credentials, setCredentials] = useState({
     email: '',
-    password: ''
+    password_hash: ''
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -64,7 +64,7 @@ export default function LoginUser() {
           <div className="password-container">
             <input
               type={showPassword ? "text" : "password"}
-              name="password"
+              name="password_hash"
               value={credentials.password}
               onChange={handleChange}
               required
