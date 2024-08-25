@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import { getTeacher } from '../../api/api';
 import Select from '../../components/selected/Select';
 import Modal from '../../components/modal/Modal';
 import './Indicator4.css';
@@ -20,11 +21,15 @@ const Indicator4 = () => {
   const [professors, setProfessors] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const professorOptions = [
-    { value: 'Juan perez', label: 'Juan perez' },
-    { value: 'Maria Gonzales', label: 'Maria Gonzales' },
-    { value: 'Mario Rayos', label: 'Mario Rayos' },
-  ];
+  useEffect(() => {
+    getTeacher().then(response => {
+      setProfessors(response.data);
+      setTeacherOptions(response.data.map(teacher => ({
+        value: `${teacher.name} ${teacher.last_name}`,
+        label: `${teacher.name} ${teacher.last_name}`,
+      })));
+    });
+  }, []);
 
   useEffect(() => {
     const storedProfessors = localStorage.getItem('professorsTrimester');

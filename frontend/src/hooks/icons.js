@@ -6,14 +6,18 @@ import { AiOutlineGroup } from "react-icons/ai";
 import { MdNotifications } from "react-icons/md";
 import { GiReceiveMoney } from "react-icons/gi";
 import { GrMoney } from "react-icons/gr";
+import { MdNavigateNext } from "react-icons/md";
+import { FaUser } from "react-icons/fa";
 
 export {
   IoIosArrowBack,
+  FaUser,
   FaHome,
   FaUserGraduate,
   TbLogout,
   AiOutlineGroup,
   MdNotifications,
   GiReceiveMoney,
-  GrMoney
+  GrMoney,
+  MdNavigateNext
 };

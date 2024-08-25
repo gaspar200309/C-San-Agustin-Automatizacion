@@ -1,17 +1,23 @@
 import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import './Sidebar.css';
-import { IoIosArrowBack, FaHome, FaUserGraduate, TbLogout, AiOutlineGroup, MdNotifications, GiReceiveMoney, GrMoney } from '../../hooks/icons';
+import { IoIosArrowBack, FaUser, MdNavigateNext, FaHome, FaUserGraduate, TbLogout, AiOutlineGroup, MdNotifications, GiReceiveMoney, GrMoney } from '../../hooks/icons';
 import { useTheme } from '../../hooks/useTheme';
 import { signOut } from '../../pages/login/authFunctions';
+import ImagenesApp from '../../assets/ImagenesApp';
 
 const SidebarHeader = ({ onToggle, isOpen }) => (
   <header className="sidebar-header">
     <div className="text logo">
+      <img className='logo-perfil' src = {ImagenesApp.perfil}></img>
       <span className="name">Administrador</span>
       <span className="profe">Armando Gaspar</span>
     </div>
-    <IoIosArrowBack className={`toggle ${isOpen ? '' : 'reverse'}`} onClick={onToggle} />
+    {isOpen ? (
+      <IoIosArrowBack className="toggle" onClick={onToggle} />
+    ) : (
+      <MdNavigateNext className="toggle reverse" onClick={onToggle} />
+    )}
   </header>
 );
 
@@ -53,25 +59,21 @@ const SidebarThemeToggle = ({ theme, toggleTheme }) => (
   </li>
 );
 
-export const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+export const Sidebar = ({ isOpen, toggleSidebar }) => {
   const { theme, toggleTheme } = useTheme();
-
-  const toggleSidebar = () => setIsOpen(!isOpen);
 
   return (
     <nav className={`sidebar ${isOpen ? 'open' : 'close'}`}>
       <div className="menu-bar">
         <SidebarHeader onToggle={toggleSidebar} isOpen={isOpen} />
         <div className="menu">
-          {/* <SidebarSearch /> */}
           <ul className="menu-links">
             <SidebarLink to="/home" icon={<FaHome />} text="Dashboard" />
+            <SidebarLink to="/userManagement" icon={<FaUser/>} text="Usuarios" />
             <SidebarLink to="/list-indicador" icon={<GiReceiveMoney />} text="Indicadores" />
-            <SidebarLink to="/registerProf" icon={<MdNotifications />} text="Notificaciones" />
+            <SidebarLink to="/registerTeacher" icon={<MdNotifications />} text="Formularios" />
             <SidebarLink to="/analiticas" icon={<AiOutlineGroup />} text="Analiticas" />
             <SidebarLink to="/me-gustas" icon={<FaUserGraduate />} text="Me gustas" />
-            <SidebarLink to="/carteras" icon={<GrMoney />} text="Carteras" />
           </ul>
         </div>
         <div className="bottom-content">

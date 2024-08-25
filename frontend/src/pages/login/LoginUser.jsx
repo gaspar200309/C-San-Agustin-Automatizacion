@@ -9,8 +9,8 @@ import { saveToken, saveUser } from './authFunctions';
 
 export default function LoginUser() {
   const [credentials, setCredentials] = useState({
-    email: '',
-    password_hash: ''
+    identifier: '',
+    password: ''
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -32,7 +32,8 @@ export default function LoginUser() {
       
       if (result.data.access_token) {
         saveToken(result.data.access_token);
-        /* saveUser({ username: result.data.username }); */
+        console.log(result.data, "Verificar")
+        saveUser({ username: result.data.username, roles: result.data.roles });
         navigate('/home');
         window.location.reload();
       } else {
@@ -55,7 +56,7 @@ export default function LoginUser() {
           <label>Correo electrónico</label>
           <input
             type="text"
-            name="email"
+            name="identifier"
             value={credentials.username}
             onChange={handleChange}
             required
@@ -64,7 +65,7 @@ export default function LoginUser() {
           <div className="password-container">
             <input
               type={showPassword ? "text" : "password"}
-              name="password_hash"
+              name="password"
               value={credentials.password}
               onChange={handleChange}
               required

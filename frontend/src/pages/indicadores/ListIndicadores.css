@@ -1,48 +1,111 @@
 .list-indicadores-container {
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+  margin: 20px 0px 5px 25px;
+  background-color: var(--sidebar-color);
+  color: var(--text-color);
+  transition: var(--tran-05);
+  border: none;
 }
 
 .list-title {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 2rem;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  text-align: center;
+  color: var(--primary-color);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
 }
 
-.indicadores-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
+.indicadores-table {
+  width: 100%;
+  border-collapse: collapse; 
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  background-color: var(--body-color);
+  color: white; 
+  transition: var(--tran-05);
 }
 
-.indicador-card {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    transition: transform 0.3s;
-    width: 250px;
+.indicadores-table th, .indicadores-table td {
+  padding: 15px 20px;
+  text-align: left;
 }
 
-.indicador-card:hover {
-    transform: scale(1.05);
+.indicadores-table th {
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: none;
+}
+
+.indicadores-table td {
+  background-color: var(--sidebar-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: none;
+}
+
+.indicadores-table tr {
+  transition: var(--tran-03);
+}
+
+.indicadores-table tr:hover td {
+  background-color: var(--primary-color-light);
+}
+
+.nombre-cell {
+  max-width: 400px;
+  white-space: normal; 
+  word-wrap: break-word; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  font-weight: 600;
+  color: var(--toggle-color);
+}
+
+.indicadores-table td:nth-child(3) {
+  max-width: 400px;
+  white-space: normal;
+  word-wrap: break-word; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  color: var(--primary-color);
+  font-size: 0.9rem;
 }
 
 .indicador-button {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 10px 20px;
-    background-color: #164b99;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-    cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 15px;
+  color: white;
+  background-color: var(--primary-color);
+  border-radius: 4px;
+  text-decoration: none;
+  transition: var(--tran-03);
+  font-weight: 500;
 }
 
 .indicador-button:hover {
-    background-color: #1c63c9;
+  background-color: var(--primary-color-light);
+  color: var(--text-color);
+}
+
+.indicador-button .icon {
+  margin-right: 8px;
+  font-size: 1.2rem;
+}
+
+
+/* Dark Mode */
+body.dark .list-title,
+body.dark .indicadores-table th,
+body.dark .nombre-cell,
+body.dark .indicador-button,
+body.dark .icon {
+  color: var(--body-color);
+}
+
+body.dark .indicadores-table td {
+  color: var(--body-color);
 }
