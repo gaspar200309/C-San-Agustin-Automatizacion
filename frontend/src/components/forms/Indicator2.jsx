@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import Select from '../../components/selected/Select';
 import Modal from '../../components/modal/Modal';
+import TeacherSelector from '../selected/TeacherSelector';
+import StatusSelect from '../../components/selected/StatusSelect';
 import './Indicator1.css';
+import Button from '../buttons/Button';
 
 const validationSchema = Yup.object({
   profesor: Yup.string().required('Requerido'),
@@ -13,26 +15,17 @@ const validationSchema = Yup.object({
 });
 
 const Indicator2 = () => {
-  const [professors, setProfessors] = useState([
-    { name: 'Michael Jacinto Gonzales', status: 'Retraso' },
-    { name: 'Susana Corrales Vargas', status: 'Sí' },
-  ]);
-
+  const [professors, setProfessors] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
 
-  useEffect(() => {
-    const storedProfessors = localStorage.getItem('professors');
-    if (storedProfessors) {
-      setProfessors(JSON.parse(storedProfessors));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('professors', JSON.stringify(professors));
-  }, [professors]);
 
   const handleSubmit = (values, { resetForm }) => {
-    setProfessors([...professors, { name: values.profesor, status: values.estado }]);
+    const newProfessor = {
+      name: values.profesor.split(' ')[0],
+      last_name: values.profesor.split(' ').slice(1).join(' '),
+      status: values.estado
+    };
+    setProfessors(prevProfessors => [...prevProfessors, newProfessor]);
     resetForm();
     setModalOpen(false);
   };
@@ -58,7 +51,7 @@ const Indicator2 = () => {
           <tbody>
             {professors.map((prof, index) => (
               <tr key={index} className={['Sí', 'Retraso', 'Incompleto'].includes(prof.status) ? 'delivered' : 'not-delivered'}>
-                <td>{prof.name}</td>
+                <td>{`${prof.name} ${prof.last_name}`}</td>
                 <td>{prof.status}</td>
               </tr>
             ))}
@@ -77,33 +70,19 @@ const Indicator2 = () => {
         >
           {({ values, setFieldValue }) => (
             <Form className="form">
-              <Select
-                label="Profesor"
+            <TeacherSelector
                 name="profesor"
-                required={true}
                 value={values.profesor}
                 onChange={(e) => setFieldValue('profesor', e.target.value)}
-              >
-                <option value="">Seleccione Profesor</option>
-                <option value="Michael Jacinto Gonzales">Michael Jacinto Gonzales</option>
-                <option value="Susana Corrales Vargas">Susana Corrales Vargas</option>
-                {/* Add more professors here */}
-              </Select>
-              <Select
+                required={true}
+              />
+              <StatusSelect
                 label="Estado"
                 name="estado"
-                required={true}
                 value={values.estado}
                 onChange={(e) => setFieldValue('estado', e.target.value)}
-              >
-                <option value="">Seleccione Estado</option>
-                <option value="Sí">Sí</option>
-                <option value="No">No</option>
-                <option value="Retraso">Retraso</option>
-                <option value="Incompleto">Incompleto</option>
-                <option value="No corresponde">No corresponde</option>
-              </Select>
-              <button type="submit">Agregar Profesor</button>
+              />
+              <Button type='secundary' onClick={handleSubmit}>Registrar </Button>
             </Form>
           )}
         </Formik>

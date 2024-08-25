@@ -7,7 +7,6 @@ auth_bp = Blueprint('auth', __name__)
 def register():
     try:
         data = request.get_json()
-        print("jajaj")
         print(data)
         username = data.get('username')
         email = data.get('email')
@@ -25,11 +24,11 @@ def register():
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    print(data, "ss")
-    identifier = data.get('identifier')  # Cambia 'username' por 'identifier'
+    identifier = data.get('identifier')  
     password = data.get('password')
 
-    token, message = authenticate_user(identifier, password)
-    if token:
-        return jsonify({"access_token": token}), 200
+    auth_response, message = authenticate_user(identifier, password)
+    if auth_response:
+        return jsonify(auth_response), 200
     return jsonify({"error": message}), 401
+

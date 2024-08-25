@@ -15,8 +15,12 @@ export const getToken = () => {
 };
 
 export const saveUser = (userData) => {
-  Cookies.set('userData', JSON.stringify(userData), {sameSite: 'Strict' }); 
+  Cookies.set('userData', JSON.stringify(userData), {
+    expires: 1, 
+    sameSite: 'Strict'
+  });
 };
+
 
 export const getUser = () => {
   const userDataString = Cookies.get('userData');

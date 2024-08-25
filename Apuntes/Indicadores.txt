@@ -33,3 +33,223 @@ y tamnien mostrar ya, en que paralelo dicta clase, y que materias dicta,  de acu
 -------
 7: Cada uno de los 6 periodos ponen notas, los profes y esas notas, los 3 cordinadores verifican si entregaron, como: su, Incompelto, No, Retraso , no corresponde,, seria
 registrar todos los prodfes si entrego o no, todos los profes
+
+--------------------------------------------------------------------------------
+
+Hay algo que no entiendo muy bien y ya estoy mucho tiempo si n poder analizar, 
+para ver como sera el modelo bien optimizado en el modelo, me ayudarias a hacer,
+te voy contar algo de como funciona algunas cosas, en realidad todo esto se divide en indicadores,
+cada uno pertenece a un objetivo SGC y un objetivo academico, se trata de controlar todo lo que pasa en el colegio,
+y en cada indicador controlan de diferentes formas es algo muy dinamico,
+en algunos casos controlan con estos parametros  (5) ÓPTIMO, (4) MUY BUENO, (3) BUENO, (2) REGULAR, (1) INSUFICIENTE y
+en otros casos es de esta forma Tasa=(Nro. de PGO recibidos)/(Nro. total de la población) y puede variar dependiendo
+a cada indicador, bueno cada indicador contrala difernetes cosas, por ejemplo en el indicador uno control
+los documentos si entrego o no se entrego, luego de esto al final se contara cuantos se entragron 
+y cuantos o no se entregaron y el total de documentos, todo esto con su nombre, tambien tenemos el
+ indicador 2 que se trata de controlar el plan curricular de contendos por año, donde mediante un
+  formulario se podra seleccionar el profesor que me entrego para ver si cumplio o 
+  no en este caso lo llamamos estados de las cuales tenemos los estado: SI CUMPLIO, NO CUMPLIO, RETRASO
+en algunos casos hay no corresponde en otros casos no, entonces aqui los cordinadores son los que 
+van a controlar a estos profesores y cada porfesor es designado a cada cordinador,
+en este caso lo van controlar por todo el año, tambien se hace un conteo de los entegados y no entregados,
+ hay profesores que entregaron aunque tarde pero cuenta como entregado, contar el total de profes, 
+ que hay ahora seguidamente hablaremos del indicador 3 maneja el mismo estado del indicador
+  dos pero en este caso controlan si entregaron su plan global operativo, en este
+caso se encargan de controlar los cordinadores, y los profesores pueden ser designados
+por mas de un cordinador y este cordinadores registraran sus estados, vajo un algoritmo 
+esto se debe mostrar en una tabla, dashboard, al director como resultado, puede ver casos 
+donde el cordinado 1 le ponga como si entrego, y el cordinador 2 le ponga como no entrego y 
+se de tomar encuenta como si.incompleto, me pregunto como se hara todo eso lo mismo se 
+debe sacar el total, porcentajes, etc.
+Ahora trabajeremos en el indicador 4, igual tiene mas de un cordinador, entonces se registran lo mismo que los anteriores
+mediantes los estados, tmabien registraran mas de un cordinador, pero en este caso se registraran por trimestres que son en
+en este caso 3 trimestres luego se va sacar un porcentaje de cumplimiento de cada trimestre y el total de los 3 semestres
+en el indicador 6 ya es un poco diferente aqui se controlan los avances de los profesores  y se controla por periodos, en la cual existen 
+6 periodos, y en cada periodo se controla el avance de los profesores de las cuales se escoge el curso que dicta el profesor, luego 
+el paralelo que dicata el profesor, al final se va registrar en porcentajes el avance en ese curso por parte de los profesores 
+y en el indicador 7 se controla si los profesores entregaron las notas de los 
+estudiantes, en este caso se controla por cada uno de los 6 periodos, y 
+se controla si los profesores entregaron las notas de los estudiantes, por periodo, esto lo aran mas de un cordinador.
+Ahora hablaremos del indicador 8 en el indicador 8 controlan si hay reporte de un estudiante que no cumplio con algo o como una 
+alerta igual controlan los cordinadores, se maneja los mismos estados si el reporte se hizo a tiempo o no como los mismo estados
+tambien es por 6 periodos, ahora veremos el indicador 10 en el indcador POR EJEMPLO  en aqui se controla los estudiantes activos 
+y no activos en el sistema que tiene los estudiantes donde se van a registrar la cantidad de estudiantes que estan activos y la cantidad de estudaintes 
+inactivos y esto se controla por trimestre, tambien sacaran el porcentaje de todo esto como lo arias para que la base de datos sea de calidad,
+seguro, escalable, sobre todo quisiera que sea escalable por que sobre esto hay 70 indicadores mas que tienes con diferentes hsitorias 
+para ello la base de datos tiene que estar bien diseñado, quisiera que tomes encuenta los aspectos que te mensione como base, 
+determina tambien que tareas de eso se va hacer con la logica de programacion, por cierto los usuarios son los cordinadores con ese rol por cierto eso ya esta echo en el modelo que te enviare 
+tambien abra directores, como puedo hacer para que los cordinadores tenga los profesores que tienen que encargarse, tambien tomar encuenta que los indicadores pertencen a los objAcademicos y los obj sgc
+
+
+
+from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.types import Date
+from sqlalchemy.orm import relationship
+from .. import db 
+
+class User(db.Model):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    username = Column(String(50), unique=True, nullable=False)
+    email = Column(String(120), unique=True, nullable=False)
+    password_hash = Column(String(512), nullable=False)
+    roles = relationship('UserRole', back_populates='user')
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+        print(f"Generated password hash: {self.password_hash}")
+
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+class Role(db.Model):
+    __tablename__ = 'roles'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50), unique=True, nullable=False)
+    permissions = relationship('Permission', back_populates='role')
+    users = relationship('UserRole', back_populates='role')
+
+class Permission(db.Model):
+    __tablename__ = 'permissions'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50), unique=True, nullable=False)
+    role_id = Column(Integer, ForeignKey('roles.id'))
+    role = relationship('Role', back_populates='permissions')
+
+class UserRole(db.Model):
+    __tablename__ = 'user_roles'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    role_id = Column(Integer, ForeignKey('roles.id'))
+    user = relationship('User', back_populates='roles')
+    role = relationship('Role', back_populates='users')
+  
+    from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Date
+    from sqlalchemy.orm import relationship
+    
+    from .. import db 
+    
+    class Teacher(db.Model):
+        __tablename__ = 'teachers'
+        id = Column(Integer, primary_key=True)
+        name = Column(String(50), nullable=False)
+        last_name = Column(String(50), nullable=False)
+        assignments = relationship('CoordinatorTeacherAssignment', back_populates='teacher')
+    
+    class CoordinatorTeacherAssignment(db.Model):
+        __tablename__ = 'coordinator_teacher_assignments'
+        id = Column(Integer, primary_key=True)
+        teacher_id = Column(Integer, ForeignKey('teachers.id'))
+        coordinator_id = Column(Integer, ForeignKey('users.id'))
+        teacher = relationship('Teacher', back_populates='assignments')
+        coordinator = relationship('User')
+
+        from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Date
+        from sqlalchemy.orm import relationship
+        from .. import db 
+        
+        class Trimester(db.Model):
+            __tablename__ = 'trimesters'
+            id = Column(Integer, primary_key=True)
+            name = Column(String(50), unique=True, nullable=False)
+        
+        class Period(db.Model):
+            __tablename__ = 'periods'
+            id = Column(Integer, primary_key=True)
+            name = Column(String(50), unique=True, nullable=False)
+                
+        class Document(db.Model):
+            __tablename__ = 'documents'
+            id = Column(Integer, primary_key=True)
+            name = Column(String(50), unique=True, nullable=False)
+            description = Column(String(250), nullable=False)
+            is_delivered = Column(Boolean, default=False)
+
+            from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Date
+            from sqlalchemy.orm import relationship
+            from .Indicadores import Indicator
+            from .. import db 
+            
+            class AcademicObjective(db.Model):
+                __tablename__ = 'academic_objectives'
+                id = Column(Integer, primary_key=True)
+                name = Column(String(50), unique=True, nullable=False)
+                description = Column(String(250), nullable=False)
+                indicators = relationship('Indicator', back_populates='academic_objective')
+            
+            class SGCObjective(db.Model):
+                __tablename__ = 'sgc_objectives'
+                id = Column(Integer, primary_key=True)
+                name = Column(String(50), unique=True, nullable=False)
+                description = Column(String(250), nullable=False)
+                indicators = relationship('Indicator', back_populates='sgc_objective')
+
+                
+                from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Date
+                from sqlalchemy.orm import relationship
+                from .teacher import Teacher
+                from .user import User
+                from .. import db 
+                
+                class Indicator(db.Model):
+                    __tablename__ = 'indicators'
+                    id = Column(Integer, primary_key=True)
+                    name = Column(String(250), nullable=False)
+                    delivery_deadline = Column(Date, nullable=True)
+                    due_date = Column(Date, nullable=False)
+                    improvement_action = Column(String(250))
+                    expected_result = Column(String(50), nullable=False)
+                    academic_objective_id = Column(Integer, ForeignKey('academic_objectives.id'))
+                    sgc_objective_id = Column(Integer, ForeignKey('sgc_objectives.id'))
+                    evaluations = relationship('Evaluation', back_populates='indicator')
+                
+                class IndicatorState(db.Model):
+                    __tablename__ = 'indicator_states'
+                    id = Column(Integer, primary_key=True)
+                    name = Column(String(50), nullable=False)
+                
+                class Evaluation(db.Model):
+                    __tablename__ = 'evaluations'
+                    id = Column(Integer, primary_key=True)
+                    indicator_id = Column(Integer, ForeignKey('indicators.id'))
+                    teacher_id = Column(Integer, ForeignKey('teachers.id'))
+                    coordinator_id = Column(Integer, ForeignKey('users.id'))
+                    state_id = Column(Integer, ForeignKey('indicator_states.id'))
+                    evaluation_date = Column(Date, nullable=False)
+                    notes = Column(String(250))
+                    indicator = relationship('Indicator', back_populates='evaluations')
+                    teacher = relationship('Teacher')
+                    coordinator = relationship('User')
+                    state = relationship('IndicatorState')
+
+                    from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Date
+                    from sqlalchemy.orm import relationship
+                    from .. import db 
+                    
+                    class Course(db.Model):
+                        __tablename__ = 'courses'
+                        id = Column(Integer, primary_key=True)
+                        name = Column(String(50), unique=True, nullable=False)
+                        grade = Column(String(50), nullable=False)
+                        description = Column(String(250), nullable=False)
+                        paralelos = relationship('CourseParallel', back_populates='course')
+                    
+                    class Parallel(db.Model):
+                        __tablename__ = 'parallels'
+                        id = Column(Integer, primary_key=True)
+                        name = Column(String(50), unique=True, nullable=False)
+                        courses = relationship('CourseParallel', back_populates='parallel')
+                    
+                    class CourseParallel(db.Model):
+                        __tablename__ = 'course_parallels'
+                        id = Column(Integer, primary_key=True)
+                        course_id = Column(Integer, ForeignKey('courses.id'))
+                        parallel_id = Column(Integer, ForeignKey('parallels.id'))
+                        course = relationship('Course', back_populates='paralelos')
+                        parallel = relationship('Parallel', back_populates='courses')
+QUiero que me lo revises bien si todo esta bien en las relaciones porque los separe en diferentes archivos, 
+por eso esta imortado en cada uno son 6 archivos se separaron, sobre los usuarios toso esta bien quiero que me lo corrigas                     
+
+

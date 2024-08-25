@@ -31,15 +31,8 @@ def authenticate_user(identifier, password):
     
     if user:
         is_password_correct = user.check_password(password)
-        print(f"Password correct: {is_password_correct}")
         if is_password_correct:
             roles = [role.role.name for role in user.roles]
             access_token = create_access_token(identity={'username': user.username, 'roles': roles})
-            return access_token, "Authentication successful."
+            return {"access_token": access_token, "username": user.username, "roles": roles}, "Authentication successful."
     return None, "Invalid username or password."
-
-
-
-
-
-

@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import InputText from '../../components/inputs/InputText';
-import Select from '../../components/selected/Select';
+
+import StatusSelect from '../../components/selected/StatusSelect';
+import TeacherSelector from '../selected/TeacherSelector';
 import Modal from '../../components/modal/Modal';
+import Button from '../buttons/Button';
+import Table from '../table/Table'
+import { getTeacher } from '../../api/api';
 import './Indicator1.css';
 
 const validationSchema = Yup.object({
@@ -20,19 +24,19 @@ const validationSchema = Yup.object({
 
 const Indicator3 = () => {
   const [professors, setProfessors] = useState([]);
+  const [teacherOptions, setTeacherOptions] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [coordinators, setCoordinators] = useState(['Coordinator 1', 'Coordinator 2']); // Default coordinators
+  const [coordinators, setCoordinators] = useState(['Coordinator 1', 'Coordinator 2']); 
 
   useEffect(() => {
-    const storedProfessors = localStorage.getItem('professors');
-    if (storedProfessors) {
-      setProfessors(JSON.parse(storedProfessors));
-    }
+    getTeacher().then(response => {
+      setProfessors(response.data);
+      setTeacherOptions(response.data.map(teacher => ({
+        value: `${teacher.name} ${teacher.last_name}`,
+        label: `${teacher.name} ${teacher.last_name}`,
+      })));
+    });
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem('professors', JSON.stringify(professors));
-  }, [professors]);
 
   const handleSubmit = (values, { resetForm }) => {
     const existingProfessor = professors.find(prof => prof.name === values.profesor);
@@ -51,12 +55,37 @@ const Indicator3 = () => {
     setModalOpen(false);
   };
 
+  const columns = [
+    { header: 'Nombre', accessor: 'name' },
+    { header: 'Apellido', accessor: 'last_name' },
+    { 
+      header: 'Nombre Completo', 
+      accessor: 'fullName',
+      render: (row) => `${row.name} ${row.last_name}`
+    },
+    { 
+      header: 'Coordinador 1', 
+      accessor: 'coordinator1',
+      render: (row) => row.compliance?.coordinator1 ? '✔️' : '❌'
+    },
+    { 
+      header: 'Coordinador 2', 
+      accessor: 'coordinator2',
+      render: (row) => row.compliance?.coordinator2 ? '✔️' : '❌'
+    },
+  ];
+
+  const handleRowClick = (row) => {
+    console.log('Row clicked:', row);
+  };
+  
+
   const totalCount = professors.length;
   const deliveredCount = professors.reduce((acc, prof) => {
-    return acc + Object.values(prof.compliance).filter(delivered => delivered).length;
+    return acc + Object.values(prof.compliance || {}).filter(delivered => delivered).length;
   }, 0);
   const notDeliveredCount = professors.reduce((acc, prof) => {
-    return acc + Object.values(prof.compliance).filter(delivered => !delivered).length;
+    return acc + Object.values(prof.compliance || {}).filter(delivered => !delivered).length;
   }, 0);
   const totalComplianceCount = deliveredCount + notDeliveredCount;
   const deliveredPercentage = totalComplianceCount ? ((deliveredCount / totalComplianceCount) * 100).toFixed(2) : 0;
@@ -66,29 +95,12 @@ const Indicator3 = () => {
     <div className="indicator-container">
       <button className="open-modal-btn" onClick={() => setModalOpen(true)}>Agregar Cumplimiento</button>
       <div className="professor-table">
-        <h3>Profesores Registrados</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Profesor</th>
-              {coordinators.map((coordinator, idx) => (
-                <th key={idx}>{coordinator}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {professors.map((prof, index) => (
-              <tr key={index}>
-                <td>{prof.name}</td>
-                {coordinators.map((coordinator, idx) => (
-                  <td key={idx} className={prof.compliance[coordinator] ? 'delivered' : 'not-delivered'}>
-                    {prof.compliance[coordinator] ? '✔️' : '❌'}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <h3>Tasa de cumplimiento en la entrega de Plan Global Operativo (PGO) bajo los lineamientos definidos.</h3>
+        <Table 
+        columns={columns} 
+        data={professors} 
+        onRowClick={handleRowClick}
+        />
         <p>Total Profesores: {totalCount}</p>
         <p>Total Cumplimientos: {totalComplianceCount}</p>
         <p>Entregados: {deliveredCount} ({deliveredPercentage}%)</p>
@@ -101,26 +113,21 @@ const Indicator3 = () => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {() => (
+          {({ values, setFieldValue }) => (
             <Form className="form">
-              <InputText
-                label="Profesor"
-                placeholder="Ingrese el nombre del profesor"
-                required={true}
-                type="text"
+            <TeacherSelector
                 name="profesor"
+                value={values.profesor}
+                onChange={(e) => setFieldValue('profesor', e.target.value)}
+                required={true}
               />
-              <Select label="Coordinador" name="coordinator" required={true}>
-                <option value="">Seleccione</option>
-                <option value="Coordinator 1">Coordinator 1</option>
-                <option value="Coordinator 2">Coordinator 2</option>
-              </Select>
-              <Select label="Entregado" name="delivered" required={true}>
-                <option value="">Seleccione</option>
-                <option value="true">Sí</option>
-                <option value="false">No</option>
-              </Select>
-              <button type="submit">Agregar Cumplimiento</button>
+              <StatusSelect
+                label="Estado"
+                name="estado"
+                value={values.estado}
+                onChange={(e) => setFieldValue('estado', e.target.value)}
+              />
+              <Button type="primary" onClick={handleSubmit}>Registrar</Button>
             </Form>
           )}
         </Formik>

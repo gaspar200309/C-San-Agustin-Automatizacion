@@ -12,6 +12,8 @@ import Indicator6 from './components/forms/Indicator6';
 import Indicator7 from './components/forms/Indicator7';
 import Indicator8 from './components/forms/Indicator8';
 import Indicator10 from './components/forms/Indicator10';
+import UserManagement from './pages/users/ListUser';
+import TeacherForm from './pages/registerForm/TeacherForm';
 
 
 function App() {
@@ -28,7 +30,10 @@ function App() {
         <Route path="/indicador6" element={<PrivateRoute><Indicator6 /></PrivateRoute>} />
         <Route path="/indicador7" element={<PrivateRoute><Indicator7 /></PrivateRoute>} />
         <Route path="/indicador8" element={<PrivateRoute><Indicator8 /></PrivateRoute>}/>
-        <Route path="/indicador10" element={<PrivateRoute><Indicator10 /></PrivateRoute>}/> 
+        <Route path="/indicador10" element={<PrivateRoute><Indicator10 /></PrivateRoute>}/>
+        <Route path="/userManagement" element={<PrivateRoute><UserManagement /></PrivateRoute>}/>
+
+        <Route path='/registerTeacher' element = {<PrivateRoute><TeacherForm/></PrivateRoute>}/>
       </Routes>
     </BrowserRouter>
   );
