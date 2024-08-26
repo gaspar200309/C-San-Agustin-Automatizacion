@@ -2,18 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
-import Button from '../../components/buttons/Button';
-import InputText from '../../components/inputs/InputText';
+import { Button } from '../../components/buttons/Button';
+import InputText from '../../components/inputs/InputText'
 import Modal from '../../components/modal/Modal';
 import Select from '../../components/selected/Select';
 import Table from '../../components/table/Table';
+import SearchBar from '../../components/searchBar/SearchBar';
+import { FaEdit, MdDelete } from '../../hooks/icons'
 import { getUsers, addUser, updateUser, deleteUser, getRoles } from '../../api/api';
+import { getUser } from '../login/authFunctions'; 
+import './ListUser.css'
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const [roles, setRoles] = useState([]);
+  const [filterText, setFilterText] = useState('');
+  const currentUser = getUser(); 
 
   useEffect(() => {
     getRoles().then(response => {
@@ -58,56 +64,73 @@ const UserManagement = () => {
     setModalOpen(false);
   };
 
+  const filteredUsers = users.filter(user =>
+    user.name.toLowerCase().includes(filterText.toLowerCase()) ||
+    user.last_name.toLowerCase().includes(filterText.toLowerCase()) ||
+    user.username.toLowerCase().includes(filterText.toLowerCase()) ||
+    user.email.toLowerCase().includes(filterText.toLowerCase()) ||
+    user.role.toLowerCase().includes(filterText.toLowerCase())
+  );
+
+  const isAdmin = currentUser?.roles.includes('Administrador');
+
   const columns = [
-    { header: 'Nombre', accessor: 'firstName' },
-    { header: 'Apellido', accessor: 'lastName' },
+    { header: 'Nombre', accessor: 'name' },
+    { header: 'Apellido', accessor: 'last_name' },
     { header: 'Usuario', accessor: 'username' },
     { header: 'Correo Electrónico', accessor: 'email' },
-    { header: 'Tipo de Usuario', accessor: 'userType' },
-    {
+    { header: 'Tipo de Usuario', accessor: 'role' },
+    isAdmin && {
       header: 'Acciones',
       render: (row) => (
-        <>
-          <Button type="secondary" onClick={() => handleEditUser(row)}>Editar</Button>
-          <Button type="danger" onClick={() => handleDeleteUser(row.id)}>Eliminar</Button>
-        </>
+        <div className="user-management-table-actions">
+          <Button type="secondary" onClick={() => handleEditUser(row)}><FaEdit /></Button>
+          <Button type="danger" onClick={() => handleDeleteUser(row.id)}><MdDelete /></Button>
+        </div>
       )
     }
-  ];
+  ].filter(Boolean);
 
   return (
     <div className="user-management-container">
-      <Button type="primary" onClick={handleAddUser}>Agregar Usuario</Button>
-      <Table columns={columns} data={users} />
-
+      <div className="user-management-header">
+        <h2 className="user-management-title">Gestión de Usuarios</h2>
+        
+        {isAdmin && (
+          <Button type="primary" onClick={handleAddUser}>Agregar Usuario</Button>
+        )}
+      </div>
+      <Table columns={columns} data={filteredUsers} className="user-management-table" />
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
         <h2>{editingUser ? 'Editar Usuario' : 'Agregar Usuario'}</h2>
         <Formik
           initialValues={{
-            firstName: editingUser?.firstName || '',
-            lastName: editingUser?.lastName || '',
+            name: editingUser?.name || '',
+            last_name: editingUser?.last_name || '',
             username: editingUser?.username || '',
             email: editingUser?.email || '',
-            userType: editingUser?.userType || ''
+            password: '', // Initialize password as empty
+            role: editingUser?.role || ''
           }}
           validationSchema={Yup.object({
-            firstName: Yup.string().required('Requerido'),
-            lastName: Yup.string().required('Requerido'),
+            name: Yup.string().required('Requerido'),
+            last_name: Yup.string().required('Requerido'),
             username: Yup.string().required('Requerido'),
             email: Yup.string().email('Correo inválido').required('Requerido'),
-            userType: Yup.string().required('Requerido')
+            password: Yup.string().min(6, 'Mínimo 6 caracteres').required('Requerido'),
+            role: Yup.string().required('Requerido')
           })}
           onSubmit={handleSubmit}
         >
           <Form className="form">
             <InputText
               label="Nombre"
-              name="firstName"
+              name="name"
               required
             />
             <InputText
               label="Apellido"
-              name="lastName"
+              name="last_name"
               required
             />
             <InputText
@@ -120,17 +143,23 @@ const UserManagement = () => {
               name="email"
               required
             />
+            <InputText
+              label="Contraseña"
+              name="password"
+              type="password"
+              required
+            />
             <Select
               label="Roles"
-              name="userType"  // Match the name with Formik's initialValues
+              name="role"
               required
             >
               <option value="">Seleccione un tipo de usuario</option>
               {roles.map((rol) => (
-                <option key={rol.value} value={rol.value}>{rol.label}</option>
+                <option key={rol.value} value={rol.label}>{rol.label}</option>
               ))}
             </Select>
-            <Button type="primary" buttonType="submit">Guardar</Button>
+            <Button variant="primary" type="submit">Guardar</Button>
           </Form>
         </Formik>
       </Modal>

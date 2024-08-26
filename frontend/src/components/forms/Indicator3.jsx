@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import StatusSelect from '../../components/selected/StatusSelect';
 import TeacherSelector from '../selected/TeacherSelector';
 import Modal from '../../components/modal/Modal';
-import Button from '../buttons/Button';
+import { Button } from '../buttons/Button';
 import Table from '../table/Table'
 import { getTeacher } from '../../api/api';
 import './Indicator1.css';

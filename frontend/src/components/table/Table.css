@@ -68,3 +68,6 @@
     background-color: var(--sidebar-color);
   }
   
+  .reusable-table table {
+    margin-left: 25px;
+  }

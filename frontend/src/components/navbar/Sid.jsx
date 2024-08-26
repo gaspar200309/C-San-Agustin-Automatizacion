@@ -5,21 +5,28 @@ import { IoIosArrowBack, FaUser, MdNavigateNext, FaHome, FaUserGraduate, TbLogou
 import { useTheme } from '../../hooks/useTheme';
 import { signOut } from '../../pages/login/authFunctions';
 import ImagenesApp from '../../assets/ImagenesApp';
+import { getUser } from '../../pages/login/authFunctions';
 
-const SidebarHeader = ({ onToggle, isOpen }) => (
-  <header className="sidebar-header">
-    <div className="text logo">
-      <img className='logo-perfil' src = {ImagenesApp.perfil}></img>
-      <span className="name">Administrador</span>
-      <span className="profe">Armando Gaspar</span>
-    </div>
-    {isOpen ? (
-      <IoIosArrowBack className="toggle" onClick={onToggle} />
-    ) : (
-      <MdNavigateNext className="toggle reverse" onClick={onToggle} />
-    )}
-  </header>
-);
+const SidebarHeader = ({ onToggle, isOpen }) => {
+  const currentUser = getUser(); 
+
+  return (
+    <header className="sidebar-header">
+      <div className="text logo">
+        <img className='logo-perfil' src={ImagenesApp.perfil} alt="Perfil" />
+        <span className="name">{currentUser?.roles.includes('Administrador') ? 'Administrador' : 'Usuario'}</span>
+        <span className="profe">{currentUser?.username || 'Usuario'}</span>
+      </div>
+      {isOpen ? (
+        <IoIosArrowBack className="toggle" onClick={onToggle} />
+      ) : (
+        <MdNavigateNext className="toggle reverse" onClick={onToggle} />
+      )}
+    </header>
+  );
+};
+
+export default SidebarHeader;
 
 const SidebarLink = ({ to, icon, text }) => (
   <li className="nav-link">

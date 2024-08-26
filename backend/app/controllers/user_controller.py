@@ -44,13 +44,14 @@ def get_user(user_id):
 @user_bp.route('/users', methods=['POST'])
 def create_user():
     data = request.json
+    print(data)
     new_user = UserService.create_user(
-        data['username'], 
-        data['name'], 
-        data['last_name'], 
-        data['email'], 
-        data['password'], 
-        data['role_ids']
+        username=data['username'], 
+        name=data['firstName'],  # Updated to match the frontend key
+        last_name=data['lastName'],  # Updated to match the frontend key
+        email=data['email'], 
+        password=data['password'], 
+        role_ids=data['role_ids']
     )
     return jsonify({
         'id': new_user.id, 
@@ -59,6 +60,8 @@ def create_user():
         'username': new_user.username, 
         'email': new_user.email
     }), 201
+
+
 
 @user_bp.route('/users/<int:user_id>', methods=['PUT'])
 def update_user(user_id):
@@ -69,7 +72,7 @@ def update_user(user_id):
         data['name'], 
         data['last_name'], 
         data['email'], 
-        data['role_ids']
+        data['role']
     )
     if updated_user:
         return jsonify({

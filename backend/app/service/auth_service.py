@@ -3,13 +3,13 @@ from flask_jwt_extended import create_access_token
 import os
 import secrets
 
-def create_user(username, email, password, role_name):
+def create_user(username,name, last_name, email, password, role_name):
     print("Hola mundo")
     existing_user = User.query.filter((User.username == username) | (User.email == email)).first()
     if existing_user:
         return None, "User with that username or email already exists."
 
-    user = User(username=username, email=email)
+    user = User(username=username, name=name, last_name=last_name, email=email)
     print(user, "Hola mundo")
     user.set_password(password)
     db.session.add(user)

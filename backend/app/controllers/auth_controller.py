@@ -9,11 +9,13 @@ def register():
         data = request.get_json()
         print(data)
         username = data.get('username')
+        name = data.get('name')
+        last_name = data.get('last_name')
         email = data.get('email')
         password = data.get('password')
         role_name = data.get('role')
 
-        user, message = create_user(username, email, password, role_name)
+        user, message = create_user(username, name, last_name, email, password, role_name)
         if user:
             return jsonify({"message": message}), 201
         return jsonify({"error": message}), 400

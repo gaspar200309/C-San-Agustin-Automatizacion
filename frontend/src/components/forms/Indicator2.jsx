@@ -5,7 +5,7 @@ import Modal from '../../components/modal/Modal';
 import TeacherSelector from '../selected/TeacherSelector';
 import StatusSelect from '../../components/selected/StatusSelect';
 import './Indicator1.css';
-import Button from '../buttons/Button';
+import { Button } from '../buttons/Button';
 
 const validationSchema = Yup.object({
   profesor: Yup.string().required('Requerido'),
