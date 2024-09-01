@@ -1,82 +1,84 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
 import './LoginUser.css';
-import { FaRegEyeSlash } from "react-icons/fa";
-import { IoEyeOutline } from "react-icons/io5";
+import InputText from '../../components/inputs/InputText';
+import { Button } from '../../components/buttons/Button';
 import { loginUser } from '../../api/api';
 import { saveToken, saveUser } from './authFunctions';
-
+import ImagenesApp from '../../assets/ImagenesApp';
 
 export default function LoginUser() {
-  const [credentials, setCredentials] = useState({
-    identifier: '',
-    password: ''
-  });
-
-  const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState('');
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setCredentials({
-      ...credentials,
-      [e.target.name]: e.target.value
-    });
+  const initialValues = {
+    identifier: '',
+    password: '',
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const validationSchema = Yup.object({
+    identifier: Yup.string()
+      .email('Correo electrónico inválido')
+      .required('El correo electrónico es requerido'),
+    password: Yup.string()
+      .required('La contraseña es requerida'),
+  });
+
+  const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      
-      const result = await loginUser(credentials);
-      console.log('Login result:', result); 
-      
+      const result = await loginUser(values);
+      console.log('Login result:', result);
+
       if (result.data.access_token) {
         saveToken(result.data.access_token);
-        console.log(result.data, "Verificar")
         saveUser({ username: result.data.username, roles: result.data.roles });
         navigate('/home');
         window.location.reload();
       } else {
-        console.log('Login failed: No token received');
+        setLoginError('Credenciales incorrectas. Por favor, intente de nuevo.');
       }
     } catch (error) {
       console.error('Login error:', error);
+      setLoginError('Credenciales incorrectas. Por favor, intente de nuevo.');
     }
-  };
-
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
+    setSubmitting(false);
   };
 
   return (
     <div className="login-container">
       <div className="login-form">
         <h2>Inicia sesión</h2>
-        <form onSubmit={handleSubmit}>
-          <label>Correo electrónico</label>
-          <input
-            type="text"
-            name="identifier"
-            value={credentials.username}
-            onChange={handleChange}
-            required
-          />
-          <label>Contraseña</label>
-          <div className="password-container">
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={credentials.password}
-              onChange={handleChange}
-              required
-            />
-            <button type="button" onClick={toggleShowPassword} className="toggle-password">
-              {showPassword ? <IoEyeOutline /> : <FaRegEyeSlash />}
-            </button>
-          </div>
-          <Link to="/reset">¿Olvidaste la contraseña?</Link>
-          <button className="button-primary" type="submit">Ingresar</button>
-        </form>
+        <img className="logo-fesa" src={ImagenesApp.logo} alt="Logo" height="80px" />
+
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <InputText
+                label="Correo electrónico"
+                name="identifier"
+                type="text"
+                required
+              />
+              <InputText
+                label="Contraseña"
+                name="password"
+                type="password"
+                required
+              />
+              {loginError && <span className="error-message">{loginError}</span>}
+              <Link to="/reset">¿Olvidaste la contraseña?</Link>
+              <Button type="submit" variant="primary" disabled={isSubmitting}>
+                Ingresar
+              </Button>
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   );

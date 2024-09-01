@@ -1,9 +1,11 @@
+/* Modal.css */
+
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
@@ -12,30 +14,142 @@
 }
 
 .modal-content {
-  padding: 20px;
+  background-color: var(--body-color);
+  padding: 2rem;
   border-radius: 8px;
-  max-width: 500px;
   width: 90%;
-  position: relative;
-  color: var(--text-color);
-  transition: var(--tran-03);
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: var(--tran-05);
+}
+
+.modal-content.light {
+  background-color: var(--body-color);
+}
+
+.modal-content.dark {
+  background-color: var(--color-medium);
 }
 
 .close-btn {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 1rem;
+  right: 1rem;
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 1.5rem;
   cursor: pointer;
+  color: var(--primary-color);
+  transition: var(--tran-03);
+}
+
+.close-btn:hover {
+  color: var(--color-5);
+}
+
+/* Form Styling for Adaptability */
+.modal-content form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.modal-content form .full-width {
+  grid-column: 1 / -1;
+}
+
+.modal-content form .half-width {
+  grid-column: span 2;
+}
+
+.modal-content form input[type="text"],
+.modal-content form input[type="email"],
+.modal-content form input[type="password"],
+.modal-content form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--primary-color);
+  border-radius: 4px;
+  background-color: var(--body-color);
   color: var(--text-color);
+  transition: var(--tran-03);
+}
+
+.modal-content form input[type="text"].dark,
+.modal-content form input[type="email"].dark,
+.modal-content form input[type="password"].dark,
+.modal-content form textarea.dark {
+  background-color: var(--color-dark);
+  border: 1px solid var(--color-3);
+}
+
+.modal-content form input[type="text"]:focus,
+.modal-content form input[type="email"]:focus,
+.modal-content form input[type="password"]:focus,
+.modal-content form textarea:focus {
+  border-color: var(--color-4);
+  outline: none;
+}
+
+/* Responsive Grid for Columns */
+@media (min-width: 768px) {
+  .modal-content form {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .modal-content form {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: var(--body-color);
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: 4px;
+  border: 2px solid var(--body-color);
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-5);
+}
+
+/* Additional Styling for Dark Theme */
+body.dark .modal-overlay {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 body.dark .modal-content {
-  background-color: var(--sidebar-color);
+  background-color: var(--color-medium);
 }
 
 body.dark .close-btn {
   color: var(--toggle-color);
+}
+
+body.dark .close-btn:hover {
+  color: var(--color-4);
+}
+
+body.dark .modal-content::-webkit-scrollbar-track {
+  background: var(--color-medium);
+}
+
+body.dark .modal-content::-webkit-scrollbar-thumb {
+  background-color: var(--toggle-color);
+  border: 2px solid var(--color-medium);
+}
+
+body.dark .modal-content::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-5);
 }
