@@ -8,11 +8,12 @@ def get_users():
     users = UserService.get_all_users()
     return jsonify([
         {
-            'id': user.id, 
-            'name': user.name, 
-            'last_name': user.last_name, 
-            'username': user.username, 
-            'email': user.email
+            'id': user.id,
+            'name': user.name,
+            'last_name': user.last_name,
+            'username': user.username,
+            'email': user.email,
+            'roles': [role.role.name for role in user.roles]  
         } for user in users
     ])
 

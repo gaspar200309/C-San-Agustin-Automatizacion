@@ -2,8 +2,9 @@ from app.models.user import User, Role, Teacher, UserRole, db
 
 class UserService:
     @staticmethod
+    @staticmethod
     def get_all_users():
-        return User.query.all()
+        return db.session.query(User).outerjoin(UserRole).outerjoin(Role).all()
 
     @staticmethod
     def get_user_by_id(user_id):
