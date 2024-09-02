@@ -27,7 +27,11 @@ function UserForm({ initialValues, onSubmit, roles, editingUser }) {
             is: false,
             then: Yup.string().required('Requerido'),
           }),
-        role: Yup.string().required('Requerido'),
+        role: Yup.string()
+          .when('editingUser', {
+            is: false,
+            then: Yup.string().nullable().required("Requerido"),
+          }),
       })}
       onSubmit={onSubmit}
     >
@@ -48,10 +52,10 @@ function UserForm({ initialValues, onSubmit, roles, editingUser }) {
           type="password"
           required={!editingUser} 
         />
-        <Select label="Roles" name="role" required>
+        <Select label="Roles" name="role" required = {!editingUser}>
           <option value="">Seleccione un tipo de usuario</option>
           {roles.map((rol) => (
-            <option key={rol.value} value={rol.label}>
+            <option key={rol.value} value={rol.value}>
               {rol.label}
             </option>
           ))}

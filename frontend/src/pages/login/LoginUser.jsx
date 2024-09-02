@@ -35,7 +35,6 @@ export default function LoginUser() {
         saveToken(result.data.access_token);
         saveUser({ username: result.data.username, roles: result.data.roles });
         navigate('/home');
-        window.location.reload();
       } else {
         setLoginError('Credenciales incorrectas. Por favor, intente de nuevo.');
       }

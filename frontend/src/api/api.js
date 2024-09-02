@@ -20,3 +20,5 @@ export const getUsers = () => api.get('/api/users')
 export const addUser = (data) => api.post('/auth/register', data)
 export const updateUser = (id, data) => api.put(`/api/users/${id}`, data)
 export const deleteUser = (id) => api.delete(`/api/users/${id}`)
+
+export const getCourses = () => api.get('/api/courses')
