@@ -3,19 +3,17 @@ from flask_jwt_extended import create_access_token
 import os
 import secrets
 
-def create_user(username,name, last_name, email, password, role_name):
-    print("Hola mundo")
+def create_user(username, name, last_name, email, password, role_id):
     existing_user = User.query.filter((User.username == username) | (User.email == email)).first()
     if existing_user:
-        return None, "User with that username or email already exists."
+        return None, "El nombre de usuario o correo ya está en uso."
 
     user = User(username=username, name=name, last_name=last_name, email=email)
-    print(user, "Hola mundo")
     user.set_password(password)
     db.session.add(user)
     db.session.commit()
 
-    role = Role.query.filter_by(name=role_name).first()
+    role = Role.query.get(role_id)
     if not role:
         return None, "Role not found."
 
@@ -24,6 +22,7 @@ def create_user(username,name, last_name, email, password, role_name):
     db.session.commit()
 
     return user, "User created successfully."
+
 
 
 def authenticate_user(identifier, password):

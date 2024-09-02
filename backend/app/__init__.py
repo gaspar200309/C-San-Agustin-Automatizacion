@@ -4,21 +4,15 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
 from .config import config
+from .utils.init_curse import init_curso
+from .utils.init_roles import init_roles
+from .utils.init_paralelo import init_paralelo
+from .utils.init_nivel import init_nivel
 
 db = SQLAlchemy()
 migrate = Migrate()
 jwt = JWTManager()
 
-def init_roles(app):
-    with app.app_context():
-        from app.models.user import Role
-        roles = ['Administrador', 'Usuario', 'Cordinador'] 
-        for role_name in roles:
-            role = Role.query.filter_by(name=role_name).first()
-            if not role:
-                new_role = Role(name=role_name)
-                db.session.add(new_role)
-        db.session.commit()
 
 def create_app():
     app = Flask(__name__)
@@ -40,12 +34,17 @@ def create_app():
         from .routes.auth_routes import auth_bp
         from app.controllers.teacher_controller import teacher_bp
         from app.controllers.user_controller import user_bp
+        from app.controllers.courses_controller import courses_bp
         
         app.register_blueprint(auth_bp, url_prefix='/auth')
         app.register_blueprint(teacher_bp, url_prefix='/api')
         app.register_blueprint(user_bp, url_prefix='/api')
+        app.register_blueprint(courses_bp, url_prefix = '/api')
                 
         db.create_all()
         init_roles(app)
+        init_curso(app)
+        init_paralelo(app)
+        init_nivel(app)
 
     return app

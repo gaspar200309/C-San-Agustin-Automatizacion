@@ -1,14 +1,20 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Date
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from app.models.user import teacher_course_parallel
-from .. import db 
+from .. import db
+
+class Level(db.Model):
+    __tablename__ = 'levels'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50), unique=True, nullable=False)
+    courses = relationship('Course', back_populates='level')
 
 class Course(db.Model):
     __tablename__ = 'courses'
     id = Column(Integer, primary_key=True)
-    name = Column(String(50), unique=True, nullable=False)
-    grade = Column(String(50), nullable=False)
-    description = Column(String(250), nullable=False)
+    name = Column(String(50), nullable=False)
+    level_id = Column(Integer, ForeignKey('levels.id'), nullable=False)
+    level = relationship('Level', back_populates='courses')
     paralelos = relationship('CourseParallel', back_populates='course')
 
 class Parallel(db.Model):

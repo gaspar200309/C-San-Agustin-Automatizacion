@@ -4,6 +4,7 @@ class UserService:
     @staticmethod
     def get_all_users():
         return User.query.all()
+    
 
     @staticmethod
     def get_user_by_id(user_id):
@@ -32,12 +33,15 @@ class UserService:
             user.last_name = last_name
             user.email = email
             UserRole.query.filter_by(user_id=user_id).delete()
-            for role_id in role_ids:
+            for role_id in role_ids:            
+                if isinstance(role_id, str) and role_id.isdigit():
+                    role_id = int(role_id)
                 user_role = UserRole(user_id=user_id, role_id=role_id)
                 db.session.add(user_role)
             db.session.commit()
             return user
         return None
+
 
     @staticmethod
     def delete_user(user_id):

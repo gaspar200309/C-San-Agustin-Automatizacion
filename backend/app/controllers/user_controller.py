@@ -8,11 +8,12 @@ def get_users():
     users = UserService.get_all_users()
     return jsonify([
         {
-            'id': user.id, 
-            'name': user.name, 
-            'last_name': user.last_name, 
-            'username': user.username, 
-            'email': user.email
+            'id': user.id,
+            'name': user.name,
+            'last_name': user.last_name,
+            'username': user.username,
+            'email': user.email,
+            'roles': [role.role.name for role in user.roles]  
         } for user in users
     ])
 
@@ -47,8 +48,8 @@ def create_user():
     print(data)
     new_user = UserService.create_user(
         username=data['username'], 
-        name=data['firstName'],  # Updated to match the frontend key
-        last_name=data['lastName'],  # Updated to match the frontend key
+        name=data['firstName'],  
+        last_name=data['lastName'],
         email=data['email'], 
         password=data['password'], 
         role_ids=data['role_ids']
