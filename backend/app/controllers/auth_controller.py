@@ -13,15 +13,16 @@ def register():
         last_name = data.get('last_name')
         email = data.get('email')
         password = data.get('password')
-        role_name = data.get('role')
+        role_id = data.get('role') 
 
-        user, message = create_user(username, name, last_name, email, password, role_name)
+        user, message = create_user(username, name, last_name, email, password, role_id)
         if user:
             return jsonify({"message": message}), 201
         return jsonify({"error": message}), 400
     except Exception as e:
         print(f"Error in register route: {str(e)}")
         return jsonify({"error": "An unexpected error occurred"}), 500
+
 
 @auth_bp.route('/login', methods=['POST'])
 def login():

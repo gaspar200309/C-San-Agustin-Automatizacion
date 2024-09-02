@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import './Sidebar.css';
-import { IoIosArrowBack, FaUser, MdNavigateNext, FaHome, FaUserGraduate, TbLogout, AiOutlineGroup, MdNotifications, GiReceiveMoney, GrMoney } from '../../hooks/icons';
+import { IoIosArrowBack, GrAnalytics, FaUser, MdNavigateNext, FaHome, FaUserGraduate, TbLogout, AiOutlineGroup, MdNotifications, GiReceiveMoney, GrMoney } from '../../hooks/icons';
 import { useTheme } from '../../hooks/useTheme';
 import { signOut } from '../../pages/login/authFunctions';
 import ImagenesApp from '../../assets/ImagenesApp';
@@ -78,8 +78,8 @@ export const Sidebar = ({ isOpen, toggleSidebar }) => {
             <SidebarLink to="/home" icon={<FaHome />} text="Dashboard" />
             <SidebarLink to="/userManagement" icon={<FaUser/>} text="Usuarios" />
             <SidebarLink to="/list-indicador" icon={<GiReceiveMoney />} text="Indicadores" />
-            <SidebarLink to="/registerTeacher" icon={<MdNotifications />} text="Formularios" />
-            <SidebarLink to="/analiticas" icon={<AiOutlineGroup />} text="Analiticas" />
+            <SidebarLink to="/registerTeacher" icon={<AiOutlineGroup />} text="Formularios" />
+            <SidebarLink to="/analiticas" icon={<GrAnalytics />} text="Analiticas" />
             <SidebarLink to="/me-gustas" icon={<FaUserGraduate />} text="Me gustas" />
           </ul>
         </div>

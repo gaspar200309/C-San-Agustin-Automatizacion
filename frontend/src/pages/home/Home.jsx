@@ -1,6 +1,7 @@
 import React from 'react';
 import { Bar, Pie, Line, Scatter, Radar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, ArcElement, LineElement, PointElement, RadialLinearScale, Title, Tooltip, Legend, Filler } from 'chart.js';
+import {PiNotePencilBold} from '../../hooks/icons'
 import './Dashboard.css'; // Import the CSS file
 
 // Register the components for Chart.js
@@ -191,10 +192,36 @@ export default function Dashboard() {
   return (
     <div className="dashboard-container">
       <h2 className="dashboard-title">Dashboard</h2>
+      <div className="counter-container">
+        <div className="counter">
+          <h3><PiNotePencilBold/>Total indicadores</h3>
+          <p>80</p>
+        </div>
+        <div className="counter">
+          <h3><PiNotePencilBold/>Total indicadores completados</h3>
+          <p>30</p>
+        </div>
+        <div className="counter">
+          <h3>Total de indicadores pendientes</h3>
+          <p>50</p>
+        </div>
+      </div>
 
+      <div className="chart-container large">
+        <Bar data={barData} options={barOptions} />
+      </div>
       <div className="chart-container">
         <Bar data={barData} options={barOptions} />
       </div>
+      <div className="history-container">
+        <h3>Lista de indicadores completados </h3>
+        <ul>
+          <li>Indicator 1</li>
+          <li>Indicator 2</li>
+          <li>Indicator 3</li>
+        </ul>
+      </div>
+      
 
       <div className="chart-container">
         <Pie data={pieData} options={pieOptions} />

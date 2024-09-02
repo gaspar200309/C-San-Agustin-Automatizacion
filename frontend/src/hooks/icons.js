@@ -11,8 +11,13 @@ import { FaUser } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { GrAnalytics } from "react-icons/gr";
+import { MdAdminPanelSettings } from "react-icons/md";
+import { PiNotePencilBold } from "react-icons/pi";
 
 export {
+  MdAdminPanelSettings,
+  PiNotePencilBold,
   MdDelete,
   FaEdit,
   IoIosArrowBack,
@@ -25,5 +30,6 @@ export {
   MdNotifications,
   GiReceiveMoney,
   GrMoney,
-  MdNavigateNext
+  MdNavigateNext,
+  GrAnalytics
 };

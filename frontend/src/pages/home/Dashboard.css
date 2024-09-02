@@ -27,4 +27,94 @@
     border-radius: 8px;
     background-color: var(--sidebar-color);
   }
+  /* . */
+  .dashboard-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .chart-container {
+    background-color: var(--sidebar-color);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: var(--tran-03);
+  }
+  
+  .chart-container.large {
+    grid-column: span 2;
+  }
+  
+  .counter-container {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    background-color: var(--sidebar-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: var(--tran-03);
+  }
+  
+  .counter {
+    text-align: center;
+  }
+  
+  .counter h3 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+  }
+  
+  .counter p {
+    font-size: 1rem;
+    color: var(--text-color);
+  }
+  
+  .history-container {
+    background-color: var(--sidebar-color);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    max-height: 600px;
+    
+    transition: var(--tran-03);
+  }
+  
+  .history-container h3 {
+    margin-bottom: 10px;
+    color: var(--primary-color);
+  }
+  
+  .history-container ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .history-container ul li {
+    padding: 10px;
+    border-bottom: 1px solid var(--primary-color-light);
+  }
+  
+  .history-container ul li:last-child {
+    border-bottom: none;
+  }
+  .chart-container .large {
+    height: 500px;
+  }
+  
+  ::selection {
+    background: var(--primary-color);
+    color: #FFFFFF;
+  }
+  
+  
+  
+  body.dark .chart-container,
+  body.dark .counter-container,
+  body.dark .history-container {
+    background-color: var(--primary-color-light);
+  }
+  
   

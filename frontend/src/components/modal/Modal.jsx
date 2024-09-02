@@ -14,7 +14,7 @@ const Modal = ({ isOpen, onClose, children, theme = 'light' }) => {
           theme={theme} 
           onClick={onClose} 
           className="close-btn"
-        >
+        > 
           <IoCloseSharp/>
         </Button>
         {children}
