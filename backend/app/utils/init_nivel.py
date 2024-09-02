@@ -3,7 +3,7 @@ def init_nivel(app):
         from app.models.coures import Level
         from app import db 
 
-        niveles = ['Primaria', 'Secundaria', 'Avanzado']
+        niveles = ['Preparatorio', 'Profundización', 'Expansion']
         for name in niveles:
             nivel = Level.query.filter_by(name=name).first()
             if not nivel:
