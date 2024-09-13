@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import Table from '../table/Table'
 import Modal from '../modal/Modal'
 import InputText from '../inputs/InputText'

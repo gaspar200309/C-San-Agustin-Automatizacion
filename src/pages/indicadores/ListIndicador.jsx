@@ -30,6 +30,7 @@ export default function ListIndicadores() {
     return (
         <div className="list-indicadores-container">
             <h1 className="list-title">Lista de Indicadores</h1>
+            <Link to="registerIndicator" className="indicador-button">Registrar indicador</Link>
             <table className="indicadores-table">
                 <thead>
                     <tr>

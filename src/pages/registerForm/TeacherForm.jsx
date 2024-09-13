@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import InputText from "../../components/inputs/InputText";
 import Select from "../../components/selected/Select";
 import { Button } from "../../components/buttons/Button";
-import { getCourses, registerTeacher, getAsignatura } from "../../api/api";
+import { getCourses, registerTeacher} from "../../api/api";
 import useFetchData from "../../hooks/useFetchData";
 import "./TeacherForm.css";
 

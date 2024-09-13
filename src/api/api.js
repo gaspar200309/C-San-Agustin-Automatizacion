@@ -22,4 +22,7 @@ export const updateUser = (id, data) => api.put(`/api/users/${id}`, data)
 export const deleteUser = (id) => api.delete(`/api/users/${id}`)
 
 export const getCourses = () => api.get('/api/courses')
-export const getAsignatura = () => api.get('/api/asignatura')
+
+export const getAcademyObjetive = () => api.get('/api/academic')
+export const getSGCAcademi = () => api.get('/api/sgc-objectives')
+export const addIndicator = (data) => api.post('/api/indicators', data);
