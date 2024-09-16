@@ -25,4 +25,14 @@ export const getCourses = () => api.get('/api/courses')
 
 export const getAcademyObjetive = () => api.get('/api/academic')
 export const getSGCAcademi = () => api.get('/api/sgc-objectives')
+export const getFormulas  = () => api.get('/api/formulas')
 export const addIndicator = (data) => api.post('/api/indicators', data);
+export const getIndicator = () => api.get('/api/indicators')
+
+export const registerCommunications = () => api.get('/api/indicators')
+export const registerAttendance = () => api.get('/api/indicators')
+export const registerTeacherNotes = () => api.get('/api/indicators')
+export const registerCourseData = () => api.get('/api/indicators')
+export const registerStudentNotes = () => api.get('/api/indicators')
+export const getPeriods = () => api.get('/api/indicators')
+export const registerYearlyCommunications = () => api.get('/api/indicators')

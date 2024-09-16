@@ -1,0 +1,22 @@
+.link-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .link-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .link-button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+  }
+  
