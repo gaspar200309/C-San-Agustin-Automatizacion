@@ -18,12 +18,12 @@ export default function ListIndicadores() {
         { id: 7, nombre: 'Indicador7', lineaBase: '600', formula: 'Formula6' },
         { id: 8, nombre: 'Indicador8', lineaBase: '700', formula: 'Formula7' },
         { id: 10, nombre: 'Indicador10', lineaBase: '800', formula: 'Formula8' },
-        { id: 11, nombre: 'Índice de asistencia de estudiantes por trimestre.', lineaBase: '800', formula: 'Formula8' },
-        { id: 12, nombre: 'Índice de licencias de estudiantes por trimestre (registradas).', lineaBase: '800', formula: 'Formula8' },
-        { id: 13, nombre: 'Índice de incidencias de estudiantes por trimestre (registradas).', lineaBase: '800', formula: 'Formula8' },
-        { id: 14, nombre: 'Nivel de cumplimiento en la actualización del registro de notas en el SIGA.', lineaBase: '800', formula: 'Formula8' },
-        { id: 15, nombre: 'Cantidad de comunicados enviados por coordinadores y docentes trimestralmente.', lineaBase: '800', formula: 'Formula8' },
-        { id: 16, nombre: 'Cantidad de comunicados publicados según medios oficiales contemplados en la estrategia comunicacional.', lineaBase: '800', formula: 'Formula8' },
+        { id: 11, nombre: 'Índice de asistencia de estudiantes por trimestre.', lineaBase: '800', formula: 'Formula11' },
+        { id: 12, nombre: 'Índice de licencias de estudiantes por trimestre (registradas).', lineaBase: '800', formula: 'Formula12' },
+        { id: 13, nombre: 'Índice de incidencias de estudiantes por trimestre (registradas).', lineaBase: '800', formula: 'Formula13' },
+        { id: 14, nombre: 'Nivel de cumplimiento en la actualización del registro de notas en el SIGA.', lineaBase: '800', formula: 'Formula14' },
+        { id: 15, nombre: 'Cantidad de comunicados enviados por coordinadores y docentes trimestralmente.', lineaBase: '800', formula: 'Formula15' },
+        { id: 16, nombre: 'Cantidad de comunicados publicados según medios oficiales contemplados en la estrategia comunicacional.', lineaBase: '800', formula: 'Formula16' },
     ];
 
 

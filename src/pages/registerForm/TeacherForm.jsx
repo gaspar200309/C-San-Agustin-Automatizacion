@@ -7,6 +7,7 @@ import { Button } from "../../components/buttons/Button";
 import { getCourses, registerTeacher} from "../../api/api";
 import useFetchData from "../../hooks/useFetchData";
 import "./TeacherForm.css";
+import CourseSelect from "../../components/selected/CourseSelect";
 
 const TeacherForm = () => {
   const { data: courses } = useFetchData(getCourses);
@@ -58,14 +59,7 @@ const TeacherForm = () => {
         <InputText label="Apellidos" name="lastName" required />
         <InputText label="Asignatura" name="subjects" required />
 
-        <Select label="Cursos" name="course" required>
-          <option value="">Seleccione un curso</option>
-          {uniqueCourses.map((course) => (
-            <option key={course.course_id} value={course.course_id}>
-              {`${course.nivel} - ${course.course_name}`} 
-            </option>
-          ))}
-        </Select>
+        <CourseSelect label="Cursos" name="course" required/>
 
         <Button variant="primary" type="submit">
           Registrar Profesor
