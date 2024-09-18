@@ -10,7 +10,7 @@ const ColumnToggle = ({ allColumns }) => {
     if (allColumns && Array.isArray(allColumns)) {
       setColumnsState(allColumns.map(column => ({
         id: column.id,
-        Header: column.Header,
+        header: column.header,
         isHidden: column.isHidden,
       })));
     }
@@ -41,9 +41,8 @@ const ColumnToggle = ({ allColumns }) => {
     }
   };
 
-  // Ensure that column.Header is defined before calling toString()
   const filteredColumns = columnsState.filter(column =>
-    column.Header?.toString().toLowerCase().includes(filterValues.toLowerCase())
+    column.header?.toString().toLowerCase().includes(filterValues.toLowerCase())
   );
 
   return (
@@ -66,7 +65,7 @@ const ColumnToggle = ({ allColumns }) => {
               checked={!column.isHidden}
               rounded={true}
             />
-            <label>{column.Header}</label>
+            <label>{column.header}</label>
           </div>
         ))}
       </div>

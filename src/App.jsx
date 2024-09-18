@@ -23,6 +23,7 @@ import TeacherNotesForm from './components/forms/NuevosInd/TeacherNotesForm';
 import UserManagement from './pages/users/ListUser';
 import TeacherForm from './pages/registerForm/TeacherForm';
 import IndicatorsList from './pages/indicadores/IndicatorList';
+import AssignIndicator from './pages/indicadores/AssignIndicator';
 
 
 function App() {
@@ -33,6 +34,8 @@ function App() {
         <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
         {/* <Route path='/list-indicador' element={<PrivateRoute><Indicador11/></PrivateRoute>}/> */}
         <Route path = '/list-indicador/registerIndicator' element = {<PrivateRoute><RegisterIndicator/></PrivateRoute>} />
+        <Route path='/list-indicador/asignerCordinator' element = {<PrivateRoute><AssignIndicator/></PrivateRoute>}/>
+
         <Route path="/indicador1" element={<PrivateRoute><Indicator1 /></PrivateRoute>} />
         <Route path="/indicador2" element={<PrivateRoute><Indicator2 /></PrivateRoute>} />
         <Route path="/indicador3" element={<PrivateRoute><Indicator3 /></PrivateRoute>} />
@@ -49,6 +52,7 @@ function App() {
         <Route path='/indicador16' element = {<PrivateRoute><YearlyCommunicationsForm/></PrivateRoute>}/>
         <Route path='/list-indicador' element = {<PrivateRoute><IndicatorsList/></PrivateRoute>}/>
         <Route path='/userManagement' element = {<PrivateRoute><UserManagement/></PrivateRoute>}/>
+
   
           <Route path='/registerTeacher' element = {<PrivateRoute><TeacherForm/></PrivateRoute>}/>
       </Routes>

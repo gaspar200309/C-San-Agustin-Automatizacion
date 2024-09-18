@@ -28,6 +28,8 @@ export const getSGCAcademi = () => api.get('/api/sgc-objectives')
 export const getFormulas  = () => api.get('/api/formulas')
 export const addIndicator = (data) => api.post('/api/indicators', data);
 export const getIndicator = () => api.get('/api/indicators')
+export const assignCoordinatorToIndicator = (data) => api.post(`/indicators/${indicatorId}/assign-coordinator`, data)
+export const removeCoordinatorFromIndicator = (data) =>  api.delete(`/indicators/${indicatorId}/remove-coordinator`, data);
 
 export const registerCommunications = () => api.get('/api/indicators')
 export const registerAttendance = () => api.get('/api/indicators')

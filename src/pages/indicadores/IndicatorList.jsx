@@ -1,126 +1,78 @@
-import React, { useState, useMemo, useCallback, lazy, Suspense } from 'react';
+import React, { useMemo, useState, lazy, Suspense } from 'react';
 import { getIndicator } from '../../api/api';
 import useFetchData from '../../hooks/useFetchData';
-import ColumnToggle from '../../components/table/ColumnToggle';
 import Table from '../../components/table/Table';
-
+import ColumnToggle from '../../components/table/ColumnToggle';
+import Modal from '../../components/modal/Modal'; 
+import './ListIndicadores.css'; 
 
 const LinkButton = lazy(() => import('../../components/buttons/LinkButton'));
 
 const IndicatorsList = () => {
   const { data: indicators, loading: loadingIndicator, error: errorIndicator } = useFetchData(getIndicator);
   const [columnsState, setColumnsState] = useState([
+    { id: 'id', header: "ID", accessor: 'id', isHidden: false },
     { id: 'name', header: 'Nombre', accessor: 'name', isHidden: false },
     { id: 'due_date', header: 'Fecha de Vencimiento', accessor: 'due_date', isHidden: false },
     { id: 'expected_result', header: 'Resultado Esperado', accessor: 'expected_result', isHidden: false },
     { id: 'academic_objective', header: 'Objetivo Académico', accessor: 'academic_objective', isHidden: false },
     { id: 'sgc_objective', header: 'Objetivo SGC', accessor: 'sgc_objective', isHidden: false },
-    { id: 'formula', header: 'Fórmula', accessor: 'formula', isHidden: false }
+    { id: 'formula', header: 'Fórmula', accessor: 'formula', isHidden: false },
+    { id: 'actions', header: 'Acciones', accessor: 'actions', isHidden: false }, // Add actions column
   ]);
-
-  const [showColumnToggle, setShowColumnToggle] = useState(false);
-
-
-
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    page,
-    prepareRow,
-    allColumns,
-    state,
-    setGlobalFilter,
-    canPreviousPage,
-    canNextPage,
-    pageOptions,
-    pageCount,
-    gotoPage,
-    nextPage,
-    previousPage,
-    setPageSize,
-  } = useTable(
-    {
-      columns,
-      data,
-      defaultColumn,
-      globalFilter: (rows, columnIds, filterValue) => {
-        const { column, value } = filterValue;
-        return rows.filter(row => {
-          const rowValue = row.values[column];
-          return rowValue !== undefined
-            ? String(rowValue).toLowerCase().includes(String(value).toLowerCase())
-            : true;
-        });
-      },
-      initialState: { pageIndex: 0, pageSize: 10 },
-    },
-    useFilters,
-    useGlobalFilter,
-    useSortBy,
-    usePagination
-  );
-
-  const filteredIndicators = useMemo(() => {
-    if (!globalFilter.value) return indicators;
-    return indicators.filter((indicator) =>
-      indicator[globalFilter.column]
-        ?.toString()
-        .toLowerCase()
-        .includes(globalFilter.value.toLowerCase())
-    );
-  }, [globalFilter, indicators]);
-
-  // useCallback para memorizar el cambio en el filtro
-  const handleFilterChange = useCallback((e) => {
-    setGlobalFilter((prevFilter) => ({ ...prevFilter, value: e.target.value }));
-  }, []);
-
-  const handleColumnChange = useCallback((e) => {
-    setGlobalFilter((prevFilter) => ({ ...prevFilter, column: e.target.value }));
-  }, []);
-
-  // Filter columns to show/hide
-  const visibleColumns = useMemo(() => columnsState.filter(column => !column.isHidden), [columnsState]);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
 
   if (loadingIndicator) return <p>Cargando...</p>;
   if (errorIndicator) return <p>Error cargando los Indicadores.</p>;
+
+  const visibleColumns = columnsState.filter(column => !column.isHidden);
+
+  const handleColumnChange = (updatedColumns) => {
+    setColumnsState(updatedColumns);
+  };
+
+  const handleRegisterClick = (indicatorId) => {
+    console.log('Register indicator:', indicatorId);
+  };
+
+  const columnsWithActions = visibleColumns.map(col => 
+    col.id === 'actions' ? 
+      { 
+        ...col, 
+        Cell: ({ row }) => (
+          <button onClick={() => handleRegisterClick(row.original.id)}>Registrar</button>
+        ) 
+      } 
+      : col
+  );
 
   return (
     <div>
       <h1>Lista de Indicadores</h1>
 
-      <Suspense fallback={<p>Cargando botón...</p>}>
-        <LinkButton to="registerIndicator" className="indicador-button">
-          Registrar indicador
-        </LinkButton>
-      </Suspense>
-
-    {showColumnToggle  && <ColumnToggle allColumns={columnsState} />}
-      
-
-      <div>
-        <label htmlFor="column">Filtrar por columna:</label>
-        <select id="column" value={globalFilter.column} onChange={handleColumnChange}>
-          <option value="">Seleccione columna</option>
-          {columnsState.map(column => (
-            <option key={column.id} value={column.accessor}>
-              {column.header}
-            </option>
-          ))}
-        </select>
-
-        <input
-          type="text"
-          placeholder="Buscar..."
-          value={globalFilter.value}
-          onChange={handleFilterChange}
-        />
+      <div className="button-container">
+        <Suspense fallback={<p>Cargando botón...</p>}>
+          <LinkButton to="registerIndicator" className="indicador-button">
+            Registrar indicador
+          </LinkButton>
+        </Suspense>
+        <Suspense fallback={<p>Cargando botón...</p>}>
+          <LinkButton to="asignerCordinator" className="indicador-button">
+            Asignar Coordinador
+          </LinkButton>
+        </Suspense>
       </div>
 
+      <button onClick={() => setIsModalOpen(true)}>Mostrar/Ocultar Columnas</button>
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <h2>Seleccionar Columnas</h2>
+        <ColumnToggle allColumns={columnsState} onColumnChange={handleColumnChange} />
+      </Modal>
+
       <Table 
-        columns={visibleColumns} 
-        data={filteredIndicators} 
+        columns={columnsWithActions} 
+        data={indicators} 
         onRowClick={(row) => console.log('Row clicked:', row)} 
       />
     </div>

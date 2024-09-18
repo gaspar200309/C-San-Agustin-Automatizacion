@@ -1,0 +1,95 @@
+/* General styles for the component */
+.assign-indicator-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  h2 {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+  }
+  
+  /* Styling for the list of indicators */
+  .indicator-item {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .indicator-item h3 {
+    margin: 0;
+    font-size: 20px;
+    color: #555;
+  }
+  
+  .indicator-item p {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .indicator-item button {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .indicator-item button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Modal user list */
+  .user-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .user-item span {
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .user-item:last-child {
+    border-bottom: none;
+  }
+  
+  /* Switch component inside user item */
+  .switch-label {
+    margin-left: 10px;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .indicator-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .indicator-item h3 {
+      margin-bottom: 10px;
+    }
+  
+    .user-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .user-item span {
+      margin-bottom: 8px;
+    }
+  }
+  
