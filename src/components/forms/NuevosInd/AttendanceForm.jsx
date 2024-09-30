@@ -1,81 +1,37 @@
-import React, { useState } from 'react';
-import { getIndicator, getUsers, assignCoordinatorToIndicator, removeCoordinatorFromIndicator } from '../../api/api'; // Nuevas API
-import useFetchData from '../../hooks/useFetchData';
-import Modal from '../../components/modal/Modal'; 
-import Switch from '../../components/selected/Switch';
+import React from "react";
+import { useMemo } from "react";
+import { Formik, Form } from "formik";
+import Select from "../../selected/Select";
+import InputText from "../../inputs/InputText";
+import { Button } from "../../buttons/Button";
+import { registerAttendance } from "../../../api/api";
+import useFetchData from "../../../hooks/useFetchData";
+import CourseSelect from "../../selected/CourseSelect";
+import useSubmitData from "../../../hooks/useFetchData";
 
-export default function AssignIndicator() {
-  const { data: indicators, loading: loadingIndicator, error: errorIndicator } = useFetchData(getIndicator);
-  const { data: users, loading: loadingUsers, error: errorUsers } = useFetchData(getUsers);
+const AttendanceForm = () => {
+  const { loading, error, success, submitData } = useSubmitData(registerAttendance);
 
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [selectedIndicator, setSelectedIndicator] = useState(null);
-  const [assignedUsers, setAssignedUsers] = useState({});  // Clave de indicador -> lista de IDs de usuarios asignados
-
-  const toggleModal = () => setModalOpen(!isModalOpen);
-
-  const handleOpenModal = (indicator) => {
-    setSelectedIndicator(indicator);
-    toggleModal();
-  };
-
-  const handleSwitchChange = async (indicatorId, userId, isSelected) => {
-    try {
-      if (isSelected) {
-        // Asignar el usuario como coordinador
-        await assignCoordinatorToIndicator(indicatorId, userId);
-      } else {
-        // Quitar asignación
-        await removeCoordinatorFromIndicator(indicatorId, userId);
-      }
-      // Actualizar el estado local después de la asignación
-      setAssignedUsers((prev) => ({
-        ...prev,
-        [indicatorId]: isSelected
-          ? [...(prev[indicatorId] || []), userId]
-          : (prev[indicatorId] || []).filter((id) => id !== userId)
-      }));
-    } catch (error) {
-      console.error("Error en la asignación/desasignación:", error);
-    }
-  };
-
-  if (loadingIndicator || loadingUsers) return <p>Cargando...</p>;
-  if (errorIndicator || errorUsers) return <p>Error cargando los datos.</p>;
+  
 
   return (
-    <div>
-      <h2>Lista de Indicadores</h2>
-      <ul>
-        {indicators.map((indicator) => (
-          <li key={indicator.id} className="indicator-item">
-            <h3>{indicator.name}</h3>
-            <p>Fecha de entrega: {indicator.delivery_deadline}</p>
-            <p>Resultado esperado: {indicator.expected_result}</p>
-            <button onClick={() => handleOpenModal(indicator)}>Asignar Coordinadores</button>
-          </li>
-        ))}
-      </ul>
-
-      <Modal isOpen={isModalOpen} onClose={toggleModal} title={`Asignar Coordinadores a: ${selectedIndicator?.name}`}>
-        {selectedIndicator && (
-          <div>
-            <h4>{selectedIndicator.name}</h4>
-            <ul>
-              {users.map(user => (
-                <li key={user.id} className="user-item">
-                  <span>{user.name}</span>
-                  <Switch
-                    label="Asignar"
-                    value={(assignedUsers[selectedIndicator.id] || []).includes(user.id)}
-                    onChange={(e) => handleSwitchChange(selectedIndicator.id, user.id, e.target.checked)}
-                  />
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </Modal>
-    </div>
+    <Formik
+      initialValues={{ totalClasses: '', missedClasses: '' }}
+      onSubmit={(values) => {
+        const attendancePercentage = ((values.totalClasses - values.missedClasses) / values.totalClasses) * 100;
+        submitData({ ...values, attendancePercentage });
+      }}
+    >
+      {() => (
+        <Form>
+          <CourseSelect name="course" label="Cursos" required />
+          <InputText name="totalClasses" label="Total por Curso" required  />
+          <InputText name="missedClasses" label="Cantidad de licencias" required  />
+          <Button type="submit">Registrar Asistencia</Button>
+        </Form>
+      )}
+    </Formik>
   );
-}
+};
+
+export default AttendanceForm;

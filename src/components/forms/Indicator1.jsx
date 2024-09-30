@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import InputText from '../../components/inputs/InputText';
-import Select from '../../components/selected/Select';
+import StatusSelect from '../selected/StatusSelect';
 import Modal from '../../components/modal/Modal';
 import './Indicator1.css';
 
@@ -69,7 +69,7 @@ const Indicator1 = () => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {() => (
+          {({ values, setFieldValue }) => (
             <Form className="form">
               <InputText
                 label="Documento"
@@ -78,11 +78,13 @@ const Indicator1 = () => {
                 type="text"
                 name="documento"
               />
-              <Select label="Entregado" name="delivered" required={true}>
-                <option value="">Seleccione</option>
-                <option value="true">Sí</option>
-                <option value="false">No</option>
-              </Select>
+              <StatusSelect
+                label="Estado"
+                name="estado"
+                value={values.estado}
+                onChange={(e) => setFieldValue('estado', e.target.value)}
+              />
+              
               <button type="submit">Agregar Documento</button>
             </Form>
           )}

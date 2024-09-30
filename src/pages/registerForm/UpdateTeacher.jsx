@@ -1,24 +1,50 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import InputText from "../../components/inputs/InputText";
 import { Button } from "../../components/buttons/Button";
-import { registerTeacher } from "../../api/api";
+import { updateTeacher, getTeacherById } from "../../api/api";
 import CourseSelect from "../../components/selected/CourseSelect";
 import useSubmitData from "../../hooks/useSubmitData";
 import "./TeacherForm.css";
 
-const TeacherForm = () => {
+const EditTeacherForm = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   
-  const { submitData, loading: submitLoading, error: submitError, success } = useSubmitData(registerTeacher);
+  const { submitData, loading: submitLoading, error: submitError, success } = useSubmitData(updateTeacher);
 
-  const initialValues = {
+  const [initialValues, setInitialValues] = useState({
     firstName: '',
     lastName: '',
     course: '',
     subjects: '',
-  };
+  });
+
+  const [fetchLoading, setFetchLoading] = useState(false);
+  const [fetchError, setFetchError] = useState(null);
+
+  useEffect(() => {
+    const fetchTeacher = async () => {
+      setFetchLoading(true);
+      try {
+        const { data } = await getTeacherById(id);
+        setInitialValues({
+          firstName: data.name || '',
+          lastName: data.last_name || '',
+          course: data.courses[0]?.course_id || '',
+          subjects: data.asignatura || '',
+        });
+      } catch (error) {
+        setFetchError(error);
+      } finally {
+        setFetchLoading(false);
+      }
+    };
+
+    fetchTeacher();
+  }, [id]);
 
   const validationSchema = Yup.object({
     firstName: Yup.string().required('Nombre es requerido'),
@@ -28,28 +54,32 @@ const TeacherForm = () => {
   });
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-    await submitData(values);
+    await submitData({ ...values, id });
     if (success) {
-      navigate("/listTeacher");
       resetForm();
+      navigate("/listTeacher");
     }
     setSubmitting(false);
   };
+
+  if (fetchLoading) return <p>Cargando...</p>;
+  if (fetchError) return <p>Error: {fetchError.message}</p>;
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
+      enableReinitialize
       onSubmit={handleSubmit}
     >
       <Form className="register-teacher-form">
-        <h3>Registrar Profesor</h3>
+        <h3>Editar Profesor</h3>
         <InputText label="Nombre" name="firstName" required />
         <InputText label="Apellidos" name="lastName" required />
         <InputText label="Asignatura" name="subjects" required />
         <CourseSelect label="Cursos" name="course" required />
         <Button variant="primary" type="submit" disabled={submitLoading}>
-          Registrar Profesor
+          Guardar Cambios
         </Button>
         {submitError && <p className="error-message">Error: {submitError.message}</p>}
       </Form>
@@ -57,4 +87,4 @@ const TeacherForm = () => {
   );
 };
 
-export default TeacherForm;
+export default EditTeacherForm;

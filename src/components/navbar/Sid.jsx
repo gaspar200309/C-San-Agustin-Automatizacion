@@ -78,7 +78,7 @@ export const Sidebar = ({ isOpen, toggleSidebar }) => {
             <SidebarLink to="/home" icon={<FaHome />} text="Dashboard" />
             <SidebarLink to="/userManagement" icon={<FaUser/>} text="Usuarios" />
             <SidebarLink to="/list-indicador" icon={<AiOutlineGroup />} text="Indicadores" />
-            <SidebarLink to="/registerTeacher" icon={<PiChalkboardTeacher />} text="Formularios" />
+            <SidebarLink to="/listTeacher" icon={<PiChalkboardTeacher />} text="Formularios" />
             <SidebarLink to="/analiticas" icon={<GrAnalytics />} text="Analiticas" />
             <SidebarLink to="/me-gustas" icon={<FaUserGraduate />} text="Me gustas" />
           </ul>

@@ -3,7 +3,10 @@ import { Bar, Pie, Line, Scatter, Radar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, ArcElement, LineElement, PointElement, RadialLinearScale, Title, Tooltip, Legend, Filler } from 'chart.js';
 import { PiNotePencilBold } from '../../hooks/icons';
 import SearchBar from '../../components/searchBar/SearchBar';
-import './Dashboard.css'; // Import the CSS file
+import { countIndicator } from '../../api/api';
+import useFetchData from '../../hooks/useFetchData';
+import './Dashboard.css'; 
+
 
 // Register the components for Chart.js
 ChartJS.register(
@@ -21,7 +24,9 @@ ChartJS.register(
 );
 
 export default function Dashboard() {
-  // Existing chart data...
+
+  const { data: countIndicators, loading: loadingIndicator, error: errorIndicator} = useFetchData(countIndicator);
+
   const barData = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June'],
     datasets: [
@@ -189,6 +194,15 @@ export default function Dashboard() {
     }
   };
 
+  if (loadingIndicator) {
+    return <div>Cargando...</div>;
+  }
+  
+  if (errorIndicator) {
+    return <div>Error al cargar los datos: {errorIndicator.message}</div>;
+  }
+  
+
   return (
     <div className="parent">
       <div className="div1">
@@ -201,8 +215,8 @@ export default function Dashboard() {
       <div className="div3">
       <div className="counter-container1">
           <div className="counter">
-            <h3><PiNotePencilBold />Total indicadores registrados</h3>
-            <p>80</p>
+            <h3><PiNotePencilBold />Total indicadores</h3>
+            <p>{countIndicators.total}</p>
           </div>
         </div>
       </div>
@@ -211,7 +225,7 @@ export default function Dashboard() {
       <div className="counter-container2">
           <div className="counter">
             <h3><PiNotePencilBold />Total indicadores completados</h3>
-            <p>30</p>
+            <p>{countIndicators.total}</p>
           </div>
         </div>
       </div>
@@ -220,7 +234,7 @@ export default function Dashboard() {
       <div className="counter-container3">
           <div className="counter">
             <h3>Total de indicadores pendientes</h3>
-            <p>50</p>
+            <p>{countIndicators.complete}</p>
           </div>
         </div>
       </div>
@@ -229,7 +243,7 @@ export default function Dashboard() {
       <div className="counter-container4">
           <div className="counter">
             <h3>Total de indicadores pendientes</h3>
-            <p>50</p>
+            <p>{countIndicators.incomplete}</p>
           </div>
         </div>
       </div>

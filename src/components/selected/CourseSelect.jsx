@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import  { useMemo } from 'react';
 import useFetchData from '../../hooks/useFetchData';
 import Select from '../selected/Select';
 import { getCourses } from '../../api/api';
@@ -7,13 +7,13 @@ const CourseSelect = ({ name, label, ...props }) => {
   const { data: courses, error, loading } = useFetchData(getCourses);
 
   const uniqueCourses = useMemo(() => {
-    return [
-      ...new Map(courses.map((item) => [item.course_id, item])).values(),
-    ];
+    if (!courses) return [];
+    return [...new Map(courses.map((item) => [item.course_id, item])).values()];
   }, [courses]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
+  if (!courses || courses.length === 0) return <p>No courses available</p>;
 
   return (
     <Select label={label} name={name} {...props}>

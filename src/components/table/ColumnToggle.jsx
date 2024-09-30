@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Switch from '../selected/Switch';
+import { Button } from '../buttons/Button';
 import './ColumnToggle.css';
 
 const ColumnToggle = ({ allColumns }) => {
@@ -54,8 +55,8 @@ const ColumnToggle = ({ allColumns }) => {
           value={filterValues}
           onChange={handleFilterChange}
         />
-        <button onClick={() => toggleAllColumns(true)}>Mostrar Todo</button>
-        <button onClick={() => toggleAllColumns(false)}>Ocultar Todo</button>
+        <Button onClick={() => toggleAllColumns(true)}>Mostrar Todo</Button>
+        <Button onClick={() => toggleAllColumns(false)}>Ocultar Todo</Button>
       </div>
       <div className="column-toggle-list">
         {filteredColumns.map(column => (

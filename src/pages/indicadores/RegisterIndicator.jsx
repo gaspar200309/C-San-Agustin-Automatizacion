@@ -1,6 +1,5 @@
-import React from 'react';
 import { Formik, Form } from 'formik';
-import { useNavigate } from 'react-router-dom'; // Importa useNavigate para la redirección
+import { useNavigate } from 'react-router-dom';
 import InputText from '../../components/inputs/InputText';
 import Select from '../../components/selected/Select';
 import { Button } from '../../components/buttons/Button';
@@ -8,10 +7,10 @@ import useFetchData from '../../hooks/useFetchData';
 import useSubmitData from '../../hooks/useSubmitData';
 import { getAcademyObjetive, getSGCAcademi, getFormulas, addIndicator } from '../../api/api';
 import * as Yup from 'yup';
-import './RegisterIndicator.css';  
+import './RegisterIndicator.css';
 
 const RegisterIndicator = () => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const { data: academicObjectives, loading: loadingAcademy, error: errorAcademy } = useFetchData(getAcademyObjetive);
   const { data: sgcObjectives, loading: loadingSGC, error: errorSGC } = useFetchData(getSGCAcademi);
@@ -26,16 +25,19 @@ const RegisterIndicator = () => {
     formula_id: Yup.number().required('La fórmula es requerida')
   });
 
-  const { loading, error, success, submitData } = useSubmitData(addIndicator);
+  const { loading, error, submitData } = useSubmitData(addIndicator);
 
   const handleSubmit = async (values, { setSubmitting }) => {
+    if (loading) return; // No permitir que se ejecute si ya está en proceso
+
     console.log('Datos del formulario:', values);
 
     try {
-      await submitData(values); 
-      if (success) {
-        console.log('Registro exitoso:', success);
-        navigate('/list-indicador'); 
+      setSubmitting(true);
+      const response = await submitData(values);
+      if (response && response.success) {
+        console.log('Registro exitoso:', response);
+        navigate('/list-indicador');
       }
     } catch (err) {
       console.error('Error al registrar el indicador:', err);
@@ -43,6 +45,7 @@ const RegisterIndicator = () => {
       setSubmitting(false);
     }
   };
+
 
   if (loadingAcademy || loadingSGC || loadingFormulas) return <p>Cargando...</p>;
   if (errorAcademy || errorSGC || errorFormulas) return <p>Error cargando los datos.</p>;
@@ -104,6 +107,7 @@ const RegisterIndicator = () => {
                 <Button type="submit" disabled={isSubmitting || loading}>
                   {loading ? 'Guardando...' : 'Registrar Indicador'}
                 </Button>
+
                 {error && <p className="error-message">Error: {error.message}</p>}
               </div>
             </Form>
