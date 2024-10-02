@@ -20,6 +20,8 @@ const validationSchema = Yup.object({
 const Indicator4 = () => {
   const [professors, setProfessors] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const [teacherOptions, setTeacherOptions] = useState([]);
+
 
   useEffect(() => {
     getTeacher().then(response => {
@@ -64,7 +66,8 @@ const Indicator4 = () => {
   const calculateCounts = (trimester) => {
     const totalCount = professors.length;
     const deliveredCount = professors.reduce((acc, prof) => {
-      return acc + (isDelivered(prof.compliance[trimester]) ? 1 : 0);
+      return acc + (prof.compliance?.[trimester] && isDelivered(prof.compliance[trimester]) ? 1 : 0);
+
     }, 0);
     const notDeliveredCount = totalCount - deliveredCount;
     const deliveredPercentage = totalCount ? ((deliveredCount / totalCount) * 100).toFixed(2) : 0;

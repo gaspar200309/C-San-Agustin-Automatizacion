@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import{ useState, useEffect, useMemo, useCallback } from "react";
 import { Button } from "../../components/buttons/Button";
 import Modal from "../../components/modal/Modal";
 import Table from "../../components/table/Table";
@@ -7,7 +7,7 @@ import { FaEdit, MdDelete } from "../../hooks/icons";
 import { getUsers, addUser, updateUser, deleteUser, getRoles } from "../../api/api";
 import { getUser } from "../login/authFunctions";
 import UserForm from "./RegisterUser";
-import { Toaster, toast } from 'sonner'; 
+
 import "./ListUser.css";
 
 const UserManagement = () => {

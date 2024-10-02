@@ -1,4 +1,3 @@
-import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import './Sidebar.css';
 import { IoIosArrowBack, PiChalkboardTeacher, GrAnalytics, FaUser, MdNavigateNext, FaHome, FaUserGraduate, TbLogout, AiOutlineGroup, MdNotifications, GiReceiveMoney, GrMoney } from '../../hooks/icons';
@@ -78,7 +77,7 @@ export const Sidebar = ({ isOpen, toggleSidebar }) => {
             <SidebarLink to="/home" icon={<FaHome />} text="Dashboard" />
             <SidebarLink to="/userManagement" icon={<FaUser/>} text="Usuarios" />
             <SidebarLink to="/list-indicador" icon={<AiOutlineGroup />} text="Indicadores" />
-            <SidebarLink to="/registerTeacher" icon={<PiChalkboardTeacher />} text="Formularios" />
+            <SidebarLink to="/listTeacher" icon={<PiChalkboardTeacher />} text="Formularios" />
             <SidebarLink to="/analiticas" icon={<GrAnalytics />} text="Analiticas" />
             <SidebarLink to="/me-gustas" icon={<FaUserGraduate />} text="Me gustas" />
           </ul>

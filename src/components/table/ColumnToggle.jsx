@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Switch from '../selected/Switch';
+import { Button } from '../buttons/Button';
 import './ColumnToggle.css';
 
 const ColumnToggle = ({ allColumns }) => {
@@ -10,7 +11,7 @@ const ColumnToggle = ({ allColumns }) => {
     if (allColumns && Array.isArray(allColumns)) {
       setColumnsState(allColumns.map(column => ({
         id: column.id,
-        Header: column.Header,
+        header: column.header,
         isHidden: column.isHidden,
       })));
     }
@@ -41,9 +42,8 @@ const ColumnToggle = ({ allColumns }) => {
     }
   };
 
-  // Ensure that column.Header is defined before calling toString()
   const filteredColumns = columnsState.filter(column =>
-    column.Header?.toString().toLowerCase().includes(filterValues.toLowerCase())
+    column.header?.toString().toLowerCase().includes(filterValues.toLowerCase())
   );
 
   return (
@@ -55,8 +55,8 @@ const ColumnToggle = ({ allColumns }) => {
           value={filterValues}
           onChange={handleFilterChange}
         />
-        <button onClick={() => toggleAllColumns(true)}>Mostrar Todo</button>
-        <button onClick={() => toggleAllColumns(false)}>Ocultar Todo</button>
+        <Button onClick={() => toggleAllColumns(true)}>Mostrar Todo</Button>
+        <Button onClick={() => toggleAllColumns(false)}>Ocultar Todo</Button>
       </div>
       <div className="column-toggle-list">
         {filteredColumns.map(column => (
@@ -66,7 +66,7 @@ const ColumnToggle = ({ allColumns }) => {
               checked={!column.isHidden}
               rounded={true}
             />
-            <label>{column.Header}</label>
+            <label>{column.header}</label>
           </div>
         ))}
       </div>

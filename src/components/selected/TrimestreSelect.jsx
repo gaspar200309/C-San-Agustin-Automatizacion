@@ -1,4 +1,3 @@
-import React, { useMemo } from 'react';
 import Select from '../selected/Select';
 
 const TrimestreSelect = ({ name, label, ...props }) => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Select from '../../components/selected/Select';
 import { getTeacher } from '../../api/api';
 
@@ -8,12 +8,13 @@ const TeacherSelector = ({ onChange, value, name, label, required }) => {
   useEffect(() => {
     getTeacher().then(response => {
       setTeacherOptions(response.data.map(teacher => ({
-        value: `${teacher.name} ${teacher.last_name}`,
+        value: teacher.id,
         label: `${teacher.name} ${teacher.last_name}`,
+        key: teacher.id, 
       })));
     });
   }, []);
-
+  
   return (
     <Select
       label={label || "Profesor"}
@@ -24,12 +25,13 @@ const TeacherSelector = ({ onChange, value, name, label, required }) => {
     >
       <option value="">Seleccione Profesor</option>
       {teacherOptions.map((teacher) => (
-        <option key={teacher.value} value={teacher.value}>
+        <option key={teacher.key} value={teacher.value}>
           {teacher.label}
         </option>
       ))}
     </Select>
   );
+  
 };
 
 export default TeacherSelector;
