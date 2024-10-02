@@ -50,6 +50,8 @@ export const assignCoordinatorToIndicator = (indicatorId, userId) => api.post(`/
 export const removeCoordinatorFromIndicator = (indicatorId, userId) => api.delete(`/api/indicators/${indicatorId}/remove-coordinator`, { data: { userId } });
 export const getAssignCoordinatorToIndicator = () => api.get('/api/indicators/simple')
 export const getIndicatorByUsername = (username) => api.get(`/api/indicators/user/${username}`)
+export const getIndicatorAssignements = () => api.get(`/api/indicators/assignments`)
+
 
 export const registerCommunications = () => api.get('/api/indicators')
 export const registerAttendance = () => api.get('/api/indicators')
@@ -58,3 +60,10 @@ export const registerCourseData = () => api.get('/api/indicators')
 export const registerStudentNotes = () => api.get('/api/indicators')
 export const getPeriods = () => api.get('/api/indicators')
 export const registerYearlyCommunications = () => api.get('/api/indicators')
+
+export const registerDocuments = (data) => api.post('/api/documents', data)
+export const getDocuments = () => api.get('/api/documents/delivered')
+export const countDocuments = () => api.get('/api/documents/counts')
+
+export const registerStatusIndicator = (data) => api.post('/api/evaluations', data)
+export const getStatusIndicator = (id) => api.get(`/api/evaluations/all/${id}`)

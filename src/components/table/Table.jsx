@@ -1,10 +1,6 @@
-import React from 'react';
 import './Table.css';
 
 const Table = ({ columns, data, onRowClick }) => {
-  console.log('Table received columns:', columns);
-  console.log('Table received data:', data);
-
   return (
     <table className="reusable-table">
       <thead>

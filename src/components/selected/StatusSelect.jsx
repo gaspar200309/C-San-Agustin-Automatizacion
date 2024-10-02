@@ -1,4 +1,3 @@
-import React from 'react';
 import Select from '../../components/selected/Select';
 
 const StatusSelect = ({ label, name, value, onChange }) => {
@@ -11,11 +10,11 @@ const StatusSelect = ({ label, name, value, onChange }) => {
       onChange={onChange}
     >
       <option value="">Seleccione Estado</option>
-      <option value="Sí">Sí</option>
-      <option value="No">No</option>
-      <option value="Retraso">Retraso</option>
-      <option value="Incompleto">Incompleto</option>
-      <option value="No corresponde">No corresponde</option>
+      <option value="1">Sí</option>
+      <option value="2">No</option>
+      <option value="3">Retraso</option>
+      <option value="4">Incompleto</option>
+      <option value="5">No corresponde</option>
     </Select>
   );
 };

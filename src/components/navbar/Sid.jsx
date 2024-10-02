@@ -1,4 +1,3 @@
-import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import './Sidebar.css';
 import { IoIosArrowBack, PiChalkboardTeacher, GrAnalytics, FaUser, MdNavigateNext, FaHome, FaUserGraduate, TbLogout, AiOutlineGroup, MdNotifications, GiReceiveMoney, GrMoney } from '../../hooks/icons';

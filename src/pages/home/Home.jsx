@@ -6,6 +6,7 @@ import SearchBar from '../../components/searchBar/SearchBar';
 import { countIndicator } from '../../api/api';
 import useFetchData from '../../hooks/useFetchData';
 import './Dashboard.css'; 
+import DocumentStats from '../../components/graphics/DocumentStates';
 
 
 // Register the components for Chart.js
@@ -278,8 +279,10 @@ export default function Dashboard() {
         </div>
       </div>
       <div className="div11">
-        <div className="chart-container">
-          <Radar data={radarData} options={radarOptions} />
+      
+      <div className="chart-container">
+          {/* <Radar data={radarData} options={radarOptions} /> */}
+          <DocumentStats/>
         </div>
       </div>
       <div className="div12">
