@@ -1,124 +1,91 @@
 import React, { useState, useEffect } from 'react';
+import Modal from '../../components/modal/Modal';
+import { useParams } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import InputText from '../../components/inputs/InputText';
-import Select from '../../components/selected/Select';
-import Modal from '../../components/modal/Modal';
-import './Indicator7.css';
+import TeacherSelector from '../selected/TeacherSelector';
+import StatusSelect from '../selected/StatusSelect';
+import Select from '../selected/Select';
+import { Button } from '../buttons/Button';
+import Table from '../table/Table';
+import { getStatusIndicator7, registerStatusIndicador7 } from '../../api/api';
 
 const validationSchema = Yup.object({
   profesor: Yup.string().required('Requerido'),
   period: Yup.string().oneOf(['1', '2', '3', '4', '5', '6'], 'Seleccione una opción válida').required('Requerido'),
-  status: Yup.string().oneOf(['Si', 'No', 'Retraso', 'No corresponde'], 'Seleccione una opción válida').required('Requerido'),
+  status: Yup.string().required('Requerido'),
 });
-
-const initialProfessors = [
-  { name: 'Dr. Juan Pérez', periods: { '1': 'Si', '2': 'No', '3': 'Retraso' } },
-  { name: 'M.Sc. Ana López', periods: { '1': 'Si', '2': 'Si-Incompleto', '3': 'No' } },
-  { name: 'Ing. Carlos García', periods: { '1': 'Retraso', '2': 'Si', '3': 'No corresponde' } },
-  { name: 'PhD. María Rodríguez', periods: { '1': 'Si', '2': 'No', '3': 'Si-Retraso' } },
-  { name: 'M.Sc. Luis González', periods: { '1': 'No', '2': 'Retraso', '3': 'Si-Incompleto' } },
-];
-
-
-const resolveConflict = (status1, status2) => {
-  const conflictResolutionMap = {
-    'Si-No': 'Si-Incompleto',
-    'Si-Retraso': 'Si-Retraso',
-    'No-Retraso': 'No-Retraso',
-  };
-
-  const key = `${status1}-${status2}`;
-  return conflictResolutionMap[key] || conflictResolutionMap[`${status2}-${status1}`] || status1;
-};
-
 const Indicator7 = () => {
-  const [professors, setProfessors] = useState(initialProfessors);
+  const { id } = useParams();
+  const [professors, setProfessors] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
 
+  const fetchData = async () => {
+    try {
+      const response = await getStatusIndicator7(id);
+      const mappedProfessors = mapDataToTableFormat(response.data.evaluations);
+      setProfessors(mappedProfessors);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
   useEffect(() => {
-    const storedProfessors = localStorage.getItem('professors');
-    if (storedProfessors) {
-      setProfessors(JSON.parse(storedProfessors));
-    }
+    fetchData();
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem('professors', JSON.stringify(professors));
-  }, [professors]);
+  const mapDataToTableFormat = (evaluations) => {
+    const professorMap = {};
 
-  const handleSubmit = (values, { resetForm }) => {
-    const existingProfessor = professors.find(prof => prof.name === values.profesor);
-    const currentPeriodStatus = existingProfessor?.periods[values.period];
+    evaluations.forEach((evaluation) => {
+      const teacherName = `${evaluation.teacher.name} ${evaluation.teacher.last_name}`;
+      const periodId = evaluation.period.id;
+      const status = evaluation.state.name;
 
-    const resolvedStatus = currentPeriodStatus
-      ? resolveConflict(currentPeriodStatus, values.status)
-      : values.status;
+      if (!professorMap[teacherName]) {
+        professorMap[teacherName] = { name: teacherName, periods: {} };
+      }
 
-    const updatedPeriods = {
-      ...(existingProfessor?.periods || {}),
-      [values.period]: resolvedStatus,
-    };
+      professorMap[teacherName].periods[periodId] = status;
+    });
 
-    if (existingProfessor) {
-      existingProfessor.periods = updatedPeriods;
-      setProfessors([...professors]);
-    } else {
-      setProfessors([...professors, { name: values.profesor, periods: updatedPeriods }]);
-    }
-
-    resetForm();
-    setModalOpen(false);
+    return Object.values(professorMap);
   };
 
-  const getStatusClass = (status) => {
-    switch (status) {
-      case 'Si':
-        return 'status-complete';
-      case 'Incompleto':
-      case 'Si-Incompleto':
-        return 'status-incomplete';
-      case 'No':
-        return 'status-no';
-      case 'Retraso':
-      case 'Si-Retraso':
-        return 'status-delayed';
-      case 'No corresponde':
-        return 'status-not-applicable';
-      default:
-        return '';
+  const handleSubmit = async (values, { resetForm }) => {
+    try {
+      const data = {
+        indicator_id: 7, // ID fijo del indicador
+        teacher_id: parseInt(values.profesor), // Actualizado
+        period_id: parseInt(values.period), // Actualizado
+        state_id: parseInt(values.status) // Actualizado
+      };
+
+      await registerStatusIndicador7(data);
+      await fetchData();
+      resetForm();
+      setModalOpen(false);
+    } catch (error) {
+      console.error('Error al registrar:', error);
     }
-  };
+  }; 
+
+  const columns = [
+    { header: 'Profesor', accessor: 'name' },
+    { header: 'Periodo 1', accessor: 'period1', render: (row) => row.periods['1'] || 'N/A' },
+    { header: 'Periodo 2', accessor: 'period2', render: (row) => row.periods['2'] || 'N/A' },
+    { header: 'Periodo 3', accessor: 'period3', render: (row) => row.periods['3'] || 'N/A' },
+    { header: 'Periodo 4', accessor: 'period4', render: (row) => row.periods['4'] || 'N/A' },
+    { header: 'Periodo 5', accessor: 'period5', render: (row) => row.periods['5'] || 'N/A' },
+    { header: 'Periodo 6', accessor: 'period6', render: (row) => row.periods['6'] || 'N/A' },
+  ];
 
   return (
     <div className="indicator-container">
       <button className="open-modal-btn" onClick={() => setModalOpen(true)}>Agregar Estado de Nota</button>
-      <div className="professor-table">
-        <h3>Profesores Registrados</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Profesor</th>
-              {['1', '2', '3', '4', '5', '6'].map((period, idx) => (
-                <th key={idx}>Periodo {period}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {professors.map((prof, index) => (
-              <tr key={index}>
-                <td>{prof.name}</td>
-                {['1', '2', '3', '4', '5', '6'].map((period, idx) => (
-                  <td key={idx} className={getStatusClass(prof.periods[period])}>
-                    {prof.periods[period] || 'N/A'}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      
+      <Table columns={columns} data={professors} />
+
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
         <h2>Registrar Estado de Nota</h2>
         <Formik
@@ -126,15 +93,14 @@ const Indicator7 = () => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {() => (
+          {({ values, setFieldValue }) => (
             <Form className="form">
-              <Select label="Profesor" name="profesor" required={true}>
-                <option value="">Seleccione un profesor</option>
-                {initialProfessors.map((prof, index) => (
-                  <option key={index} value={prof.name}>{prof.name}</option>
-                ))}
-              </Select>
-
+              <TeacherSelector
+                name="profesor"
+                value={values.profesor}
+                onChange={(e) => setFieldValue('profesor', e.target.value)}
+                required={true}
+              />
               <Select label="Periodo" name="period" required={true}>
                 <option value="">Seleccione un periodo</option>
                 <option value="1">1</option>
@@ -144,14 +110,13 @@ const Indicator7 = () => {
                 <option value="5">5</option>
                 <option value="6">6</option>
               </Select>
-              <Select label="Estado" name="status" required={true}>
-                <option value="">Seleccione un estado</option>
-                <option value="Si">Si</option>
-                <option value="No">No</option>
-                <option value="Retraso">Retraso</option>
-                <option value="No corresponde">No corresponde</option>
-              </Select>
-              <button type="submit">Agregar Estado</button>
+              <StatusSelect
+                name="status"
+                value={values.status}
+                onChange={(e) => setFieldValue('status', e.target.value)}
+                required={true}
+              />
+              <Button type="submit">Agregar Estado</Button>
             </Form>
           )}
         </Formik>
@@ -159,5 +124,4 @@ const Indicator7 = () => {
     </div>
   );
 };
-
 export default Indicator7;

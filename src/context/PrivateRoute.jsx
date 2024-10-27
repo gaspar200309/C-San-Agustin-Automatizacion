@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { isTokenValid } from "../../utils/Auth";
-import { getToken } from "../../pages/login/authFunctions";
+import { isTokenValid } from "../utils/Auth";
+import { getToken } from "../pages/login/authFunctions";
 import { Navigate } from 'react-router-dom';
-import { Sidebar } from "../navbar/Sid";
+import { Sidebar } from "../components/navbar/Sid"; // Sidebar component
 
 const PrivateRoute = ({ children }) => {
   const token = getToken();
@@ -14,10 +14,13 @@ const PrivateRoute = ({ children }) => {
 
   return tokenExistAndStillValid ? (
     <div className={`app-layout ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
+      
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      
       <main className="main-content">
         {children}
       </main>
+
     </div>
   ) : (
     <Navigate to="/" />

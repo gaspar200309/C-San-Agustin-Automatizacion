@@ -1,0 +1,49 @@
+.custom-checkbox {
+    position: relative;
+    display: inline-block;
+    margin: 10px;
+}
+
+.custom-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.custom-checkbox label {
+    padding: 10px 20px;
+    background-color: #333;
+    border-radius: 25px;
+    color: #999;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.custom-checkbox input[type="checkbox"]:checked + label {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.custom-checkbox input[type="checkbox"]:checked + label:hover {
+    background-color: #3d5e83;
+}
+
+.custom-checkbox label:hover {
+    background-color: var(--primary-color);
+    color: #131010;
+}
+
+.custom-checkbox.dark label {
+    background-color: #4b4545; /* Ajusta el color para modo oscuro */
+    color: #131010; 
+}
+
+.custom-checkbox.dark input[type="checkbox"]:checked + label {
+    background-color: #1b4663; 
+    color: var(--text-color);
+    box-shadow: 0 0 15px 4px rgba(54, 52, 48, 0.6);
+}
+
+.custom-checkbox.dark label:hover {
+    background-color: #DDD; 
+    color: #131010;
+}

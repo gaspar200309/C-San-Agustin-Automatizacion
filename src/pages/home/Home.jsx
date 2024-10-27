@@ -1,13 +1,33 @@
-import React from 'react';
-import { Bar, Pie, Line, Scatter, Radar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, ArcElement, LineElement, PointElement, RadialLinearScale, Title, Tooltip, Legend, Filler } from 'chart.js';
-import { PiNotePencilBold } from '../../hooks/icons';
-import SearchBar from '../../components/searchBar/SearchBar';
-import { countIndicator } from '../../api/api';
-import useFetchData from '../../hooks/useFetchData';
-import './Dashboard.css'; 
-import DocumentStats from '../../components/graphics/DocumentStates';
-
+import React from "react";
+import { Bar, Pie, Line, Scatter, Radar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  ArcElement,
+  LineElement,
+  PointElement,
+  RadialLinearScale,
+  Title,
+  Tooltip,
+  Legend,
+  Filler,
+} from "chart.js";
+import {
+  PiNotePencilBold,
+  HiUsers,
+  FcComboChart,
+  IoAnalyticsSharp,
+  FaClockRotateLeft,
+  GiTeacher
+} from "../../hooks/icons";
+import SearchBar from "../../components/searchBar/SearchBar";
+import { countIndicator } from "../../api/api";
+import useFetchData from "../../hooks/useFetchData";
+import "./Dashboard.css";
+import DocumentStats from "../../components/graphics/DocumentStates";
+import DashboardIcon from "../../components/icon/DashboardIcon";
 
 // Register the components for Chart.js
 ChartJS.register(
@@ -25,70 +45,81 @@ ChartJS.register(
 );
 
 export default function Dashboard() {
-
-  const { data: countIndicators, loading: loadingIndicator, error: errorIndicator} = useFetchData(countIndicator);
-
+  const {
+    data: countIndicators,
+    loading: loadingIndicator,
+    error: errorIndicator,
+  } = useFetchData(countIndicator);
+  console.log(countIndicators);
   const barData = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+    labels: ["January", "February", "March", "April", "May", "June"],
     datasets: [
       {
-        label: 'Sales',
+        label: "Sales",
         data: [3000, 5000, 4000, 7000, 2000, 8000],
-        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+        backgroundColor: "rgba(75, 192, 192, 0.6)",
       },
     ],
   };
 
   const pieData = {
-    labels: ['Electronics', 'Fashion', 'Home Appliances'],
+    labels: ["Electronics", "Fashion", "Home Appliances"],
     datasets: [
       {
         data: [40, 30, 30],
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+        hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
       },
     ],
   };
 
   const lineData = {
-    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+    labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
     datasets: [
       {
-        label: 'User Signups',
+        label: "User Signups",
         data: [200, 300, 500, 700],
-        borderColor: 'rgba(255, 99, 132, 1)',
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        tension: 0.1
+        borderColor: "rgba(255, 99, 132, 1)",
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        tension: 0.1,
       },
     ],
   };
 
   const areaData = {
-    labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+    labels: ["Q1", "Q2", "Q3", "Q4"],
     datasets: [
       {
-        label: 'Revenue',
+        label: "Revenue",
         data: [10000, 15000, 13000, 17000],
         fill: true,
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        borderColor: "rgba(75, 192, 192, 1)",
       },
     ],
   };
 
   const radarData = {
-    labels: ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running'],
+    labels: [
+      "Eating",
+      "Drinking",
+      "Sleeping",
+      "Designing",
+      "Coding",
+      "Cycling",
+      "Running",
+    ],
     datasets: [
       {
-        label: 'My First Dataset',
+        label: "My First Dataset",
         data: [65, 59, 90, 81, 56, 55, 40],
         fill: true,
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgb(255, 99, 132)',
-        pointBackgroundColor: 'rgb(255, 99, 132)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgb(255, 99, 132)'
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderColor: "rgb(255, 99, 132)",
+        pointBackgroundColor: "rgb(255, 99, 132)",
+        pointBorderColor: "#fff",
+        pointHoverBackgroundColor: "#fff",
+        pointHoverBorderColor: "rgb(255, 99, 132)",
       },
     ],
   };
@@ -96,15 +127,15 @@ export default function Dashboard() {
   const scatterData = {
     datasets: [
       {
-        label: 'A dataset',
+        label: "A dataset",
         data: [
           { x: -10, y: 0 },
           { x: 0, y: 10 },
           { x: 10, y: 5 },
-          { x: 0.5, y: 5.5 }
+          { x: 0.5, y: 5.5 },
         ],
-        backgroundColor: 'rgb(255, 99, 132)'
-      }
+        backgroundColor: "rgb(255, 99, 132)",
+      },
     ],
   };
 
@@ -113,20 +144,20 @@ export default function Dashboard() {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: 'top',
+        position: "top",
       },
       title: {
         display: true,
         font: {
-          size: 16
-        }
-      }
+          size: 16,
+        },
+      },
     },
     scales: {
       y: {
-        beginAtZero: true
-      }
-    }
+        beginAtZero: true,
+      },
+    },
   };
 
   const barOptions = {
@@ -135,9 +166,9 @@ export default function Dashboard() {
       ...commonOptions.plugins,
       title: {
         ...commonOptions.plugins.title,
-        text: 'Monthly Sales'
-      }
-    }
+        text: "Monthly Sales",
+      },
+    },
   };
 
   const pieOptions = {
@@ -146,9 +177,9 @@ export default function Dashboard() {
       ...commonOptions.plugins,
       title: {
         ...commonOptions.plugins.title,
-        text: 'Revenue Distribution'
-      }
-    }
+        text: "Revenue Distribution",
+      },
+    },
   };
 
   const lineOptions = {
@@ -157,9 +188,9 @@ export default function Dashboard() {
       ...commonOptions.plugins,
       title: {
         ...commonOptions.plugins.title,
-        text: 'Weekly User Signups'
-      }
-    }
+        text: "Weekly User Signups",
+      },
+    },
   };
 
   const areaOptions = {
@@ -168,9 +199,9 @@ export default function Dashboard() {
       ...commonOptions.plugins,
       title: {
         ...commonOptions.plugins.title,
-        text: 'Quarterly Revenue'
-      }
-    }
+        text: "Quarterly Revenue",
+      },
+    },
   };
 
   const radarOptions = {
@@ -179,9 +210,9 @@ export default function Dashboard() {
       ...commonOptions.plugins,
       title: {
         ...commonOptions.plugins.title,
-        text: 'Skills Comparison'
-      }
-    }
+        text: "Skills Comparison",
+      },
+    },
   };
 
   const scatterOptions = {
@@ -190,75 +221,133 @@ export default function Dashboard() {
       ...commonOptions.plugins,
       title: {
         ...commonOptions.plugins.title,
-        text: 'Scatter Plot Example'
-      }
-    }
+        text: "Scatter Plot Example",
+      },
+    },
   };
 
   if (loadingIndicator) {
     return <div>Cargando...</div>;
   }
-  
+
   if (errorIndicator) {
     return <div>Error al cargar los datos: {errorIndicator.message}</div>;
   }
-  
 
   return (
     <div className="parent">
       <div className="div1">
-      <h1>Dasboard</h1>
+        <h1>Home</h1>
       </div>
       <div className="div2">
-        <SearchBar/>
+        <SearchBar />
       </div>
 
       <div className="div3">
-      <div className="counter-container1">
+        <div className="counter-container">
           <div className="counter">
-            <h3><PiNotePencilBold />Total indicadores</h3>
+            <div className="title-counter">
+              <h3>Total usuarios</h3>
+              <DashboardIcon
+                icon={HiUsers}
+                iconColor="#8280FF"
+                bgColor="#E5E4FF"
+                className="dashboard-icon"
+              />
+            </div>
+
             <p>{countIndicators.total}</p>
+            <small>
+              <span>
+                <IoAnalyticsSharp /> 80 %{" "}
+              </span>
+              Ultimos cambios
+            </small>
           </div>
         </div>
       </div>
 
       <div className="div4">
-      <div className="counter-container2">
+        <div className="counter-container">
           <div className="counter">
-            <h3><PiNotePencilBold />Total indicadores completados</h3>
+            <div className="title-counter">
+              <h3>Total profesores</h3>
+              <DashboardIcon
+                icon={GiTeacher }
+                iconColor="#FEC53D"
+                bgColor="#FFF3D6"
+                className="dashboard-icon"
+              />
+            </div>
             <p>{countIndicators.total}</p>
+            <small>
+              <span>
+                <IoAnalyticsSharp /> 80 %{" "}
+              </span>
+              Ultimos cambios
+            </small>
           </div>
         </div>
       </div>
 
       <div className="div5">
-      <div className="counter-container3">
+        <div className="counter-container">
           <div className="counter">
-            <h3>Total de indicadores pendientes</h3>
-            <p>{countIndicators.complete}</p>
+            <div className="title-counter">
+              <h3>Indicadores completados</h3>
+              <DashboardIcon
+                icon={FcComboChart }
+                iconColor="#FF9066"
+                bgColor="#D9F7E8"
+                className="dashboard-icon"
+              />
+            </div>
+            <p>{countIndicators.total}</p>
+            <small>
+              <span>
+                <IoAnalyticsSharp /> 80 %{" "}
+              </span>
+              Ultimos cambios
+            </small>
           </div>
         </div>
       </div>
 
       <div className="div6">
-      <div className="counter-container4">
+        <div className="counter-container">
           <div className="counter">
-            <h3>Total de indicadores pendientes</h3>
-            <p>{countIndicators.incomplete}</p>
+            <div className="title-counter">
+              <h3>Indicadores pendientes</h3>
+              <DashboardIcon
+                icon={FaClockRotateLeft }
+                iconColor="#FF9066"
+                bgColor="#FFDED1"
+                className="dashboard-icon"
+              />
+            </div>
+            <p>{countIndicators.total}</p>
+            <small>
+              <span>
+                <IoAnalyticsSharp /> 80 %{" "}
+              </span>
+              Ultimos cambios
+            </small>
           </div>
         </div>
       </div>
 
       <div className="div7">
-      
-      <div className="chart-container large">
-          <Bar data={barData} options={barOptions} />
+        <div className="chart-container large">
+          <Bar
+            data={barData}
+            options={barOptions}
+          />
         </div>
       </div>
 
       <div className="div8">
-      <div className="history-container">
-          <h3>Lista de indicadores completados </h3>
+        <div className="history-container">
+          <h3>Actividades recientes </h3>
           <ul>
             <li>Indicator 1</li>
             <li>Indicator 2</li>
@@ -268,27 +357,35 @@ export default function Dashboard() {
       </div>
 
       <div className="div9">
-      <div className="chart-container">
-          <Line data={lineData} options={lineOptions} />
+        <div className="chart-container">
+          <Line
+            data={lineData}
+            options={lineOptions}
+          />
         </div>
       </div>
 
       <div className="div10">
-      <div className="chart-container">
-          <Line data={areaData} options={areaOptions} />
+        <div className="chart-container">
+          <Line
+            data={areaData}
+            options={areaOptions}
+          />
         </div>
       </div>
       <div className="div11">
-      
-      <div className="chart-container">
+        <div className="chart-container">
           {/* <Radar data={radarData} options={radarOptions} /> */}
-          <DocumentStats/>
+          <DocumentStats />
         </div>
       </div>
       <div className="div12">
-      <div className="chart-container">
-          <Pie data={pieData} options={pieOptions} />
-        </div> 
+        <div className="chart-container">
+          <Pie
+            data={pieData}
+            options={pieOptions}
+          />
+        </div>
       </div>
     </div>
   );

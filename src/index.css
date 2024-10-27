@@ -7,28 +7,18 @@
 
   :root {
     /* Base Colors */
-    --body-color: #DDDDDD;
+    --body-color: #F5F6FA;
     --sidebar-color: #FFFFFF;
-    --primary-color: #164b99;
-    --toggle-color: #DDDDDD;
-    --text-color: #707070;
+    --primary-color: #4880FF;
+    --toggle-color: #6D6E70;
 
     /* Custom Colors */
     --color-dark: #1B2431;
     --color-medium: #273142;
-    
-    /* Gradients */
-    --gradient-1: linear-gradient(135deg, #45C86D 0%, #63A9FD 100%);
-    --gradient-2: linear-gradient(135deg, #A23BF3 0%, #63A9FD 100%);
-    --gradient-3: linear-gradient(135deg, #FCA0C4 0%, #E1394B 100%);
-    --gradient-4: linear-gradient(135deg, #63A9FD 0%, #FCA0C4 100%);
-    
-    /* Light Theme Specific */
-    --color-1: #45C86D;
-    --color-2: #A23BF3;
-    --color-3: #63A9FD;
-    --color-4: #FCA0C4;
-    --color-5: #E1394B;
+    --color-5: #f37575;
+
+    --text-color : #202224;
+    --text-color-secundary: #6D6E70;
     
     /* Transition Timings */
     --tran-03: all 0.2s ease;
@@ -46,23 +36,13 @@
   body.dark {
     --body-color: var(--color-dark);
     --sidebar-color: var(--color-medium);
-    --primary-color: var(--color-medium);
+    --primary-color-light: #2665e2;
+    --primary-color: var(--primary-color);
     --toggle-color: #FFFFFF;
     --text-color: #CCCCCC;
     --text-color-secundary: #8a8787;
 
-    /* Dark Theme Specific */
-    --color-1: #45C86D;
-    --color-2: #A23BF3;
-    --color-3: #63A9FD;
-    --color-4: #FCA0C4;
-    --color-5: #E1394B;
     
-    /* Dark Theme Gradients */
-    --gradient-1: linear-gradient(135deg, #3B8C5D 0%, #5279D6 100%);
-    --gradient-2: linear-gradient(135deg, #7227D9 0%, #4A91E3 100%);
-    --gradient-3: linear-gradient(135deg, #E0789A 0%, #B22B3A 100%);
-    --gradient-4: linear-gradient(135deg, #3A81C7 0%, #D4789A 100%);
   }
 
   /* Selection Styling */

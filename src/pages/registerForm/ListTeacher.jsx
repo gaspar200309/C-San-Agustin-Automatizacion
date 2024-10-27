@@ -10,7 +10,6 @@ import { MdDelete } from "react-icons/md";
 
 export default function ListTeacher() {
   const { data: teachers, loading: loadingTeacher, error: errorTeacher } = useFetchData(getTeacher);
-  console.log(teachers)
   const currentUser = useMemo(() => getUser(), []);
   const isAdmin = useMemo(() => currentUser?.roles.includes("Administrador"), [currentUser]);
   const navigate = useNavigate(); 

@@ -64,9 +64,6 @@
   font-size: 0.875rem;
 }
 
-/* Dark Theme Adjustments */
-body.dark .input-component label {
-}
 
 body.dark .error-message {
   color: var(--color-5);

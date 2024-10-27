@@ -76,3 +76,51 @@
   }
 
   
+  .indicator-container {
+    padding: 20px;
+    background-color: #ddd2d2;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .period-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .period-navigation button {
+    background-color: #007bff; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 4px; /* Esquinas redondeadas */
+    padding: 8px 12px; /* Espaciado interno */
+    cursor: pointer; /* Cambiar cursor al pasar el mouse */
+    transition: background-color 0.3s; /* Transición suave para el color de fondo */
+  }
+  
+  .period-navigation button:hover {
+    background-color: #0056b3; /* Color de fondo al pasar el mouse */
+  }
+  
+  .period-navigation span {
+    font-size: 1.2em; /* Tamaño de la fuente */
+    font-weight: bold; /* Texto en negrita */
+  }
+  
+  .open-modal-btn {
+    background-color: #28a745; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 4px; /* Esquinas redondeadas */
+    padding: 10px 15px; /* Espaciado interno */
+    cursor: pointer; /* Cambiar cursor al pasar el mouse */
+    margin-bottom: 20px; /* Espaciado inferior */
+    transition: background-color 0.3s; /* Transición suave para el color de fondo */
+  }
+  
+  .open-modal-btn:hover {
+    background-color: #218838; /* Color de fondo al pasar el mouse */
+  }
+  

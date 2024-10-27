@@ -64,36 +64,6 @@
   grid-column: span 2;
 }
 
-.modal-content form input[type="text"],
-.modal-content form input[type="email"],
-.modal-content form input[type="password"],
-.modal-content form textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid var(--primary-color);
-  border-radius: 4px;
-  background-color: var(--body-color);
-  color: var(--text-color);
-  transition: var(--tran-03);
-}
-
-.modal-content form input[type="text"].dark,
-.modal-content form input[type="email"].dark,
-.modal-content form input[type="password"].dark,
-.modal-content form textarea.dark {
-  background-color: var(--color-dark);
-  border: 1px solid var(--color-3);
-}
-
-.modal-content form input[type="text"]:focus,
-.modal-content form input[type="email"]:focus,
-.modal-content form input[type="password"]:focus,
-.modal-content form textarea:focus {
-  border-color: var(--color-4);
-  outline: none;
-}
-
-/* Responsive Grid for Columns */
 @media (min-width: 768px) {
   .modal-content form {
     grid-template-columns: repeat(2, 1fr);
@@ -115,9 +85,8 @@
 }
 
 .modal-content::-webkit-scrollbar-thumb {
-  background-color: var(--primary-color);
-  border-radius: 4px;
-  border: 2px solid var(--body-color);
+  background-color: #6b6666;
+  border: 2px solid #ddd;
 }
 
 .modal-content::-webkit-scrollbar-thumb:hover {
