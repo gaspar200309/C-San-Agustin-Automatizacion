@@ -15,10 +15,25 @@ import { GrAnalytics } from "react-icons/gr";
 import { MdAdminPanelSettings } from "react-icons/md";
 import { PiNotePencilBold } from "react-icons/pi";
 import { PiChalkboardTeacher } from "react-icons/pi";
+import { HiUsers } from "react-icons/hi";
+import { FcComboChart } from "react-icons/fc";
+import { IoAnalyticsSharp } from "react-icons/io5";
+import { FaClockRotateLeft } from "react-icons/fa6";
+import { GiTeacher } from "react-icons/gi";
+import { FaCamera } from "react-icons/fa";
+import { FaCalendarAlt } from "react-icons/fa";
+
 
 export {
   MdAdminPanelSettings,
   PiNotePencilBold,
+  FaCalendarAlt,
+  IoAnalyticsSharp,
+  FaCamera,
+  GiTeacher,
+  FcComboChart,
+  FaClockRotateLeft,
+  HiUsers,
   MdDelete,
   FaEdit,
   IoIosArrowBack,

@@ -37,6 +37,7 @@ export const getUsers = () => api.get('/api/users')
 export const addUser = (data) => api.post('/auth/register', data)
 export const updateUser = (id, data) => api.put(`/api/users/${id}`, data)
 export const deleteUser = (id) => api.delete(`/api/users/${id}`)
+export const getUserById = (id) => api.get(`/api/users/${id}`);
 
 export const getCourses = () => api.get('/api/courses')
 
@@ -67,3 +68,23 @@ export const countDocuments = () => api.get('/api/documents/counts')
 
 export const registerStatusIndicator = (data) => api.post('/api/evaluations', data)
 export const getStatusIndicator = (id) => api.get(`/api/evaluations/all/${id}`)
+export const registerStatusIndicador4 = (data) => api.post('/api/evaluations/indicator4', data)
+export const getStatusIndicator4 = (id) => api.get(`/api/evaluations/indicator4/${id}`)
+
+export const registerStatusIndicador6 = (data) => api.post('/api/create_indicator6', data)
+export const getStatusIndicator6 = (id) => api.get(`/api/evaluations/indicator6/${id}`)
+
+export const registerStatusIndicador7 = (data) => api.post('/api/evaluations/indicator7', data)
+export const getStatusIndicator7 = (id) => api.get(`/api/evaluations/indicator7/${id}`)
+
+export const registerStatusIndicador8 = (data) => api.post('/api/evaluations/indicator8', data)
+export const getStatusIndicator8 = () => api.get('/api/evaluations/indicator8/9')
+
+export const registerStatusIndicador10 = (data) => api.post('/api/student-status', data)
+export const getStatusIndicator10 = (id) => api.get(`/api/student-status/${id}`)
+
+export const registerIndicator12 = (data) => api.post('/api/register-license', data)
+export const getIndicator12Stats = () => api.get('/api/statistics/general')
+
+export const registerIndicator13 = (data) => api.post('/api/register-insidence', data)
+export const getIndicator13Stats = () => api.get('/api/statistics')

@@ -6,6 +6,7 @@ import { Button } from '../../components/buttons/Button';
 import ColumnToggle from '../../components/table/ColumnToggle';
 import Modal from '../../components/modal/Modal'; 
 import './ListIndicadores.css'; 
+import Breadcrumb from '../../components/breadcrumb/Breadcrumb';
 
 const LinkButton = lazy(() => import('../../components/buttons/LinkButton'));
 
@@ -70,6 +71,7 @@ const IndicatorsList = () => {
 
   return (
     <div>
+    <Breadcrumb />
       <h1>Lista de Indicadores</h1>
         
 

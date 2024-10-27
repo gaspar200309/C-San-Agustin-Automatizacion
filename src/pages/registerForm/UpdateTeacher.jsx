@@ -5,23 +5,22 @@ import * as Yup from "yup";
 import InputText from "../../components/inputs/InputText";
 import { Button } from "../../components/buttons/Button";
 import { updateTeacher, getTeacherById } from "../../api/api";
-import CourseSelect from "../../components/selected/CourseSelect";
-import useSubmitData from "../../hooks/useSubmitData";
 import "./TeacherForm.css";
+import CourseModal from "../../components/selected/ModalCurse";
 
 const EditTeacherForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   
-  const { submitData, loading: submitLoading, error: submitError, success } = useSubmitData(updateTeacher);
-
   const [initialValues, setInitialValues] = useState({
     firstName: '',
     lastName: '',
-    course: '',
+    courses: [],
     subjects: '',
   });
-
+  
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
   const [fetchLoading, setFetchLoading] = useState(false);
   const [fetchError, setFetchError] = useState(null);
 
@@ -33,7 +32,7 @@ const EditTeacherForm = () => {
         setInitialValues({
           firstName: data.name || '',
           lastName: data.last_name || '',
-          course: data.courses[0]?.course_id || '',
+          courses: data.courses.map(course => course.course_id) || [], // Convertimos los cursos a array de IDs
           subjects: data.asignatura || '',
         });
       } catch (error) {
@@ -42,28 +41,42 @@ const EditTeacherForm = () => {
         setFetchLoading(false);
       }
     };
-
+    
     fetchTeacher();
   }, [id]);
 
   const validationSchema = Yup.object({
     firstName: Yup.string().required('Nombre es requerido'),
     lastName: Yup.string().required('Apellidos son requeridos'),
-    course: Yup.string().required('Seleccione un curso'),
+    courses: Yup.array().min(1, 'Seleccione al menos un curso').required('Seleccione cursos'),
     subjects: Yup.string().required('Seleccione una materia'),
   });
 
-  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-    await submitData({ ...values, id });
-    if (success) {
-      resetForm();
+  const handleSubmit = async (values, { setSubmitting }) => {
+    setSubmitLoading(true);
+    setSubmitError(null);
+    
+    try {
+      // Preparar los datos para el backend
+      const teacherData = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        subjects: values.subjects,
+        course_ids: values.courses // Enviamos el array de IDs de cursos
+      };
+      
+      await updateTeacher(id, teacherData);
       navigate("/listTeacher");
+    } catch (error) {
+      setSubmitError(error);
+    } finally {
+      setSubmitLoading(false);
+      setSubmitting(false);
     }
-    setSubmitting(false);
   };
 
-  if (fetchLoading) return <p>Cargando...</p>;
-  if (fetchError) return <p>Error: {fetchError.message}</p>;
+  if (fetchLoading) return <div className="loading">Cargando...</div>;
+  if (fetchError) return <div className="error">Error: {fetchError.message}</div>;
 
   return (
     <Formik
@@ -72,17 +85,64 @@ const EditTeacherForm = () => {
       enableReinitialize
       onSubmit={handleSubmit}
     >
-      <Form className="register-teacher-form">
-        <h3>Editar Profesor</h3>
-        <InputText label="Nombre" name="firstName" required />
-        <InputText label="Apellidos" name="lastName" required />
-        <InputText label="Asignatura" name="subjects" required />
-        <CourseSelect label="Cursos" name="course" required />
-        <Button variant="primary" type="submit" disabled={submitLoading}>
-          Guardar Cambios
-        </Button>
-        {submitError && <p className="error-message">Error: {submitError.message}</p>}
-      </Form>
+      {({ values, setFieldValue, errors, touched }) => (
+        <Form className="register-teacher-form">
+          <h3>Editar Profesor</h3>
+          
+          <InputText 
+            label="Nombre" 
+            name="firstName" 
+            required 
+          />
+          
+          <InputText 
+            label="Apellidos" 
+            name="lastName" 
+            required 
+          />
+          
+          <InputText 
+            label="Asignatura" 
+            name="subjects" 
+            required 
+          />
+          
+          <CourseModal
+            name="courses"
+            label="Cursos"
+            selectedCourses={values.courses}
+            onChange={(selectedCourses) => {
+              setFieldValue('courses', selectedCourses);
+            }}
+          />
+          {errors.courses && touched.courses && (
+            <div className="error-message">{errors.courses}</div>
+          )}
+          
+          <div className="form-footer">
+            <Button 
+              variant="secondary" 
+              type="button" 
+              onClick={() => navigate("/listTeacher")}
+            >
+              Cancelar
+            </Button>
+            <Button 
+              variant="primary" 
+              type="submit" 
+              disabled={submitLoading}
+            >
+              {submitLoading ? 'Guardando...' : 'Guardar Cambios'}
+            </Button>
+          </div>
+          
+          {submitError && (
+            <div className="error-message">
+              Error: {submitError.message}
+            </div>
+          )}
+        </Form>
+      )}
     </Formik>
   );
 };

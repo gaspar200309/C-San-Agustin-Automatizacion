@@ -20,17 +20,8 @@
   color: #FFFFFF;
 }
 
-.button-primary.dark {
-  background-color: var(--primary-color-light);
-  color: var(--text-color);
-}
-
 .button-secondary {
   background-color: var(--toggle-color);
   color: var(--text-color);
 }
 
-.button-secondary.dark {
-  background-color: var(--primary-color-light);
-  color: var(--toggle-color);
-}

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import './Sidebar.css';
-import { IoIosArrowBack, PiChalkboardTeacher, GrAnalytics, FaUser, MdNavigateNext, FaHome, FaUserGraduate, TbLogout, AiOutlineGroup, MdNotifications, GiReceiveMoney, GrMoney } from '../../hooks/icons';
+import { IoIosArrowBack, PiChalkboardTeacher, GrAnalytics, FaUser, MdNavigateNext, FaHome,
+   FaUserGraduate, TbLogout, AiOutlineGroup, FaCalendarAlt } from '../../hooks/icons';
 import { useTheme } from '../../hooks/useTheme';
 import { signOut } from '../../pages/login/authFunctions';
 import ImagenesApp from '../../assets/ImagenesApp';
@@ -12,7 +13,7 @@ const SidebarHeader = ({ onToggle, isOpen }) => {
   return (
     <header className="sidebar-header">
       <div className="text logo">
-        <img className='logo-perfil' src={ImagenesApp.perfil} alt="Perfil" />
+        <img className='logo-perfil' src={currentUser.photo} alt="Perfil" />
         <span className="name">{currentUser?.roles.includes('Administrador') ? 'Administrador' : 'Usuario'}</span>
         <span className="profe">{currentUser?.username || 'Usuario'}</span>
       </div>
@@ -76,10 +77,11 @@ export const Sidebar = ({ isOpen, toggleSidebar }) => {
           <ul className="menu-links">
             <SidebarLink to="/home" icon={<FaHome />} text="Dashboard" />
             <SidebarLink to="/userManagement" icon={<FaUser/>} text="Usuarios" />
+            <SidebarLink to="/listTeacher" icon={<PiChalkboardTeacher />} text="Profesores" />
             <SidebarLink to="/list-indicador" icon={<AiOutlineGroup />} text="Indicadores" />
-            <SidebarLink to="/listTeacher" icon={<PiChalkboardTeacher />} text="Formularios" />
+            <SidebarLink to="/calendar" icon={<FaCalendarAlt />} text="Calendario" />
             <SidebarLink to="/analiticas" icon={<GrAnalytics />} text="Analiticas" />
-            <SidebarLink to="/me-gustas" icon={<FaUserGraduate />} text="Me gustas" />
+            <SidebarLink to="/me-gustas" icon={<FaUserGraduate />} text="Likes" />
           </ul>
         </div>
         <div className="bottom-content">

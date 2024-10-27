@@ -3,10 +3,10 @@ import Select from '../selected/Select';
 const TrimestreSelect = ({ name, label, ...props }) => {
 
     const Trimestres = [
-        { id: 1, name: "Primer Trimestre" },
-        { id: 2, name: "Segundo Trimestre" },
-        { id: 3, name: "Tercer Trimestre" },
-        { id: 4, name: "Cuarto Trimestre" },
+        { id: 4, name: "Primer Trimestre" },
+        { id: 5, name: "Segundo Trimestre" },
+        { id: 6, name: "Tercer Trimestre" },
+        { id: 1, name: "Cuarto Trimestre" },
     ];
 
   return (

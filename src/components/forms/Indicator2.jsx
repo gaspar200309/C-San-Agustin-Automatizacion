@@ -23,14 +23,13 @@ const Indicator2 = () => {
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null); 
 
-  // Efecto para cargar las evaluaciones al montar el componente
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true); // Reiniciar el estado de carga
+      setLoading(true); 
       try {
-        const data = await getStatusIndicator(id);
-        setEvaluations(data.evaluations || []);
-        setStatistics(data.statistics || {});
+        const res = await getStatusIndicator(id);
+        setEvaluations(res.data.evaluations || []);
+        setStatistics(res.data.statistics || {});
       } catch (err) {
         setError(err);
         console.error('Error al obtener las evaluaciones:', err);
@@ -56,7 +55,6 @@ const Indicator2 = () => {
     if (response.success) {
       setModalOpen(false);
       toast.success('Estado registrado con éxito.');
-      // Solo volver a cargar las evaluaciones si se registra exitosamente
       const data = await getStatusIndicator(id);
       setEvaluations(data.evaluations || []);
       setStatistics(data.statistics || {});

@@ -9,8 +9,8 @@ import Indicator7 from '../forms/Indicator7';
 import Indicator8 from '../forms/Indicator8';
 import Indicator10 from '../forms/Indicator10';
 import Indicator11 from '../forms/Indicator11';
-import AttendanceForm from '../forms/NuevosInd/AttendanceForm';
-import CommunicationsForm from '../forms/NuevosInd/CommunicationsForm';
+import Indicator12 from '../forms/Indicator12';
+import Indicator13 from '../forms/Indicator13';
 import CourseDataForm from '../forms/NuevosInd/CourseDataForm';
 import YearlyCommunicationsForm from '../forms/NuevosInd/YearlyCommunicationsForm';
 import TeacherNotesForm from '../forms/NuevosInd/TeacherNotesForm';
@@ -27,8 +27,8 @@ const indicatorComponents = {
   9: Indicator8,
   10: Indicator10,
   11: Indicator11,
-  12: AttendanceForm,
-  13: CommunicationsForm,
+  12: Indicator12,
+  13: Indicator13,
   14: CourseDataForm,
   5: YearlyCommunicationsForm,
   17: TeacherNotesForm

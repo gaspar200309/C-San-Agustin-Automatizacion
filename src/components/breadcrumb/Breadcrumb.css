@@ -1,0 +1,33 @@
+/* src/styles.css */
+.breadcrumb {
+    padding: 10px;
+    font-size: 14px;
+    margin-left: 45%;
+    margin-left: 45%;
+    margin-right: 455%;
+left: 35%;
+right: 43%;
+  }
+  
+  .breadcrumb a {
+    color: #007bff;
+    text-decoration: none;
+    margin-left: 45%;
+    margin-right: 455%;
+left: 35%;
+right: 43%;
+  }
+  
+  .breadcrumb span {
+    font-weight: bold;
+    margin-left: 45%;
+    margin-right: 455%;
+left: 35%;
+right: 43%;
+  }
+  
+  .breadcrumb a:hover {
+    text-decoration: underline;
+   
+  }
+  

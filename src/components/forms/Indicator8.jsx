@@ -1,130 +1,124 @@
 import React, { useState, useEffect } from 'react';
+import Modal from '../../components/modal/Modal';
+import { useParams } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import InputText from '../../components/inputs/InputText';
-import Select from '../../components/selected/Select';
-import Modal from '../../components/modal/Modal';
-import './Indicator1.css';
+import TeacherSelector from '../selected/TeacherSelector';
+import StatusSelect from '../selected/StatusSelect';
+import Select from '../selected/Select';
+import { Button } from '../buttons/Button';
+import Table from '../table/Table';
+import { getStatusIndicator8, registerStatusIndicador8 } from '../../api/api';
 
 const validationSchema = Yup.object({
-  profesor: Yup.string()
-    .max(30, 'Debe tener 30 caracteres o menos')
-    .required('Requerido'),
-  periodo: Yup.string()
-    .oneOf(['Periodo 1', 'Periodo 2', 'Periodo 3'], 'Seleccione una opción válida')
-    .required('Requerido'),
-  estado: Yup.string()
-    .oneOf(['Sí', 'Retraso', 'No', 'No corresponde'], 'Seleccione una opción válida')
-    .required('Requerido'),
+  profesor: Yup.string().required('Requerido'),
+  period: Yup.string().oneOf(['1', '2', '3', '4', '5', '6'], 'Seleccione una opción válida').required('Requerido'),
+  status: Yup.string().required('Requerido'),
 });
-
 const Indicator8 = () => {
-  const [reports, setReports] = useState([]);
+  const [professors, setProfessors] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-
+  
   useEffect(() => {
-    const storedReports = localStorage.getItem('reports');
-    if (storedReports) {
-      setReports(JSON.parse(storedReports));
-    }
+    fetchData();
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem('reports', JSON.stringify(reports));
-  }, [reports]);
-
-  const handleSubmit = (values, { resetForm }) => {
-    setReports([
-      ...reports,
-      {
-        profesor: values.profesor,
-        [values.periodo]: values.estado,
-      },
-    ]);
-    resetForm();
-    setModalOpen(false);
+  const fetchData = async () => {
+    try {
+      const response = await getStatusIndicator8();
+      const mappedProfessors = mapDataToTableFormat(response.data.evaluations);
+      console.log(mappedProfessors)
+      setProfessors(mappedProfessors);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   };
-
-  const calculateCounts = (periodo) => {
-    const totalCount = reports.length;
-    const deliveredCount = reports.filter(report => report[periodo] === 'Sí').length;
-    const notDeliveredCount = totalCount - deliveredCount;
-    const deliveredPercentage = totalCount ? ((deliveredCount / totalCount) * 100).toFixed(2) : 0;
-    const notDeliveredPercentage = totalCount ? ((notDeliveredCount / totalCount) * 100).toFixed(2) : 0;
-
-    return { totalCount, deliveredCount, notDeliveredCount, deliveredPercentage, notDeliveredPercentage };
+  
+  const mapDataToTableFormat = (evaluations) => {
+    const professorMap = {};
+  
+    evaluations.forEach((evaluation) => {
+      const teacherName = `${evaluation.teacher.name} ${evaluation.teacher.last_name}`;
+      const periodId = evaluation.period.id;
+      const status = evaluation.state.name;
+  
+      if (!professorMap[teacherName]) {
+        professorMap[teacherName] = { name: teacherName, periods: {} };
+      }
+  
+      professorMap[teacherName].periods[periodId] = status;
+    });
+  
+    return Object.values(professorMap);
   };
+  
+  const handleSubmit = async (values, { resetForm }) => {
+    try {
+      const data = {
+        indicator_id: 9, // ID fijo del indicador TODO ESTO ES TEMPORALMENTO PORQUE SOLO ES POR ORDEN QUE SE ALMACENO EN LA BASE DE DATOS 
+        teacher_id: parseInt(values.profesor), // Actualizado
+        period_id: parseInt(values.period), // Actualizado
+        state_id: parseInt(values.status) // Actualizado
+      };
+
+      await registerStatusIndicador8(data);
+      await fetchData();
+      resetForm();
+      setModalOpen(false);
+    } catch (error) {
+      console.error('Error al registrar:', error);
+    }
+  }; 
+
+  const columns = [
+    { header: 'Profesor', accessor: 'name' },
+    { header: 'Periodo 1', accessor: 'period1', render: (row) => row.periods['1'] || 'N/A' },
+    { header: 'Periodo 2', accessor: 'period2', render: (row) => row.periods['2'] || 'N/A' },
+    { header: 'Periodo 3', accessor: 'period3', render: (row) => row.periods['3'] || 'N/A' },
+    { header: 'Periodo 4', accessor: 'period4', render: (row) => row.periods['4'] || 'N/A' },
+    { header: 'Periodo 5', accessor: 'period5', render: (row) => row.periods['5'] || 'N/A' },
+    { header: 'Periodo 6', accessor: 'period6', render: (row) => row.periods['6'] || 'N/A' },
+  ];
 
   return (
     <div className="indicator-container">
-      <button className="open-modal-btn" onClick={() => setModalOpen(true)}>Agregar Reporte</button>
-      <div className="report-table">
-        <h3>Reportes de Notas por Periodo</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Profesor</th>
-              <th>Periodo 1</th>
-              <th>Periodo 2</th>
-              <th>Periodo 3</th>
-            </tr>
-          </thead>
-          <tbody>
-            {reports.map((report, index) => (
-              <tr key={index}>
-                <td>{report.profesor}</td>
-                {['Periodo 1', 'Periodo 2', 'Periodo 3'].map((periodo, idx) => (
-                  <td key={idx} className={report[periodo] === 'Sí' ? 'delivered' : 'not-delivered'}>
-                    {report[periodo] || 'N/A'}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="summary">
-          {['Periodo 1', 'Periodo 2', 'Periodo 3'].map((periodo, idx) => {
-            const { totalCount, deliveredCount, notDeliveredCount, deliveredPercentage, notDeliveredPercentage } = calculateCounts(periodo);
-            return (
-              <div key={idx} className="summary-period">
-                <h4>{periodo}</h4>
-                <p>Total Reportes: {totalCount}</p>
-                <p>Reportados: {deliveredCount} ({deliveredPercentage}%)</p>
-                <p>No Reportados: {notDeliveredCount} ({notDeliveredPercentage}%)</p>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+        <h2>Nivel de cumplimiento en la entrega de Reporte Académico de Alerta Temprana (RAAT)</h2>
+
+      <button className="open-modal-btn" onClick={() => setModalOpen(true)}>Agregar Estado de Nota</button>
+      
+      <Table columns={columns} data={professors} />
+
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
-        <h2>Registrar Reporte de Notas</h2>
+        <h2>Nivel de cumplimiento en la entrega de Reporte Académico de Alerta Temprana (RAAT)</h2>
         <Formik
-          initialValues={{ profesor: '', periodo: '', estado: '' }}
+          initialValues={{ profesor: '', period: '', status: '' }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {() => (
+          {({ values, setFieldValue }) => (
             <Form className="form">
-              <Select label="Profesor" name="profesor" required={true}>
-                <option value="">Seleccione</option>
-                {/* Populate this with actual professor names */}
-                <option value="Profesor A">Profesor A</option>
-                <option value="Profesor B">Profesor B</option>
+              <TeacherSelector
+                name="profesor"
+                value={values.profesor}
+                onChange={(e) => setFieldValue('profesor', e.target.value)}
+                required={true}
+              />
+              <Select label="Periodo" name="period" required={true}>
+                <option value="">Seleccione un periodo</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
               </Select>
-              <Select label="Periodo" name="periodo" required={true}>
-                <option value="">Seleccione</option>
-                <option value="Periodo 1">Periodo 1</option>
-                <option value="Periodo 2">Periodo 2</option>
-                <option value="Periodo 3">Periodo 3</option>
-              </Select>
-              <Select label="Estado" name="estado" required={true}>
-                <option value="">Seleccione</option>
-                <option value="Sí">Sí</option>
-                <option value="Retraso">Retraso</option>
-                <option value="No">No</option>
-                <option value="No corresponde">No corresponde</option>
-              </Select>
-              <button type="submit">Agregar Reporte</button>
+              <StatusSelect
+                name="status"
+                value={values.status}
+                onChange={(e) => setFieldValue('status', e.target.value)}
+                required={true}
+              />
+              <Button type="submit">Agregar Estado</Button>
             </Form>
           )}
         </Formik>
@@ -132,5 +126,4 @@ const Indicator8 = () => {
     </div>
   );
 };
-
 export default Indicator8;

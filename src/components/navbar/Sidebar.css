@@ -9,7 +9,7 @@
     padding: 10px 14px;
     background: var(--sidebar-color);
     transition: var(--tran-05);
-    z-index: 100;
+    z-index: 999;
 }
 
 .logo-perfil {
@@ -317,7 +317,6 @@ body.dark .home .text {
     z-index: 9999;
   }
 
-/* Es para aplicar en el contexto */
   .app-layout {
     display: flex;
     transition: all 0.3s ease;
@@ -337,5 +336,3 @@ body.dark .home .text {
     transition: margin-left 0.3s ease;
   }
   
-
-  /* Sub-links estilos */

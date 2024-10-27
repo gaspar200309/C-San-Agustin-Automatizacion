@@ -1,5 +1,5 @@
-import { Toaster, toast } from 'sonner'; // Importar Toaster y toast
-import { useState } from 'react';
+import { Toaster, toast } from 'sonner'; 
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -7,7 +7,6 @@ import Modal from '../../components/modal/Modal';
 import TeacherSelector from '../selected/TeacherSelector';
 import StatusSelect from '../../components/selected/StatusSelect';
 import { getStatusIndicator, registerStatusIndicator } from '../../api/api';
-import useFetchData from '../../hooks/useFetchData';
 import Table from '../table/Table';
 import { Button } from '../buttons/Button';
 
@@ -17,18 +16,30 @@ const validationSchema = Yup.object({
 });
 
 const Indicator3 = () => {
-  const { id } = useParams(); // Obtener el ID del indicador
+  const { id } = useParams(); 
   const [modalOpen, setModalOpen] = useState(false);
-  const { data, loading, error, refetch } = useFetchData(getStatusIndicator); 
+  const [evaluations, setEvaluations] = useState([]); 
+  const [statistics, setStatistics] = useState({}); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null); 
 
-  const columns = [
-    { header: 'Nombre', accessor: 'teacher', render: (row) => `${row.teacher.name} ${row.teacher.last_name}` },
-    { header: 'Asignatura', accessor: 'teacher', render: (row) => row.teacher.asignatura },
-    { header: 'Estado', accessor: 'state', render: (row) => row.state.name },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true); 
+      try {
+        const res = await getStatusIndicator(id);
+        setEvaluations(res.data.evaluations || []);
+        setStatistics(res.data.statistics || {});
+      } catch (err) {
+        setError(err);
+        console.error('Error al obtener las evaluaciones:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const evaluations = data?.evaluations || [];
-  const statistics = data?.statistics || {};
+    fetchData();
+  }, [id]);
 
   if (loading) return <div>Cargando...</div>;
   if (error) return <div>Error: {error.message}</div>;
@@ -37,19 +48,27 @@ const Indicator3 = () => {
     const payload = {
       teacher_id: values.profesor,
       state_id: Number(values.estado),
-      indicator_id: Number(id), // Incluir el ID del indicador en el payload
+      indicator_id: Number(id), 
     };
 
     const response = await registerStatusIndicator(payload);
     if (response.success) {
       setModalOpen(false);
       toast.success('Estado registrado con éxito.');
-      refetch(); // Refrescar los datos después de registrar
+      const data = await getStatusIndicator(id);
+      setEvaluations(data.evaluations || []);
+      setStatistics(data.statistics || {});
     } else {
       console.error('Error al registrar el estado:', response.error);
       toast.error('Error al registrar el estado.'); 
     }
   };
+
+  const columns = [
+    { header: 'Nombre', accessor: 'teacher', render: (row) => `${row.teacher.name} ${row.teacher.last_name}` },
+    { header: 'Asignatura', accessor: 'teacher', render: (row) => row.teacher.asignatura },
+    { header: 'Estado', accessor: 'state', render: (row) => row.state.name },
+  ];
 
   return (
     <div className="indicator-container">

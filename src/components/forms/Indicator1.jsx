@@ -10,10 +10,9 @@ import './Indicator1.css';
 
 const validationSchema = Yup.object({
   documento: Yup.string()
-    .max(50, 'Debe tener 15 caracteres o menos')
+    .max(200, 'Debe tener 200 caracteres o menos')
     .required('Requerido'),
   delivered: Yup.string()
-    .oneOf(['Sí', 'No', 'Retraso', 'Incompleto', 'No corresponde'], 'Seleccione una opción válida')
     .required('Requerido'),
 });
 
@@ -47,17 +46,17 @@ const Indicator1 = () => {
   };
 
   const handleSubmit = async (values, { resetForm }) => {
-    const transformedDelivered = ['Sí', 'Retraso', 'Incompleto'].includes(values.delivered);
+    const transformedDelivered = ['1', '3', '4'].includes(values.delivered);
     try {
       await registerDocuments({
         name: values.documento,
         delivered: transformedDelivered,
         indicator_id: 1 
       });
-      resetForm();
-      setModalOpen(false);
       fetchDocuments();
       fetchCounts();
+      resetForm();
+      setModalOpen(false);
     } catch (error) {
       console.error('Error registering document:', error);
     }

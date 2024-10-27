@@ -1,17 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
-import { countDocuments } from '../../api/api'; 
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Pie } from 'react-chartjs-2';
+import { countDocuments } from '../../api/api';
+
 import './DocumentStatus.css';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+// Registramos los elementos necesarios para el gráfico de torta
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const DocumentStats = () => {
   const [counts, setCounts] = useState({ total: 0, delivered: 0, not_delivered: 0 });
@@ -39,19 +34,16 @@ const DocumentStats = () => {
   };
 
   const data = {
-    labels: ['Total', 'Entregados', 'No Entregados'],
+    labels: ['Entregados', 'No Entregados'],
     datasets: [
       {
-        label: 'Documentos',
-        data: [counts.total, counts.delivered, counts.not_delivered],
+        data: [counts.delivered, counts.not_delivered],
         backgroundColor: [
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 99, 132, 0.2)',
+          'rgba(75, 192, 192, 0.8)', // Verde azulado para entregados
+          'rgba(255, 99, 132, 0.8)', // Rojo para no entregados
         ],
         borderColor: [
           'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
           'rgba(255, 99, 132, 1)',
         ],
         borderWidth: 1,
@@ -61,25 +53,57 @@ const DocumentStats = () => {
 
   const options = {
     responsive: true,
-    scales: {
-      y: {
-        beginAtZero: true,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          font: {
+            size: 14
+          }
+        }
       },
-    },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            const label = context.label || '';
+            const value = context.raw || 0;
+            const total = context.dataset.data.reduce((acc, curr) => acc + curr, 0);
+            const percentage = ((value / total) * 100).toFixed(1);
+            return `${label}: ${value} (${percentage}%)`;
+          }
+        }
+      }
+    }
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="document-stats loading">
+        <div className="loading-spinner">Cargando...</div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return (
+      <div className="document-stats error">
+        <div className="error-message">Error: {error}</div>
+      </div>
+    );
   }
 
   return (
     <div className="document-stats">
       <h2>Estadísticas de Documentos</h2>
-      <Bar data={data} options={options} />
+      <div className="stats-summary">
+        <div className="stat-item">
+          <h3>Total de Documentos</h3>
+          <p>{counts.total}</p>
+        </div>
+        <div className="chart-container">
+          <Pie data={data} options={options} />
+        </div>
+      </div>
     </div>
   );
 };
