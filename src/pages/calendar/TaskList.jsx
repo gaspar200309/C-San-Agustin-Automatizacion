@@ -9,18 +9,23 @@ function TaskList() {
     // Agrega más tareas
   ];
 
+  const handleAddEvent = () => {
+    // Lógica para agregar un nuevo evento
+    console.log("Añadir nuevo evento");
+  };
+
   return (
     <div className="tasklist-container">
-      <button className="add-event-button">Añadir Nuevo Evento</button>
+      <button className="add-event-button" onClick={handleAddEvent}>
+        Añadir Nuevo Evento
+      </button>
 
       <h3 className="tasklist-title">Lista de Tareas e Indicadores</h3>
       <ul className="tasklist">
         {tasks.map(task => (
           <li key={task.id} className="tasklist-item">
             <span className="task-title">{task.title}</span>
-
             <span className="task-due-date">{task.dueDate}</span>
-            <hr/>
           </li>
         ))}
       </ul>

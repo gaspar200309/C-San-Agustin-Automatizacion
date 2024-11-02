@@ -3,7 +3,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import InputText from "../inputs/InputText";
 import { Button } from "../buttons/Button";
-import { registerStatusIndicador10, getStatusIndicator10 } from '../../api/api'; // Importar las funciones
+import { registerStatusIndicador10, getStatusIndicator10 } from '../../api/api'; 
 
 // Validación con Yup
 const validationSchema = Yup.object({

@@ -1,126 +1,146 @@
 .indicator-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 2rem;
-  }
-  
-  
-  .open-modal-btn:hover {
-    background-color: #45a049;
-  }
-  
-  .professor-table {
-    width: 100%;
-    max-width: 800px;
-    margin: 2rem 0;
-    border-collapse: collapse;
-  }
-  
-  .professor-table h3 {
-    margin-bottom: 1rem;
-    text-align: center;
-  }
-  
-  .professor-table table {
-    width: 100%;
-    border: 1px solid #ddd;
-  }
-  
-  .professor-table th,
-  .professor-table td {
-    padding: 0.75rem;
-    text-align: center;
-    border: 1px solid #ddd;
-  }
-  
-  .delivered {
-    background-color: #d4edda;
-    color: #155724;
-  }
-  
-  .not-delivered {
-    background-color: #f8d7da;
-    color: #721c24;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem;
+  padding: 20px;
+  background-color: var(--sidebar-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: background-color var(--tran-05);
+}
 
-  .result {
-    display: flex;
-  }
-  
-  .summary {
-    margin-top: 1rem;
-  }
-  
-  .summary h4 {
-    margin-bottom: 0.5rem;
-  }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .form button {
-    padding: 0.75rem 1.5rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .form button:hover {
-    background-color: #0056b3;
-  }
+.open-modal-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.3s;
+}
 
-  
-  .indicator-container {
-    padding: 20px;
-    background-color: #ddd2d2;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .period-navigation {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  
-  .period-navigation button {
-    background-color: #007bff; /* Color de fondo */
-    color: white; /* Color del texto */
-    border: none; /* Sin borde */
-    border-radius: 4px; /* Esquinas redondeadas */
-    padding: 8px 12px; /* Espaciado interno */
-    cursor: pointer; /* Cambiar cursor al pasar el mouse */
-    transition: background-color 0.3s; /* Transición suave para el color de fondo */
-  }
-  
-  .period-navigation button:hover {
-    background-color: #0056b3; /* Color de fondo al pasar el mouse */
-  }
-  
-  .period-navigation span {
-    font-size: 1.2em; /* Tamaño de la fuente */
-    font-weight: bold; /* Texto en negrita */
-  }
-  
-  .open-modal-btn {
-    background-color: #28a745; /* Color de fondo */
-    color: white; /* Color del texto */
-    border: none; /* Sin borde */
-    border-radius: 4px; /* Esquinas redondeadas */
-    padding: 10px 15px; /* Espaciado interno */
-    cursor: pointer; /* Cambiar cursor al pasar el mouse */
-    margin-bottom: 20px; /* Espaciado inferior */
-    transition: background-color 0.3s; /* Transición suave para el color de fondo */
-  }
-  
-  .open-modal-btn:hover {
-    background-color: #218838; /* Color de fondo al pasar el mouse */
-  }
-  
+.open-modal-btn:hover {
+  background-color: var(--primary-color-light);
+}
+
+.professor-table {
+  width: 100%;
+  max-width: 800px;
+  margin: 2rem 0;
+  border-collapse: collapse;
+}
+
+.professor-table h3 {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.professor-table table {
+  width: 100%;
+  border: 1px solid #ddd;
+}
+
+.professor-table th,
+.professor-table td {
+  padding: 0.75rem;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.state-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.state-yes {
+  background-color: #28a745; /* Verde */
+}
+
+.state-no {
+  background-color: #dc3545; /* Rojo */
+}
+
+.state-delay {
+  background-color: #ffc107; /* Amarillo */
+}
+
+.state-incomplete {
+  background-color: #17a2b8; /* Cian */
+}
+
+.summary {
+  margin-top: 1rem;
+}
+
+.summary h4 {
+  margin-bottom: 0.5rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%; /* Asegura que el formulario use el ancho completo */
+}
+
+.period-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.period-navigation button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color var(--tran-03);
+}
+
+.period-navigation button:hover {
+  background-color: var(--primary-color-light);
+}
+
+.period-navigation span {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+body.dark .indicator-container {
+  background-color: var(--color-medium);
+}
+
+body.dark .open-modal-btn {
+  background-color: var(--primary-color-light);
+}
+
+body.dark .professor-table {
+  background-color: var(--color-dark);
+  color: var(--text-color);
+}
+
+body.dark .professor-table th,
+body.dark .professor-table td {
+  border-color: var(--text-color-secundary);
+}
+
+body.dark .state-yes {
+  background-color: #1e7e34; /* Verde más oscuro */
+}
+
+body.dark .state-no {
+  background-color: #c82333; /* Rojo más oscuro */
+}
+
+body.dark .state-delay {
+  background-color: #856404; /* Amarillo más oscuro */
+}
+
+body.dark .state-incomplete {
+  background-color: #138496; /* Cian más oscuro */
+}

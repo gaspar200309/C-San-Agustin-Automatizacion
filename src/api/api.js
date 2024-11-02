@@ -24,20 +24,22 @@ api.interceptors.request.use((config) => {
 export default api;
 
 export const loginUser = (data) => api.post('/auth/login', data);
+export const countStadistc = () => api.get('/api/summary/count')
 
 export const registerTeacher = (data) => api.post('/api/teachers', data)
 export const getTeacher = () => api.get('/api/teachers')
 export const deleteTeacher = (id) => api.delete(`/api/teachers/${id}`)
 export const updateTeacher = (id, data) => api.put(`/api/teachers/${id}`, data)
 export const getTeacherById = (id) => api.get(`/api/teachers/${id}`)
+export const countTeacher = () => api.get('/api/teacher/count')//remplazado
 
 export const getRoles = () => api.get('/api/roles')
 export const getUsers = () => api.get('/api/users')
-//export const addUser = (data) => api.post('/api/users', data)
 export const addUser = (data) => api.post('/auth/register', data)
 export const updateUser = (id, data) => api.put(`/api/users/${id}`, data)
 export const deleteUser = (id) => api.delete(`/api/users/${id}`)
 export const getUserById = (id) => api.get(`/api/users/${id}`);
+export const countUser = () => api.get('/api/users/count')//remplazado
 
 export const getCourses = () => api.get('/api/courses')
 
@@ -45,8 +47,10 @@ export const getAcademyObjetive = () => api.get('/api/academic')
 export const getSGCAcademi = () => api.get('/api/sgc-objectives')
 export const getFormulas  = () => api.get('/api/formulas')
 export const addIndicator = (data) => api.post('/api/indicators', data);
-export const countIndicator = ()  => api.get('/api/indicators/count')
+export const countIndicator = ()  => api.get('/api/indicators/count')//remplazado
 export const getIndicator = () => api.get('/api/indicators')
+export const getIndicatorDeadlines = () => api.get('/api/indicators/deadlines');
+
 export const assignCoordinatorToIndicator = (indicatorId, userId) => api.post(`/api/indicators/${indicatorId}/assign-coordinator`, { userId });
 export const removeCoordinatorFromIndicator = (indicatorId, userId) => api.delete(`/api/indicators/${indicatorId}/remove-coordinator`, { data: { userId } });
 export const getAssignCoordinatorToIndicator = () => api.get('/api/indicators/simple')
@@ -66,8 +70,9 @@ export const registerDocuments = (data) => api.post('/api/documents', data)
 export const getDocuments = () => api.get('/api/documents/delivered')
 export const countDocuments = () => api.get('/api/documents/counts')
 
-export const registerStatusIndicator = (data) => api.post('/api/evaluations', data)
+export const registerStatusIndicator = (data) => api.post('/api/evaluations/indicator2', data)
 export const getStatusIndicator = (id) => api.get(`/api/evaluations/all/${id}`)
+
 export const registerStatusIndicador4 = (data) => api.post('/api/evaluations/indicator4', data)
 export const getStatusIndicator4 = (id) => api.get(`/api/evaluations/indicator4/${id}`)
 
@@ -88,3 +93,10 @@ export const getIndicator12Stats = () => api.get('/api/statistics/general')
 
 export const registerIndicator13 = (data) => api.post('/api/register-insidence', data)
 export const getIndicator13Stats = () => api.get('/api/statistics')
+
+export const registerIndicator14 = (data) => api.post('/api/registro-nota', data);
+export const getIndicator14Stats = () => api.get('/api/registro-nota')
+export const getIndicator14Peridos = () => api.get('/api/regitro-nota/periods')
+
+export const registerIndicator15 = (data) => api.post('/api/register-communication', data)
+export const getIndicator15Stats = () => api.get('/api/communication-statistics')

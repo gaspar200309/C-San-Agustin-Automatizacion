@@ -1,12 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const SemesterSwitch = ({ onChange }) => {
-  const [isTrimestre, setIsTrimestre] = useState(true);
-
+const SemesterSwitch = ({ isTrimestre, onChange }) => {
   const handleChange = (e) => {
-    const value = e.target.value === 'trimestre';
-    setIsTrimestre(value);
-    onChange(value);
+    onChange(e.target.value === 'trimestre');
   };
 
   return (

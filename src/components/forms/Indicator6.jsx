@@ -1,67 +1,71 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import Modal from '../modal/Modal';
-import Select from '../selected/Select';
 import InputText from '../inputs/InputText';
 import TeacherSelector from '../selected/TeacherSelector';
 import CourseSelect from '../selected/CourseSelect';
-import Table from '../table/Table'; 
+import PeriodoSelect from '../selected/PeriodoSelect';
+import Table from '../table/Table';
 import { Button } from '../buttons/Button';
-
 import { registerStatusIndicador6, getStatusIndicator6 } from '../../api/api';
 
 const Indicator6 = () => {
-  const { id } = useParams();
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedPeriod, setSelectedPeriod] = useState('Mayo-Junio 2024');
-  const [selectedPeriodId, setSelectedPeriodId] = useState(2); 
   const [evaluations, setEvaluations] = useState([]);
-  
-  // Periodos con sus respectivos IDs
-  const periods = [
-    { name: "Enero-Febrero 2024", id: 1 },
-    { name: "Mayo-Junio 2024", id: 2 },
-    { name: "Marzo-Abril 2024", id: 3 },
-    { name: "Mayo-Junio 2024", id: 4 },
-    { name: "Mayo-Junio 2024", id: 5 },
-    { name: "Mayo-Junio 2024", id: 6 },
-  ]; 
-
-  const handlePeriodChange = (direction) => {
-    const currentIndex = periods.findIndex(period => period.name === selectedPeriod);
-    const newIndex = currentIndex + direction;
-    if (newIndex >= 0 && newIndex < periods.length) {
-      setSelectedPeriod(periods[newIndex].name);
-      setSelectedPeriodId(periods[newIndex].id); // Actualizar el ID del periodo
-    }
-  };
+  const [processedData, setProcessedData] = useState([]);
 
   useEffect(() => {
     fetchEvaluations();
-  }, [id]);
+  }, []);
 
   const fetchEvaluations = async () => {
     try {
-      const response = await getStatusIndicator6(id);
+      const response = await getStatusIndicator6(6);
       setEvaluations(response.data);
+      processEvaluations(response.data);
     } catch (error) {
       console.error('Error al obtener evaluaciones:', error);
     }
   };
-  
+
+  const processEvaluations = (data) => {
+    const periodKeys = ["Enero 2025", "Febrero 2025", "Marzo 2025", "Abril 2025", "Mayo 2025", "Junio 2025", "Julio 2025"];
+    
+    const rows = data.map((teacher) => {
+      return Object.keys(teacher.courses).map((courseName) => {
+        const course = teacher.courses[courseName];
+        const periods = course.periods;
+
+        // Crea un objeto para cada fila, donde los periodos se asignan dinámicamente
+        const rowData = {
+          professor: teacher.teacher_name,
+          course: courseName,
+          periodProgress: course.average || 0,
+        };
+
+        // Agrega cada periodo a la fila en el orden correcto basado en periodKeys
+        periodKeys.forEach((periodKey, index) => {
+          rowData[`periodo${index + 1}`] = periods[periodKey] || 0;
+        });
+
+        return rowData;
+      });
+    }).flat();
+
+    setProcessedData(rows);
+  };
+
   const handleSubmit = async (values, { resetForm }) => {
     try {
       const data = {
         teacher_id: parseInt(values.teacher_id),
         course_id: parseInt(values.course_id),
-        period_id: selectedPeriodId, // Usar el ID del periodo seleccionado
-        parallel: values.parallel,
+        period_id: parseInt(values.period),
         percentage: parseInt(values.percentage),
       };
 
       await registerStatusIndicador6(data);
-      await fetchEvaluations(); 
+      await fetchEvaluations();
       resetForm();
       setModalOpen(false);
     } catch (error) {
@@ -69,41 +73,24 @@ const Indicator6 = () => {
     }
   };
 
-  const tableData = evaluations.flatMap(evaluation => {
-    return Object.entries(evaluation.courses).map(([courseName, courseData]) => ({
-      professor: evaluation.teacher_name.trim(), // Eliminar espacios extra
-      course: courseName,
-      parallelA: courseData.paralelos['A']?.[selectedPeriod] || '-',
-      parallelB: courseData.paralelos['B']?.[selectedPeriod] || '-',
-      parallelC: courseData.paralelos['C']?.[selectedPeriod] || '-',
-      parallelD: courseData.paralelos['D']?.[selectedPeriod] || '-',
-      periodProgress: courseData.promedio_periodo[selectedPeriod] || '-',
-      totalProgress: courseData.promedio_total,
-    }));
-  });
-  
   const columns = [
     { header: 'Profesor', accessor: 'professor' },
     { header: 'Curso', accessor: 'course' },
-    { header: 'Paralelo A', accessor: 'parallelA' },
-    { header: 'Paralelo B', accessor: 'parallelB' },
-    { header: 'Paralelo C', accessor: 'parallelC' },
-    { header: 'Paralelo D', accessor: 'parallelD' },
-    { header: `Total avance en periodo ${selectedPeriod}`, accessor: 'periodProgress' },
-    { header: 'Total avance general', accessor: 'totalProgress' },
+    { header: 'Periodo 1', accessor: 'periodo1' },
+    { header: 'Periodo 2', accessor: 'periodo2' },
+    { header: 'Periodo 3', accessor: 'periodo3' },
+    { header: 'Periodo 4', accessor: 'periodo4' },
+    { header: 'Periodo 5', accessor: 'periodo5' },
+    { header: 'Periodo 6', accessor: 'periodo6' },
+    { header: 'Total avance en periodo', accessor: 'periodProgress' },
   ];
 
   return (
     <div className="indicator-container">
       <button className="open-modal-btn" onClick={() => setModalOpen(true)}>Agregar Progreso</button>
-      <div className="period-navigation">
-        <button onClick={() => handlePeriodChange(-1)} disabled={selectedPeriod === periods[0].name}>&lt;</button>
-        <span>Periodo: {selectedPeriod}</span>
-        <button onClick={() => handlePeriodChange(1)} disabled={selectedPeriod === periods[periods.length - 1].name}>&gt;</button>
-      </div>
       <div className="professor-table">
         <h3>Profesores Registrados</h3>
-        <Table columns={columns} data={tableData} />
+        <Table columns={columns} data={processedData} />
       </div>
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
         <h2>Registrar Progreso</h2>
@@ -111,7 +98,7 @@ const Indicator6 = () => {
           initialValues={{
             teacher_id: '',
             course_id: '',
-            parallel: '',
+            period: '',
             percentage: '',
           }}
           onSubmit={handleSubmit}
@@ -131,18 +118,13 @@ const Indicator6 = () => {
                 onChange={(e) => setFieldValue('course_id', e.target.value)}
                 value={values.course_id}
               />
-              <Select
-                label="Paralelo"
-                name="parallel"
+              <PeriodoSelect
+                name="period"
+                label={'Periodo'}
+                value={values.period}
+                onChange={(e) => setFieldValue('period', e.target.value)}
                 required={true}
-              >
-                <option value="">Seleccione un paralelo</option>
-                {['A', 'B', 'C', 'D'].map((parallel) => (
-                  <option key={parallel} value={parallel}>
-                    {parallel}
-                  </option>
-                ))}
-              </Select>
+              />
               <InputText
                 label="Porcentaje de Progreso"
                 placeholder="Ingrese el porcentaje"

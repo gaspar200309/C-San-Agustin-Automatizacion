@@ -9,6 +9,7 @@ import Select from '../selected/Select';
 import { Button } from '../buttons/Button';
 import Table from '../table/Table';
 import { getStatusIndicator8, registerStatusIndicador8 } from '../../api/api';
+import PeriodoSelect from '../selected/PeriodoSelect';
 
 const validationSchema = Yup.object({
   profesor: Yup.string().required('Requerido'),
@@ -103,15 +104,13 @@ const Indicator8 = () => {
                 onChange={(e) => setFieldValue('profesor', e.target.value)}
                 required={true}
               />
-              <Select label="Periodo" name="period" required={true}>
-                <option value="">Seleccione un periodo</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-              </Select>
+              <PeriodoSelect
+                  name="period"
+                  value={values.period}
+                  onChange={(e) => setFieldValue('period', e.target.value)}
+                  required={true}
+                />
+
               <StatusSelect
                 name="status"
                 value={values.status}

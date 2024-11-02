@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useMemo } from 'react';
 import './Sidebar.css';
 import { IoIosArrowBack, PiChalkboardTeacher, GrAnalytics, FaUser, MdNavigateNext, FaHome,
    FaUserGraduate, TbLogout, AiOutlineGroup, FaCalendarAlt } from '../../hooks/icons';
@@ -8,7 +9,9 @@ import ImagenesApp from '../../assets/ImagenesApp';
 import { getUser } from '../../pages/login/authFunctions';
 
 const SidebarHeader = ({ onToggle, isOpen }) => {
-  const currentUser = getUser(); 
+  
+  const currentUser = useMemo(() => getUser(), []);
+  const isAdmin = useMemo(() => currentUser?.roles.includes("Administrador"), [currentUser]);
 
   return (
     <header className="sidebar-header">
@@ -68,6 +71,8 @@ const SidebarThemeToggle = ({ theme, toggleTheme }) => (
 
 export const Sidebar = ({ isOpen, toggleSidebar }) => {
   const { theme, toggleTheme } = useTheme();
+  const currentUser = useMemo(() => getUser(), []);
+  const isAdmin = useMemo(() => currentUser?.roles.includes("Administrador"), [currentUser]);
 
   return (
     <nav className={`sidebar ${isOpen ? 'open' : 'close'}`}>
@@ -77,7 +82,11 @@ export const Sidebar = ({ isOpen, toggleSidebar }) => {
           <ul className="menu-links">
             <SidebarLink to="/home" icon={<FaHome />} text="Dashboard" />
             <SidebarLink to="/userManagement" icon={<FaUser/>} text="Usuarios" />
-            <SidebarLink to="/listTeacher" icon={<PiChalkboardTeacher />} text="Profesores" />
+            {
+              isAdmin && (
+                <SidebarLink to="/listTeacher" icon={<PiChalkboardTeacher />} text="Profesores" />
+              )
+            }
             <SidebarLink to="/list-indicador" icon={<AiOutlineGroup />} text="Indicadores" />
             <SidebarLink to="/calendar" icon={<FaCalendarAlt />} text="Calendario" />
             <SidebarLink to="/analiticas" icon={<GrAnalytics />} text="Analiticas" />

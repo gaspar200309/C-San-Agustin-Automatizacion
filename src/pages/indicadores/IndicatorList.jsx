@@ -20,7 +20,6 @@ const IndicatorsList = () => {
   const [columnsState, setColumnsState] = useState([
     { id: 'id', header: "ID", accessor: 'id', isHidden: false },
     { id: 'name', header: 'Nombre', accessor: 'name', isHidden: false },
-    { id: 'due_date', header: 'Fecha de Vencimiento', accessor: 'due_date', isHidden: false },
     { id: 'expected_result', header: 'Resultado Esperado', accessor: 'expected_result', isHidden: false },
     { id: 'academic_objective', header: 'Objetivo Académico', accessor: 'academic_objective', isHidden: true },
     { id: 'sgc_objective', header: 'Objetivo SGC', accessor: 'sgc_objective', isHidden: true },

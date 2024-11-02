@@ -1,22 +1,30 @@
 .link-button {
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    color: #fff;
-    background-color: #007bff;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .link-button:hover {
-    background-color: #0056b3;
-  }
-  
-  .link-button:disabled {
-    background-color: #6c757d;
-    cursor: not-allowed;
-  }
-  
+  display: inline-block;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--tran-03);
+}
+
+.link-button {
+  background-color: var(--primary-color);
+  color: #FFFFFF; 
+}
+
+.link-button:hover {
+  background-color: var(--primary-color-light);
+}
+
+body.dark .link-button {
+  background-color: var(--primary-color-light);
+  color: var(--body-color); 
+}
+
+body.dark .link-button:hover {
+  background-color:  #1a5bbf; /* Puedes ajustar el tono si quieres */
+  ;
+}

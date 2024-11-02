@@ -11,7 +11,8 @@ import Indicator10 from '../forms/Indicator10';
 import Indicator11 from '../forms/Indicator11';
 import Indicator12 from '../forms/Indicator12';
 import Indicator13 from '../forms/Indicator13';
-import CourseDataForm from '../forms/NuevosInd/CourseDataForm';
+import Indicator14 from '../forms/Indicator14';
+import Indicator15 from '../forms/Indicator15';
 import YearlyCommunicationsForm from '../forms/NuevosInd/YearlyCommunicationsForm';
 import TeacherNotesForm from '../forms/NuevosInd/TeacherNotesForm';
 
@@ -23,15 +24,15 @@ const indicatorComponents = {
   4: Indicator4,
   6: Indicator6,
   7: Indicator7,
-  8:  Indicator7,/* Esto por que esta repitiendo en la base de datos  */
+  8: Indicator8,
   9: Indicator8,
   10: Indicator10,
   11: Indicator11,
   12: Indicator12,
   13: Indicator13,
-  14: CourseDataForm,
-  5: YearlyCommunicationsForm,
-  17: TeacherNotesForm
+  14: Indicator14,
+  15: Indicator15,
+  16: TeacherNotesForm
 };
 
 const DynamicIndicator = () => {

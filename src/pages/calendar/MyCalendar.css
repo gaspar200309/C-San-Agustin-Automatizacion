@@ -1,82 +1,72 @@
-/* MyCalendar.css */
-
-/* Contenedor de calendario */
-.calendar-container {
-  margin: 20px auto;
-  max-width: 1200px;
-}
-
-/* Título del calendario */
-.calendar-title {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #333;
-  text-align: center;
-}
-
-/* Contenedor de calendario y lista de tareas */
+/* General layout */
 .calendar-tasklist-wrapper {
   display: flex;
   gap: 20px;
-}
-
-/* Calendario */
-.my-calendar-container {
-  flex: 2;
-  border-radius: 8px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 25px;
-  background-color: #ffffff;
-}
-
-.event-modal {
-  background-color: #ffffff;
   padding: 20px;
-  border-radius: 8px;
-  max-width: 500px;
-  margin: auto;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.event-modal-overlay {
-  background-color: rgba(0, 0, 0, 0.5);
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+.my-calendar-container {
+  flex: 2.1;
+  background-color: var(--sidebar-color);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: var(--tran-05);
 }
 
-.close-button {
-  background-color: #ff6b6b;
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 20px;
-  transition: background-color 0.3s ease;
+.calendar-title {
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 20px;
 }
 
-.close-button:hover {
-  background-color: #d9534f;
-}
-
-/* MyCalendar.css */
-
-/* Estilos base para eventos */
 .custom-event {
-    padding: 4px;
-    font-weight: bold;
-    text-align: center;
-    cursor: pointer;
-    border: 20px 20px 20px 20px solid #8d0d0ddd;
-  }
-  
-  .custom-event:hover {
-    filter: brightness(1.2);
-  }
-  
+  color: #fff;
+  padding: 6px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  background-color: var(--primary-color);
+  transition: var(--tran-04);
+}
+
+/* Imagen del responsable */
+.responsable-photo {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-top: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border: 2px solid var(--primary-color);
+  transition: var(--tran-03);
+}
+
+/* Modal */
+.modal-title {
+  color: var(--text-color);
+}
+
+.modal-content {
+  background-color: var(--sidebar-color);
+  color: var(--text-color);
+}
+
+body.dark .my-calendar-container {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .calendar-title,
+body.dark .modal-title {
+  color: var(--text-color) !important;
+}
+
+body.dark .custom-event {
+  background-color: var(--primary-color-light) !important;
+}
+
+body.dark .rbc-off-range-bg {
+  background: var(--color-dark);
+}

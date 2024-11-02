@@ -5,9 +5,12 @@ export const signOut = () => {
   Cookies.remove('userData');
   window.location.reload();
 };
-//expires: 7,
+
 export const saveToken = (token) => {
-  Cookies.set('authToken', token, {  sameSite: 'Strict' }); 
+  Cookies.set('authToken', token, { 
+    expires: 1,  // Expira en 1 día
+    sameSite: 'Strict' 
+  }); 
 };
 
 export const getToken = () => {
@@ -16,11 +19,10 @@ export const getToken = () => {
 
 export const saveUser = (userData) => {
   Cookies.set('userData', JSON.stringify(userData), {
-    expires: 1, 
+    expires: 1,  // Expira en 1 día
     sameSite: 'Strict'
   });
 };
-
 
 export const getUser = () => {
   const userDataString = Cookies.get('userData');
