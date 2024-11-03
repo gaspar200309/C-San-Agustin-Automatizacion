@@ -70,3 +70,11 @@ body.dark .custom-event {
 body.dark .rbc-off-range-bg {
   background: var(--color-dark);
 }
+
+body.dark .rbc-today {
+  background-color: #478abd;
+}
+
+body.dark .rbc-toolbar button {
+  color: #4a89ad;
+}

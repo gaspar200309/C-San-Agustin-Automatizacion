@@ -54,7 +54,6 @@ function LoginUser() {
     <div className="login-container">
       <div className="login-form">
         <h2>Inicia sesión</h2>
-
         <Suspense fallback={<div>Cargando imagen...</div>}>
           <img className="logo-fesa" src={ImagenesApp.logo} alt="Logo" height="80px" />
         </Suspense>

@@ -40,7 +40,6 @@ const messages = {
 function MyCalendar() {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
-console.log(events, "hsjja")
   useEffect(() => {
     const fetchDeadlines = async () => {
       try {
