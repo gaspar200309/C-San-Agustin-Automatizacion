@@ -111,6 +111,7 @@ const Indicator13 = () => {
                         <Form className="form">
                             <TrimestreSelect
                                 name="trimestre_id"
+                                label={'Trimestre'}
                                 value={values.trimestre_id}
                                 onChange={(e) => setFieldValue('trimestre_id', e.target.value)}
                                 required={true}

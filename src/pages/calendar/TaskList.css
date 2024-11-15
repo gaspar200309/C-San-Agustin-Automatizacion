@@ -21,7 +21,7 @@
 }
 
 .add-event-button:hover {
-  background-color: var(--primary-color-light);
+  background-color: var(--secondary-color);
 }
 
 .tasklist-title {
@@ -51,7 +51,7 @@
 }
 
 .tasklist-item:hover {
-  background-color: var(--primary-color-light);
+  background-color: var(--primary-color);
   color: #fff;
 }
 

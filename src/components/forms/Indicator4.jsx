@@ -118,6 +118,7 @@ const Indicator4 = () => {
               <Form className="space-y-4">
                 <TeacherSelector
                   name="teacher_id"
+                  label={'Profesores'}
                   value={values.teacher_id}
                   onChange={(e) => setFieldValue('teacher_id', e.target.value)}
                   required
@@ -125,6 +126,7 @@ const Indicator4 = () => {
 
                 <TrimestreSelect
                   name="trimestre_id"
+                  label={'Trimestre'}
                   value={values.trimestre_id}
                   onChange={(e) => setFieldValue('trimestre_id', e.target.value)}
                   required
@@ -132,6 +134,7 @@ const Indicator4 = () => {
 
                 <StatusSelect
                   name="state_id"
+                  label={'Estado'}
                   value={values.state_id}
                   onChange={(e) => setFieldValue('state_id', e.target.value)}
                   required

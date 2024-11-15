@@ -10,6 +10,7 @@ import TeacherSelector from '../selected/TeacherSelector';
 import Table from '../table/Table';
 import { Button } from '../buttons/Button';
 import Modal from '../modal/Modal';
+import CourseSelectByTeacher from '../selected/CourseSelectByT';
 
 const Indicator14 = () => {
   const [isTrimestre, setIsTrimestre] = useState(false);
@@ -19,7 +20,6 @@ const Indicator14 = () => {
   const [error, setError] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  // Frontend: Modifica la función fetchData en Indicator14.js
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -50,7 +50,7 @@ const Indicator14 = () => {
         }
 
         // Actualizar el estado correspondiente
-        if (record.trimestre_id) {
+        if (record.trimestre_id) { 
           acc[key][`trimestre${record.trimestre_id}`] = record.state_name;
         } else if (record.period_id) {
           acc[key][`periodo${record.period_id}`] = record.state_name;
@@ -154,6 +154,7 @@ const Indicator14 = () => {
               {isTrimestre ? (
                 <TrimestreSelect
                   name="trimestre_id"
+                  label = {"Trimestre"}
                   value={values.trimestre_id}
                   onChange={(e) => setFieldValue('trimestre_id', e.target.value)}
                   required={true}
@@ -161,22 +162,26 @@ const Indicator14 = () => {
               ) : (
                 <PeriodoSelect
                   name="period_id"
+                  label = {"Periodo"}
                   value={values.period_id}
                   onChange={(e) => setFieldValue('period_id', e.target.value)}
                   required={true}
                 />
               )}
-              <CourseSelect
-                name="course_id"
-                value={values.course_id}
-                onChange={(e) => setFieldValue('course_id', e.target.value)}
-                required={true}
-              />
+              
               <TeacherSelector
                 name="teacher_id"
                 value={values.teacher_id}
-                onChange={(e) => setFieldValue('teacher_id', e.target.value)}
+                onChange={(e) => setFieldValue("teacher_id", e.target.value)}
                 required={true}
+              />
+              <CourseSelectByTeacher
+                label="Curso"
+                name="course_id"
+                required={true}
+                teacherId={values.teacher_id} // Pass selected teacherId here
+                onChange={(e) => setFieldValue("course_id", e.target.value)}
+                value={values.course_id}
               />
               <StatusSelect
                 name="state_id"

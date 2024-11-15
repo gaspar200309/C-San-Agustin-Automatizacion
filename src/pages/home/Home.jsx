@@ -27,6 +27,8 @@ import useFetchData from "../../hooks/useFetchData";
 import "./Dashboard.css";
 import DocumentStats from "../../components/graphics/DocumentStates";
 import DashboardIcon from "../../components/icon/DashboardIcon";
+import GraphIndicador2 from "../../components/graphics/GraphIndicador2";
+import GraphIndicador6 from "../../components/graphics/GraphIndicador6";
 
 // Register the components for Chart.js
 ChartJS.register(
@@ -330,10 +332,8 @@ export default function Dashboard() {
 
       <div className="div7">
         <div className="chart-container large">
-          <Bar
-            data={barData}
-            options={barOptions}
-          />
+           {/*  <GraphIndicador6/> */}
+        
         </div>
       </div>
 
@@ -373,10 +373,11 @@ export default function Dashboard() {
       </div>
       <div className="div12">
         <div className="chart-container">
-          <Pie
+          {/* <Pie
             data={pieData}
             options={pieOptions}
-          />
+          /> */}
+          <GraphIndicador2 />
         </div>
       </div>
     </div>

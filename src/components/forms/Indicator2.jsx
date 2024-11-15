@@ -1,5 +1,5 @@
+import React, { useState, useEffect, useCallback, lazy, Suspense, useMemo } from 'react';
 import { Toaster, toast } from 'sonner';
-import { useState, useEffect, useCallback, lazy, Suspense, useMemo } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Modal from '../../components/modal/Modal';
@@ -23,15 +23,13 @@ const Indicator2 = () => {
   const [error, setError] = useState(null);
 
   // Memoize columns to prevent unnecessary re-renders of the Table
-  const columns = useMemo(
-    () => [
-      { header: 'Nombre', accessor: 'teacher', render: (row) => `${row.teacher.name} ${row.teacher.last_name}` },
-      { header: 'Asignatura', accessor: 'teacher', render: (row) => row.teacher.asignatura },
-      { header: 'Estado', accessor: 'state', render: (row) => row.state.name },
-    ],
-    []
-  );
+  const columns = useMemo(() => [
+    { header: 'Nombre', accessor: 'teacher', render: (row) => `${row.teacher.name} ${row.teacher.last_name}` },
+    { header: 'Asignatura', accessor: 'teacher', render: (row) => row.teacher.asignatura },
+    { header: 'Estado', accessor: 'state', render: (row) => row.state.name },
+  ], []);
 
+  // Fetch data from the API
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
@@ -50,31 +48,28 @@ const Indicator2 = () => {
     fetchData();
   }, [fetchData]);
 
-  const handleSubmit = useCallback(
-    async (values) => {
-      const data = {
-        teacher_id: values.profesor,
-        state_id: Number(values.estado),
-        indicator_id: 2,
-      };
+  const handleSubmit = useCallback(async (values) => {
+    const data = {
+      teacher_id: values.profesor,
+      state_id: Number(values.estado),
+      indicator_id: 2,
+    };
 
-      try {
-        const response = await registerStatusIndicator(data);
-        if (response.data && response.data.success) {
-          setModalOpen(false);
-          toast.success(response.data.message || 'Estado registrado con éxito.');
-          await fetchData();
-        } else {
-          console.error('Error al registrar el estado:', response.data.error);
-          toast.error(response.data?.error || 'Error al registrar el estado.');
-        }
-      } catch (error) {
-        console.error('Error de red o servidor:', error);
-        toast.error('No se pudo conectar con el servidor. Intente nuevamente.');
+    try {
+      const response = await registerStatusIndicator(data);
+      if (response.data && response.data.success) {
+        setModalOpen(false);
+        toast.success(response.data.message || 'Estado registrado con éxito.');
+        await fetchData();
+      } else {
+        console.error('Error al registrar el estado:', response.data.error);
+        toast.error(response.data?.error || 'Error al registrar el estado.');
       }
-    },
-    [fetchData]
-  );
+    } catch (error) {
+      console.error('Error de red o servidor:', error);
+      toast.error('No se pudo conectar con el servidor. Intente nuevamente.');
+    }
+  }, [fetchData]);
 
   if (loading) return <div>Cargando...</div>;
   if (error) return <div>Error: {error.message}</div>;

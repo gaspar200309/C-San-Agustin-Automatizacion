@@ -112,6 +112,7 @@ const Indicator7 = () => {
               </Select>
               <StatusSelect
                 name="status"
+                label={"Estado"}
                 value={values.status}
                 onChange={(e) => setFieldValue('status', e.target.value)}
                 required={true}

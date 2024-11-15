@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { getToken } from '../pages/login/authFunctions';
 
-const baseURL = "http://localhost:5000";
+const baseURL = "http://167.88.38.229";
+//const baseURL = "http://localhost:5000";
+
 
 const api = axios.create({
   baseURL: baseURL,
@@ -42,6 +44,8 @@ export const getUserById = (id) => api.get(`/api/users/${id}`);
 export const countUser = () => api.get('/api/users/count')//remplazado
 
 export const getCourses = () => api.get('/api/courses')
+export const getCoursesByTeacher = (teacherId) => api.get(`/api/teachers/${teacherId}/courses`);
+
 
 export const getAcademyObjetive = () => api.get('/api/academic')
 export const getSGCAcademi = () => api.get('/api/sgc-objectives')
@@ -85,8 +89,8 @@ export const getStatusIndicator7 = (id) => api.get(`/api/evaluations/indicator7/
 export const registerStatusIndicador8 = (data) => api.post('/api/evaluations/indicator8', data)
 export const getStatusIndicator8 = () => api.get('/api/evaluations/indicator8/9')
 
-export const registerStatusIndicador10 = (data) => api.post('/api/student-status', data)
-export const getStatusIndicator10 = (id) => api.get(`/api/student-status/${id}`)
+export const registerStudentStatus = (data) => api.post('/api/register_active_students', data)
+export const getStudentStatus = (id) => api.get('/api/get_all_student_statuses')
 
 export const registerIndicator12 = (data) => api.post('/api/register-license', data)
 export const getIndicator12Stats = () => api.get('/api/statistics/general')

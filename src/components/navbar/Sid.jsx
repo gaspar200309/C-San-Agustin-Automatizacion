@@ -7,6 +7,7 @@ import { useTheme } from '../../hooks/useTheme';
 import { signOut } from '../../pages/login/authFunctions';
 import ImagenesApp from '../../assets/ImagenesApp';
 import { getUser } from '../../pages/login/authFunctions';
+import Loader from '../loader/Loader';
 
 const SidebarHeader = ({ onToggle, isOpen }) => {
   
@@ -75,7 +76,9 @@ export const Sidebar = ({ isOpen, toggleSidebar }) => {
   const isAdmin = useMemo(() => currentUser?.roles.includes("Administrador"), [currentUser]);
 
   return (
+
     <nav className={`sidebar ${isOpen ? 'open' : 'close'}`}>
+    <Loader />
       <div className="menu-bar">
         <SidebarHeader onToggle={toggleSidebar} isOpen={isOpen} />
         <div className="menu">
@@ -89,7 +92,7 @@ export const Sidebar = ({ isOpen, toggleSidebar }) => {
             }
             <SidebarLink to="/list-indicador" icon={<AiOutlineGroup />} text="Indicadores" />
             <SidebarLink to="/calendar" icon={<FaCalendarAlt />} text="Calendario" />
-            <SidebarLink to="/analiticas" icon={<GrAnalytics />} text="Analiticas" />
+            <SidebarLink to="/graphics" icon={<GrAnalytics />} text="Graficos" />
             <SidebarLink to="/me-gustas" icon={<FaUserGraduate />} text="Likes" />
           </ul>
         </div>

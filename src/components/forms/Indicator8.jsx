@@ -106,6 +106,7 @@ const Indicator8 = () => {
               />
               <PeriodoSelect
                   name="period"
+                  label={'Periodo'}
                   value={values.period}
                   onChange={(e) => setFieldValue('period', e.target.value)}
                   required={true}
@@ -113,6 +114,7 @@ const Indicator8 = () => {
 
               <StatusSelect
                 name="status"
+                label={'Estado de Nota'}
                 value={values.status}
                 onChange={(e) => setFieldValue('status', e.target.value)}
                 required={true}

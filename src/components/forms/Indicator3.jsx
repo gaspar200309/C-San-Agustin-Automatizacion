@@ -111,7 +111,7 @@ const Indicator3 = () => {
                 value={values.estado}
                 onChange={(e) => setFieldValue('estado', e.target.value)}
               />
-              <Button type="submit">Registrar</Button>
+              <Button  type="submit">Registrar</Button>
             </Form>
           )}
         </Formik>
