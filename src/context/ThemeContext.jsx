@@ -5,7 +5,8 @@ const ThemeContext = createContext();
 export const useTheme = () => useContext(ThemeContext);
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState('light');
+  // Inicializa el tema con el valor guardado en localStorage o 'light' por defecto
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
 
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
@@ -14,12 +15,12 @@ export const ThemeProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    setTheme(savedTheme);
-    document.body.classList.toggle('dark', savedTheme === 'dark');
-  }, []);
+    // Aplica el tema guardado en localStorage al cargar la aplicación
+    document.body.classList.toggle('dark', theme === 'dark');
+  }, [theme]);
 
   useEffect(() => {
+    // Guarda el tema en localStorage cada vez que cambia
     localStorage.setItem('theme', theme);
   }, [theme]);
 

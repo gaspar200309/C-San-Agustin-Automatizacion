@@ -94,17 +94,19 @@ const DocumentStats = () => {
 
   return (
     <div className="document-stats">
-      <h2>Estadísticas de Documentos</h2>
-      <div className="stats-summary">
-        <div className="stat-item">
-          <h3>Total de Documentos</h3>
-          <p>{counts.total}</p>
-        </div>
-        <div className="chart-container">
-          <Pie data={data} options={options} />
-        </div>
-      </div>
+  <h2>Estadísticas de Documentos</h2>
+  <div className="stats-summary">
+    <div className="stat-item">
+      <h3>Total de Documentos</h3>
+      <p>{counts.total}</p>
     </div>
+    <div className="chart-container">
+  <Pie data={data} options={options} />
+</div>
+
+  </div>
+</div>
+
   );
 };
 

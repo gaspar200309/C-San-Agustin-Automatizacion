@@ -7,6 +7,7 @@ import Modal from '../../components/modal/Modal';
 import { getDocuments, registerDocuments, countDocuments } from '../../api/api';
 import DocumentStats from '../graphics/DocumentStates';
 import './Indicator1.css';
+import { Button } from '../buttons/Button';
 
 const validationSchema = Yup.object({
   documento: Yup.string()
@@ -64,7 +65,7 @@ const Indicator1 = () => {
 
   return (
     <div className="indicator-container">
-      <button className="open-modal-btn" onClick={() => setModalOpen(true)}>Agregar Documento</button>
+      <Button className="open-modal-btn" onClick={() => setModalOpen(true)}>Agregar Documento</Button>
       <div className="document-list">
         <h3>Documentos Subidos</h3>
         <ul>
@@ -101,7 +102,7 @@ const Indicator1 = () => {
                 value={values.delivered}
                 onChange={(e) => setFieldValue('delivered', e.target.value)}
               />
-              <button type="submit">Agregar Documento</button>
+              <Button type="submit">Agregar Documento</Button>
             </Form>
           )}
         </Formik>

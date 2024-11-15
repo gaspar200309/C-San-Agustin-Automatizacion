@@ -311,10 +311,9 @@ body.dark .home .text {
   }
 
   .navbar{
-    position: fixed;
-    background-color: #164b99;
     width: 100%;
-    z-index: 9999;
+    height: 20px;
+    flex-wrap: nowrap;
   }
 
   .app-layout {
@@ -332,7 +331,17 @@ body.dark .home .text {
   
   .main-content {
     flex-grow: 1;
+    margin: 4.7% 0 0 0;
     padding: 20px 20px 20px 35px;
     transition: margin-left 0.3s ease;
   }
+
+
+  @media (max-width: 1370px) {
+    .main-content{
+        margin: 5.7% 0 0 0;
+        
+    }
+  }
+  
   

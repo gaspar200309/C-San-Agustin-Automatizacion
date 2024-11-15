@@ -55,16 +55,21 @@
 }
 
 .toggle-password-btn:hover {
-  color: var(--color-3);
+  background: none;
 }
 
 .error-message {
   color: var(--color-5);
-  margin-top: 0.5rem;
   font-size: 0.875rem;
 }
 
 
 body.dark .error-message {
   color: var(--color-5);
+}
+
+
+body.dark .toggle-password-btn:hover {
+  color: var(--color-3);
+  background: none;
 }

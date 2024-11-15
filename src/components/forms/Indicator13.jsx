@@ -27,9 +27,9 @@ const Indicator13 = () => {
             const transformedData = response.data.courses.map(course => ({
                 course_id: course.course_id,
                 course_name: course.course_name,
-                trimestre1: course.trimesters.find(t => t.trimestre_id === 4)?.total_incidencias || 0,
-                trimestre2: course.trimesters.find(t => t.trimestre_id === 5)?.total_incidencias || 0,
-                trimestre3: course.trimesters.find(t => t.trimestre_id === 6)?.total_incidencias || 0,
+                trimestre1: course.trimesters.find(t => t.trimestre_id === 1)?.total_incidencias || 0,
+                trimestre2: course.trimesters.find(t => t.trimestre_id === 2)?.total_incidencias || 0,
+                trimestre3: course.trimesters.find(t => t.trimestre_id === 3)?.total_incidencias || 0,
             }));
 
             setIncidences(transformedData);
@@ -111,6 +111,7 @@ const Indicator13 = () => {
                         <Form className="form">
                             <TrimestreSelect
                                 name="trimestre_id"
+                                label={'Trimestre'}
                                 value={values.trimestre_id}
                                 onChange={(e) => setFieldValue('trimestre_id', e.target.value)}
                                 required={true}

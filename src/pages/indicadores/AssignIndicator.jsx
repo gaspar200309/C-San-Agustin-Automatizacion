@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { getIndicator, getUsers, assignCoordinatorToIndicator, removeCoordinatorFromIndicator, getIndicatorAssignements } from '../../api/api';
 import useFetchData from '../../hooks/useFetchData';
 import Modal from '../../components/modal/Modal';
 import Switch from '../../components/selected/Switch';
 import { Button } from '../../components/buttons/Button';
 import './AssignIndicator.css';
+import LinkButton from '../../components/buttons/LinkButton';
 
 export default function AssignIndicator() {
   const { data: indicators, loading: loadingIndicator, error: errorIndicator } = useFetchData(getIndicator);
@@ -83,10 +84,13 @@ export default function AssignIndicator() {
 
   return (
     <div className="assign-indicator-container">
+      <LinkButton to="registerIndicator" className="indicador-button">
+        Registrar indicador
+      </LinkButton>
       <h2>Lista de Indicadores</h2>
       <ul className="indicator-list">
         {indicators.map((indicator) => (
-          <li key={indicator.id} className="indicator-item">
+          <li key={indicator.id} className="indicator-card">
             <div className="indicator-content">
               <h3>{indicator.name}</h3>
               <div className="coordinator-tags">
@@ -96,7 +100,7 @@ export default function AssignIndicator() {
                     <span key={coord.id} className="coordinator-tag">
                       {coord.username}
                     </span>
-                  ))}
+                  )) || <span>No hay coordinadores asignados</span>}
               </div>
               <Button onClick={() => handleOpenModal(indicator)}>
                 Asignar Coordinadores
@@ -105,6 +109,7 @@ export default function AssignIndicator() {
           </li>
         ))}
       </ul>
+
 
       <Modal
         isOpen={isModalOpen}

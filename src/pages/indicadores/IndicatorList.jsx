@@ -1,12 +1,12 @@
-import { useEffect, useState, lazy, Suspense, useMemo } from 'react';
+import { useEffect, useState, lazy, Suspense, useMemo, useCallback } from 'react';
 import { getIndicatorByUsername } from '../../api/api';
 import { getUser } from '../login/authFunctions';
 import Table from '../../components/table/Table';
 import { Button } from '../../components/buttons/Button';
 import ColumnToggle from '../../components/table/ColumnToggle';
-import Modal from '../../components/modal/Modal'; 
-import './ListIndicadores.css'; 
+import Modal from '../../components/modal/Modal';
 import Breadcrumb from '../../components/breadcrumb/Breadcrumb';
+import Loader from '../../components/loader/Loader';
 
 const LinkButton = lazy(() => import('../../components/buttons/LinkButton'));
 
@@ -14,18 +14,20 @@ const IndicatorsList = () => {
   const [indicators, setIndicators] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const currentUser = useMemo(() => getUser(), []);
   const isAdmin = useMemo(() => currentUser?.roles.includes("Administrador"), [currentUser]);
 
-  const [columnsState, setColumnsState] = useState([
+  // Column definitions with memoization
+  const columnsState = useMemo(() => ([
     { id: 'id', header: "ID", accessor: 'id', isHidden: false },
     { id: 'name', header: 'Nombre', accessor: 'name', isHidden: false },
-    { id: 'due_date', header: 'Fecha de Vencimiento', accessor: 'due_date', isHidden: false },
     { id: 'expected_result', header: 'Resultado Esperado', accessor: 'expected_result', isHidden: false },
     { id: 'academic_objective', header: 'Objetivo Académico', accessor: 'academic_objective', isHidden: true },
     { id: 'sgc_objective', header: 'Objetivo SGC', accessor: 'sgc_objective', isHidden: true },
     { id: 'formula', header: 'Fórmula', accessor: 'formula', isHidden: false },
-    { id: 'is_completed', header: 'Completado', accessor: 'is_completed', isHidden: false},
+    { id: 'is_completed', header: 'Completado', accessor: 'is_completed', isHidden: false },
     { id: 'actions', header: 'Acciones', accessor: 'actions', isHidden: false, 
       render: (row) => (
         <Suspense fallback={<span>Loading...</span>}>
@@ -35,59 +37,51 @@ const IndicatorsList = () => {
         </Suspense>
       )
     },
-  ]);
-  
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  ]), []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const user = getUser();
-      if (user && user.username) {
-        try {
-          const res = await getIndicatorByUsername(user.username);
-          setIndicators(res.data);
-        } catch (err) {
-          setError('Error al cargar los indicadores');
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        setError('No se encontró información del usuario');
+  const visibleColumns = useMemo(() => columnsState.filter(column => !column.isHidden), [columnsState]);
+
+  const fetchData = useCallback(async () => {
+    if (currentUser && currentUser.username) {
+      try {
+        const res = await getIndicatorByUsername(currentUser.username);
+        setIndicators(res.data);
+      } catch (err) {
+        setError('Error al cargar los indicadores');
+      } finally {
         setLoading(false);
       }
-    };
+    } else {
+      setError('No se encontró información del usuario');
+      setLoading(false);
+    }
+  }, [currentUser]);
 
+  // Fetch indicators on component mount
+  useEffect(() => {
     fetchData();
+  }, [fetchData]);
+
+  const handleColumnChange = useCallback((updatedColumns) => {
+    setColumnsState(updatedColumns);
   }, []);
 
-  if (loading) return <p>Cargando...</p>;
-  if (error) return <p>{error}</p>;
-
-  const visibleColumns = columnsState.filter(column => !column.isHidden);
-
-  const handleColumnChange = (updatedColumns) => {
-    setColumnsState(updatedColumns);
-  };
+  if (loading) return <Loader />;
+  if (error) return <p className="error-message">{error}</p>;
 
   return (
     <div>
-    <Breadcrumb />
+      <Breadcrumb />
       <h1>Lista de Indicadores</h1>
-        
 
       <div className="button-container">
-      {isAdmin && (
+        {isAdmin && (
           <Suspense fallback={<p>Cargando botón...</p>}>
-          <LinkButton to="registerIndicator" className="indicador-button">
-            Registrar indicador
-          </LinkButton>
-        </Suspense>
+            <LinkButton to="asignerCordinator" className="indicador-button">
+              Asignar Coordinador
+            </LinkButton>
+          </Suspense>
         )}
-        <Suspense fallback={<p>Cargando botón...</p>}>
-          <LinkButton to="asignerCordinator" className="indicador-button">
-            Asignar Coordinador
-          </LinkButton>
-        </Suspense>
       </div>
 
       <Button onClick={() => setIsModalOpen(true)}>Mostrar/Ocultar Columnas</Button>

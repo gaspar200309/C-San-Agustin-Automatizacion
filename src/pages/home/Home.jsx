@@ -15,7 +15,6 @@ import {
   Filler,
 } from "chart.js";
 import {
-  PiNotePencilBold,
   HiUsers,
   FcComboChart,
   IoAnalyticsSharp,
@@ -23,11 +22,13 @@ import {
   GiTeacher
 } from "../../hooks/icons";
 import SearchBar from "../../components/searchBar/SearchBar";
-import { countIndicator } from "../../api/api";
+import { countStadistc } from "../../api/api";
 import useFetchData from "../../hooks/useFetchData";
 import "./Dashboard.css";
 import DocumentStats from "../../components/graphics/DocumentStates";
 import DashboardIcon from "../../components/icon/DashboardIcon";
+import GraphIndicador2 from "../../components/graphics/GraphIndicador2";
+import GraphIndicador6 from "../../components/graphics/GraphIndicador6";
 
 // Register the components for Chart.js
 ChartJS.register(
@@ -45,12 +46,9 @@ ChartJS.register(
 );
 
 export default function Dashboard() {
-  const {
-    data: countIndicators,
-    loading: loadingIndicator,
-    error: errorIndicator,
-  } = useFetchData(countIndicator);
-  console.log(countIndicators);
+
+  const { data: countSummary, loading, error } = useFetchData(countStadistc);
+
   const barData = {
     labels: ["January", "February", "March", "April", "May", "June"],
     datasets: [
@@ -226,13 +224,9 @@ export default function Dashboard() {
     },
   };
 
-  if (loadingIndicator) {
-    return <div>Cargando...</div>;
-  }
-
-  if (errorIndicator) {
-    return <div>Error al cargar los datos: {errorIndicator.message}</div>;
-  }
+ 
+  if (loading) return <div>Cargando...</div>;
+  if (error) return <div>Error al cargar los datos: {error.message}</div>;
 
   return (
     <div className="parent">
@@ -256,10 +250,10 @@ export default function Dashboard() {
               />
             </div>
 
-            <p>{countIndicators.total}</p>
+            <p>{countSummary.total_users}</p>
             <small>
               <span>
-                <IoAnalyticsSharp /> 80 %{" "}
+                <IoAnalyticsSharp /> 60 %{" "}
               </span>
               Ultimos cambios
             </small>
@@ -279,7 +273,7 @@ export default function Dashboard() {
                 className="dashboard-icon"
               />
             </div>
-            <p>{countIndicators.total}</p>
+            <p>{countSummary.total_teachers}</p>
             <small>
               <span>
                 <IoAnalyticsSharp /> 80 %{" "}
@@ -294,7 +288,7 @@ export default function Dashboard() {
         <div className="counter-container">
           <div className="counter">
             <div className="title-counter">
-              <h3>Indicadores completados</h3>
+              <h3>Indicadores incomplete</h3>
               <DashboardIcon
                 icon={FcComboChart }
                 iconColor="#FF9066"
@@ -302,10 +296,10 @@ export default function Dashboard() {
                 className="dashboard-icon"
               />
             </div>
-            <p>{countIndicators.total}</p>
+            <p>{countSummary.indicators.incomplete}</p>
             <small>
               <span>
-                <IoAnalyticsSharp /> 80 %{" "}
+                <IoAnalyticsSharp /> 100 %{" "}
               </span>
               Ultimos cambios
             </small>
@@ -325,10 +319,10 @@ export default function Dashboard() {
                 className="dashboard-icon"
               />
             </div>
-            <p>{countIndicators.total}</p>
+            <p>{countSummary.indicators.completed}</p>
             <small>
               <span>
-                <IoAnalyticsSharp /> 80 %{" "}
+                <IoAnalyticsSharp /> 0 %{" "}
               </span>
               Ultimos cambios
             </small>
@@ -338,10 +332,8 @@ export default function Dashboard() {
 
       <div className="div7">
         <div className="chart-container large">
-          <Bar
-            data={barData}
-            options={barOptions}
-          />
+           {/*  <GraphIndicador6/> */}
+        
         </div>
       </div>
 
@@ -381,10 +373,11 @@ export default function Dashboard() {
       </div>
       <div className="div12">
         <div className="chart-container">
-          <Pie
+          {/* <Pie
             data={pieData}
             options={pieOptions}
-          />
+          /> */}
+          <GraphIndicador2 />
         </div>
       </div>
     </div>

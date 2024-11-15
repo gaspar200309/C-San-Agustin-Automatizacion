@@ -103,7 +103,7 @@ const Indicator7 = () => {
               />
               <Select label="Periodo" name="period" required={true}>
                 <option value="">Seleccione un periodo</option>
-                <option value="1">1</option>
+                <option value="1">Perio</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
                 <option value="4">4</option>
@@ -112,6 +112,7 @@ const Indicator7 = () => {
               </Select>
               <StatusSelect
                 name="status"
+                label={"Estado"}
                 value={values.status}
                 onChange={(e) => setFieldValue('status', e.target.value)}
                 required={true}

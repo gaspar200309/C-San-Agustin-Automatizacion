@@ -23,9 +23,9 @@ const Indicator12 = () => {
             const transformedData = response.data.courses.map(course => ({
                 course_id: course.course_id,
                 course_name: course.course_name,
-                trimestre1: course.trimesters["4"]?.total_licencias || 0,
-                trimestre2: course.trimesters["5"]?.total_licencias || 0,
-                trimestre3: course.trimesters["6"]?.total_licencias || 0
+                trimestre1: course.trimesters["1"]?.total_licencias || 0,
+                trimestre2: course.trimesters["2"]?.total_licencias || 0,
+                trimestre3: course.trimesters["3"]?.total_licencias || 0
             }));
     
             setEvaluations(transformedData);
@@ -100,6 +100,7 @@ const Indicator12 = () => {
                         <Form className="form">
                             <TrimestreSelect
                                 name="trimestre_id"
+                                label = {'Trimestre'}
                                 value={values.trimestre_id}
                                 onChange={(e) => setFieldValue('trimestre_id', e.target.value)}
                                 required={true}

@@ -30,6 +30,7 @@
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.25.0",
     "react-table": "^7.8.0",
+    "recharts": "^2.13.3",
     "sonner": "^1.5.0",
     "yup": "^1.4.0"
   },
@@ -40,8 +41,6 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
-    "cypress": "^13.13.3",
-    "cypress-file-upload": "^5.0.8",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.2",
     "eslint-plugin-react-hooks": "^4.6.2",

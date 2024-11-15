@@ -9,5 +9,5 @@ export const Button = ({ variant = 'primary', type = 'button', children, ...prop
       {children}
     </button>
   );
-};
+}; 
  

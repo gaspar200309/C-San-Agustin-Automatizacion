@@ -1,15 +1,16 @@
+// components/Navbar.js
 import React from 'react';
-import { FaSearch, FaBell, FaUserCircle, FaMoon, FaSun, FaGlobe } from 'react-icons/fa';
+import { FaSearch, FaBell, FaMoon, FaSun, FaGlobe } from 'react-icons/fa';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
-import { getUser } from '../../pages/login/authFunctions';
+import { useAuth } from '../../context/AuthContext'; 
 
 import './Navbar.css';
 
 const Navbar = ({ sidebarOpen, toggleSidebar }) => {
   const { theme, toggleTheme } = useTheme();
   const { language, toggleLanguage } = useLanguage();
-  const currentUser = getUser();
+  const { currentUser } = useAuth(); 
 
   return (
     <nav className="navbar">
@@ -45,7 +46,6 @@ const Navbar = ({ sidebarOpen, toggleSidebar }) => {
         </>
       ) : (
         <div className="navbar-right">
-          {/* Solo mostrar opciones de idioma y tema si no hay usuario */}
           <div className="language-switch" onClick={toggleLanguage}>
             <FaGlobe className="iconN " />
             <span>{language === 'es' ? 'ES' : 'EN'}</span>
