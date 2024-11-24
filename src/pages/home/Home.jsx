@@ -29,6 +29,8 @@ import DocumentStats from "../../components/graphics/DocumentStates";
 import DashboardIcon from "../../components/icon/DashboardIcon";
 import GraphIndicador2 from "../../components/graphics/GraphIndicador2";
 import GraphIndicador6 from "../../components/graphics/GraphIndicador6";
+import GraphIndicador3 from "../../components/graphics/GraphIndicador3";
+import GraphIndicator4 from "../../components/graphics/GraphIndicador4";
 
 // Register the components for Chart.js
 ChartJS.register(
@@ -332,8 +334,8 @@ export default function Dashboard() {
 
       <div className="div7">
         <div className="chart-container large">
-           {/*  <GraphIndicador6/> */}
-        
+           
+        <GraphIndicador6/>
         </div>
       </div>
 
@@ -350,19 +352,20 @@ export default function Dashboard() {
 
       <div className="div9">
         <div className="chart-container">
-          <Line
+          {/* <Line
             data={lineData}
             options={lineOptions}
-          />
+          /> */} <GraphIndicador3/>
         </div>
       </div>
 
       <div className="div10">
         <div className="chart-container">
-          <Line
+          {/* <Line
             data={areaData}
             options={areaOptions}
-          />
+          /> */}
+          <GraphIndicator4/>
         </div>
       </div>
       <div className="div11">
