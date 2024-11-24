@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getToken } from '../pages/login/authFunctions';
 
-const baseURL = "http://167.88.38.229";
+const baseURL = "https://apigestionindicadores.sanagustin.edu.bo";
 //const baseURL = "http://localhost:5000";
 
 
@@ -79,9 +79,11 @@ export const getStatusIndicator = (id) => api.get(`/api/evaluations/all/${id}`)
 
 export const registerStatusIndicador4 = (data) => api.post('/api/evaluations/indicator4', data)
 export const getStatusIndicator4 = (id) => api.get(`/api/evaluations/indicator4/${id}`)
+export const getStatisticsByTrimester = (indicatorId, trimesterId) => api.get(`/api/evaluations/indicator4/${indicatorId}/${trimesterId}`)
 
 export const registerStatusIndicador6 = (data) => api.post('/api/create_indicator6', data)
 export const getStatusIndicator6 = (id) => api.get(`/api/evaluations/indicator6/${id}`)
+export const getStatisticsByIndicator = (indicatorId, period_id) => api.get(`/api/evaluations/indicator6/${indicatorId}/${period_id}`)
 
 export const registerStatusIndicador7 = (data) => api.post('/api/evaluations/indicator7', data)
 export const getStatusIndicator7 = (id) => api.get(`/api/evaluations/indicator7/${id}`)

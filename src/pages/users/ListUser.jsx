@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo, useCallback, lazy, Suspense } from "react
 import { Button } from "../../components/buttons/Button";
 import Table from "../../components/table/Table";
 import SearchBar from "../../components/searchBar/SearchBar";
-import TableFilter from "../../components/table/TableFilter";
 import { FaEdit, MdDelete } from "../../hooks/icons";
 import { getUsers, deleteUser, getRoles } from "../../api/api";
 import { getUser } from "../login/authFunctions";
