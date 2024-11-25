@@ -119,10 +119,7 @@ body.dark .open-modal-btn {
   background-color: var(--primary-color-light);
 }
 
-body.dark .professor-table {
-  background-color: var(--color-dark);
-  color: var(--text-color);
-}
+
 
 body.dark .professor-table th,
 body.dark .professor-table td {

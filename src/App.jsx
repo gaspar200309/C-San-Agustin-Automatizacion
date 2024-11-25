@@ -5,6 +5,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { LanguageProvider } from "./context/LanguageContext";
 import Navbar from "./components/navbar/Navbar";
 import AppRoutes from "./routes/AppRoutes";
+import { CourseProvider } from "./context/CourseProvider";
 
 const LoadingComponent = () => <div className="loading-spinner">Cargando...</div>;
 
@@ -13,12 +14,14 @@ function App() {
     <AuthProvider>
       <ThemeProvider>
         <LanguageProvider>
+        <CourseProvider>
           <BrowserRouter>
             <Navbar />
             <Suspense fallback={<LoadingComponent />}>
               <AppRoutes />
             </Suspense>
           </BrowserRouter>
+          </CourseProvider>
         </LanguageProvider>
       </ThemeProvider>
     </AuthProvider>
