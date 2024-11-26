@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { getToken } from '../pages/login/authFunctions';
 
-//const baseURL = "https://apigestionindicadores.sanagustin.edu.bo";
-const baseURL = "http://localhost:5000";
+const baseURL = "https://apigestionindicadores.sanagustin.edu.bo";
+//const baseURL = "http://localhost:5000";
 
 
 const api = axios.create({
