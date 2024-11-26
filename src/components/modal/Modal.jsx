@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Button } from '../buttons/Button';
 import { IoCloseSharp } from '../../hooks/icons';
 import './Modal.css';
 
-const Modal = ({ isOpen, onClose, children, theme = 'light' }) => {
+const Modal = memo(({ isOpen, onClose, children, theme = 'light' }) => {
   if (!isOpen) return null;
 
   return (
@@ -21,6 +21,6 @@ const Modal = ({ isOpen, onClose, children, theme = 'light' }) => {
       </div>
     </div>
   );
-};
+});
 
 export default Modal;

@@ -1,19 +1,18 @@
-import  { useMemo } from 'react';
-import useFetchData from '../../hooks/useFetchData';
+import React, { useMemo } from 'react';
 import Select from '../selected/Select';
-import { getCourses } from '../../api/api';
+import { useCourseContext } from '../../context/CourseProvider';
 
 const CourseSelect = ({ name, label, ...props }) => {
-  const { data: courses, error, loading } = useFetchData(getCourses);
+  const { courses, error, loading } = useCourseContext();
 
   const uniqueCourses = useMemo(() => {
-    if (!courses) return [];
+    if (!Array.isArray(courses)) return [];
     return [...new Map(courses.map((item) => [item.course_id, item])).values()];
   }, [courses]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
-  if (!courses || courses.length === 0) return <p>No courses available</p>;
+  if (!uniqueCourses.length) return <p>No courses available</p>;
 
   return (
     <Select label={label} name={name} {...props}>
