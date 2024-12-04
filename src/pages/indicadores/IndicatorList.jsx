@@ -12,6 +12,7 @@ const LinkButton = lazy(() => import('../../components/buttons/LinkButton'));
 
 const IndicatorsList = () => {
   const [indicators, setIndicators] = useState([]);
+  console.log(indicators);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,10 +25,10 @@ const IndicatorsList = () => {
     { id: 'id', header: "ID", accessor: 'id', isHidden: false },
     { id: 'name', header: 'Nombre', accessor: 'name', isHidden: false },
     { id: 'expected_result', header: 'Resultado Esperado', accessor: 'expected_result', isHidden: false },
-    { id: 'academic_objective', header: 'Objetivo Académico', accessor: 'academic_objective', isHidden: true },
-    { id: 'sgc_objective', header: 'Objetivo SGC', accessor: 'sgc_objective', isHidden: true },
-    { id: 'formula', header: 'Fórmula', accessor: 'formula', isHidden: false },
-    { id: 'is_completed', header: 'Completado', accessor: 'is_completed', isHidden: false },
+    { id: 'academic_objective', header: 'Objetivo Académico', accessor: 'academic_objective', isHidden: false },
+    { id: 'sgc_objective', header: 'Objetivo SGC', accessor: 'sgc_objective', isHidden: false },
+    { id: 'formula', header: 'Fórmula', accessor: 'formula', isHidden: true },
+    { id: 'is_completed', header: 'Completado', accessor: 'is_completed', isHidden: true },
     { id: 'actions', header: 'Acciones', accessor: 'actions', isHidden: false, 
       render: (row) => (
         <Suspense fallback={<span>Loading...</span>}>

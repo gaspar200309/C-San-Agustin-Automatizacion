@@ -102,6 +102,7 @@ function UserForm() {
 
   // Función de envío, optimizada con `useCallback`
   const handleSubmit = useCallback(async (values, { resetForm }) => {
+    console.log('Formulario enviado con los siguientes datos:', values); 
     const formData = new FormData();
     Object.keys(values).forEach((key) => {
       if (values[key] !== null) formData.append(key, values[key]);

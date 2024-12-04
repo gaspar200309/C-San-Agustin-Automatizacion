@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { getToken } from '../pages/login/authFunctions';
 
-const baseURL = "https://apigestionindicadores.sanagustin.edu.bo";
+//const baseURL = "https://apigestionindicadores.sanagustin.edu.bo";
 //const baseURL = "http://localhost:5000";
-
+// Obtiene la URL desde las variables de entorno o usa la local por defecto
+const baseURL =   "http://localhost:5000"|| import.meta.env.VITE_API_URL;
 
 const api = axios.create({
   baseURL: baseURL,
@@ -57,9 +58,10 @@ export const getIndicatorDeadlines = () => api.get('/api/indicators/deadlines');
 
 export const assignCoordinatorToIndicator = (indicatorId, userId) => api.post(`/api/indicators/${indicatorId}/assign-coordinator`, { userId });
 export const removeCoordinatorFromIndicator = (indicatorId, userId) => api.delete(`/api/indicators/${indicatorId}/remove-coordinator`, { data: { userId } });
+export const getUserByIdIndicator = (id) => api.get(`/api/indicators/${id}/users`)
 export const getAssignCoordinatorToIndicator = () => api.get('/api/indicators/simple')
 export const getIndicatorByUsername = (username) => api.get(`/api/indicators/user/${username}`)
-export const getIndicatorAssignements = () => api.get(`/api/indicators/assignments`)
+
 
 
 export const registerCommunications = () => api.get('/api/indicators')
