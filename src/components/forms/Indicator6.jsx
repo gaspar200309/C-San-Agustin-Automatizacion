@@ -1,81 +1,72 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import Modal from "../modal/Modal";
-import InputText from "../inputs/InputText";
 import TeacherSelector from "../selected/TeacherSelector";
 import PeriodoSelect from "../selected/PeriodoSelect";
 import Table from "../table/Table";
 import { Button } from "../buttons/Button";
 import { registerStatusIndicador6, getStatusIndicator6 } from "../../api/api";
-import CourseSelectByTeacher from "../selected/CourseSelectByT";
+import CoursesByTeacherInputs from "../inputs/CoursesByTeacherInputs";
 
 const Indicator6 = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [processedData, setProcessedData] = useState([]);
+  const [coursePercentages, setCoursePercentages] = useState({});
+  const [summary, setSummary] = useState({
+    total_percentage_all: 0,
+    total_count_all: 0,
+    overall_average_all: 0,
+  });
+
+  const handlePercentageChange = (courseId, percentage) => {
+    setCoursePercentages((prevPercentages) => ({
+      ...prevPercentages,
+      [courseId]: percentage,
+    }));
+  };
 
   useEffect(() => {
     fetchEvaluations();
   }, []);
 
-
-  const handlePeriodChange = (e) => {
-    setSelectedPeriod(e.target.value); // Update selected period
-  };
-
   const fetchEvaluations = async () => {
     try {
       const response = await getStatusIndicator6(6);
-      processEvaluations(response.data);
+
+      const { results, summary } = response.data;
+
+      // Process the data to create a flat structure for the table
+      const flattenedData = results.map((teacher) => {
+        const periodData = { ...teacher.periods };
+        return {
+          teacher_name: teacher.teacher_name.trim(),
+          ...periodData,
+          overall_average: teacher.overall_average,
+        };
+      });
+
+      setProcessedData(flattenedData);
+      setSummary(summary);
     } catch (error) {
       console.error("Error al obtener evaluaciones:", error);
     }
   };
 
-  const processEvaluations = (data) => {
-    const periodKeys = [
-      "Enero 2025",
-      "Febrero 2025",
-      "Marzo 2025",
-      "Abril 2025",
-      "Mayo 2025",
-      "Junio 2025",
-      "Julio 2025",
-    ];
-
-    const rows = data
-      .map((teacher) => {
-        return Object.keys(teacher.courses).map((courseName) => {
-          const course = teacher.courses[courseName];
-          const periods = course.periods;
-
-          // Crea un objeto para cada fila, donde los periodos se asignan dinámicamente
-          const rowData = {
-            professor: teacher.teacher_name,
-            course: courseName,
-            periodProgress: course.average || 0,
-          };
-
-          // Agrega cada periodo a la fila en el orden correcto basado en periodKeys
-          periodKeys.forEach((periodKey, index) => {
-            rowData[`periodo${index + 1}`] = periods[periodKey] || 0;
-          });
-
-          return rowData;
-        });
-      })
-      .flat();
-
-    setProcessedData(rows);
-  };
-
   const handleSubmit = async (values, { resetForm }) => {
     try {
-      const data = {
-        teacher_id: parseInt(values.teacher_id),
-        course_id: parseInt(values.course_id),
-        period_id: parseInt(values.period),
-        percentage: parseInt(values.percentage),
-      };
+      const data = Object.keys(coursePercentages)
+        .filter((courseId) => coursePercentages[courseId])
+        .map((courseId) => ({
+          teacher_id: parseInt(values.teacher_id),
+          course_id: parseInt(courseId),
+          period_id: parseInt(values.period),
+          percentage: parseInt(coursePercentages[courseId]),
+        }));
+
+      if (data.length === 0) {
+        alert("Por favor, ingresa al menos un porcentaje válido.");
+        return;
+      }
 
       await registerStatusIndicador6(data);
       await fetchEvaluations();
@@ -86,82 +77,73 @@ const Indicator6 = () => {
     }
   };
 
-  const columns = [
-    { header: "Profesor", accessor: "professor" },
-    { header: "Curso", accessor: "course" },
-    { header: "Periodo 1", accessor: "periodo1" },
-    { header: "Periodo 2", accessor: "periodo2" },
-    { header: "Periodo 3", accessor: "periodo3" },
-    { header: "Periodo 4", accessor: "periodo4" },
-    { header: "Periodo 5", accessor: "periodo5" },
-    { header: "Periodo 6", accessor: "periodo6" },
-    { header: "Total avance en periodo", accessor: "periodProgress" },
-  ];
+  const generateColumns = () => {
+    if (processedData.length === 0) return [];
+
+    const periodKeys = Object.keys(processedData[0])
+      .filter((key) => key !== "teacher_name" && key !== "overall_average")
+      .sort((a, b) => parseInt(a) - parseInt(b));
+
+    return [
+      { header: "Profesor", accessor: "teacher_name" },
+      ...periodKeys.map((period) => ({
+        header: `Periodo ${period}`,
+        accessor: period,
+      })),
+      { header: "Promedio Total", accessor: "overall_average" },
+    ];
+  };
 
   return (
     <div className="indicator-container">
-      <button
-        className="open-modal-btn"
-        onClick={() => setModalOpen(true)}>
-        Agregar Progreso
+      <button className="open-modal-btn" onClick={() => setModalOpen(true)}>
+        Registar indicador
       </button>
+
       <div className="professor-table">
-        <h3>Profesores Registrados</h3>
-        <Table
-          columns={columns}
-          data={processedData}
-        />
+        <h3>Índice de cumplimiento de avance curricular por períodos.</h3>
+        <Table columns={generateColumns()} data={processedData} />
       </div>
-    
-      <Modal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}>
+      <div className="summary">
+        <h3>Resumen General</h3>
+        <p>Total de porcentajes: {summary.total_percentage_all}</p>
+        <p>Total de evaluaciones: {summary.total_count_all}</p>
+        <p>Promedio general: {summary.overall_average_all}</p>
+      </div>
+
+      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
         <h2>Registrar Progreso</h2>
         <Formik
           initialValues={{
             teacher_id: "",
-            course_id: "",
             period: "",
-            percentage: "",
           }}
-          onSubmit={handleSubmit}>
+          onSubmit={handleSubmit}
+        >
           {({ values, setFieldValue }) => (
             <Form className="form">
               <TeacherSelector
                 name="teacher_id"
                 value={values.teacher_id}
                 onChange={(e) => setFieldValue("teacher_id", e.target.value)}
-                required={true}
+                required
               />
-              <CourseSelectByTeacher
-                label="Curso"
-                name="course_id"
-                required={true}
-                teacherId={values.teacher_id} // Pass selected teacherId here
-                onChange={(e) => setFieldValue("course_id", e.target.value)}
-                value={values.course_id}
-              />
-
               <PeriodoSelect
                 name="period"
-                label={"Periodo"}
+                label="Periodo"
                 value={values.period}
                 onChange={(e) => setFieldValue("period", e.target.value)}
-                required={true}
+                required
               />
-              <InputText
-                label="Porcentaje de Progreso"
-                placeholder="Ingrese el porcentaje"
-                required={true}
-                type="number"
-                name="percentage"
+              <CoursesByTeacherInputs
+                teacherId={values.teacher_id}
+                onChange={handlePercentageChange}
               />
               <Button type="submit">Agregar Progreso</Button>
             </Form>
           )}
         </Formik>
       </Modal>
-      
     </div>
   );
 };

@@ -1,16 +1,17 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom"; 
-import Table from "../../components/table/Table";
 import { Toaster, toast } from "sonner";
-import useFetchData from "../../hooks/useFetchData";
 import { Button } from "../../components/buttons/Button";
-import { getTeacher, deleteTeacher } from "../../api/api"; 
+import { deleteTeacher } from "../../api/api"; 
 import { getUser } from "../login/authFunctions";
 import { MdDelete } from "react-icons/md";
+import { useTeacherContext } from "../../context/TeacherProvider";
+import Table from "../../components/table/Table";
 
 export default function ListTeacher() {
-  const { data: teachers, loading: loadingTeacher, error: errorTeacher } = useFetchData(getTeacher);
+  const { teachers, loading, error, fetchTeachers } = useTeacherContext();
   const currentUser = useMemo(() => getUser(), []);
+  console.log(currentUser);
   const isAdmin = useMemo(() => currentUser?.roles.includes("Administrador"), [currentUser]);
   const navigate = useNavigate(); 
 
@@ -53,22 +54,30 @@ export default function ListTeacher() {
       deleteTeacher(teacher.id)
         .then(() => {
           toast.success('Profesor eliminado exitosamente');
+          fetchTeachers(); // Recargar la lista después de eliminar
         })
         .catch((error) => {
           toast.error(`Error al eliminar el profesor: ${error.message}`);
         });
     }
-  }, [currentUser]);
+  }, [currentUser, fetchTeachers]);
+
+  // Llamar fetchTeachers al montar el componente
+  useEffect(() => {
+    if (teachers.length === 0) {
+      fetchTeachers();
+    }
+  }, [teachers, fetchTeachers]);
   
 
-  if (loadingTeacher) return <p>Cargando...</p>;
-  if (errorTeacher) return <p>Error cargando los datos.</p>;
+  if (loading) return <p>Cargando...</p>;
+  if (error) return <p>Error cargando los datos.</p>;
 
   return (
     <>
       <Toaster />
       {isAdmin && (
-        <Button type="primary" onClick={() => navigate("/registerTeacher")}>  {/* Navegar a la página de registro */}
+        <Button type="primary" onClick={() => navigate("/registerTeacher")}>
           Agregar profesor
         </Button>
       )}

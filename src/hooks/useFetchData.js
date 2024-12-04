@@ -1,26 +1,44 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 
-const useFetchData = (fetchFunction, shouldFetch = true, dependencies = []) => {
-  const [data, setData] = useState(null);
+const useFetchData = (fetchFunction, options = {}) => {
+  const { shouldFetch = true, dependencies = [], initialData = null } = options;
+
+  const [data, setData] = useState(initialData);
   const [loading, setLoading] = useState(shouldFetch);
   const [error, setError] = useState(null);
+  const isMounted = useRef(true);
 
-  const fetchData = useCallback(async () => {
-    if (!shouldFetch) return; 
+  const fetchData = async (...args) => {
+    if (!shouldFetch) return;
+
+    setLoading(true);
     try {
-      setLoading(true);
-      const response = await fetchFunction();
-      setData(response.data);
+      const response = await fetchFunction(...args);
+      if (isMounted.current) {
+        setData(response.data || null);
+      }
     } catch (err) {
-      setError(err);
+      if (isMounted.current) {
+        setError(err);
+      }
     } finally {
-      setLoading(false);
+      if (isMounted.current) {
+        setLoading(false);
+      }
     }
-  }, [fetchFunction]);
+  };
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData, ...dependencies]);
+    isMounted.current = true;
+
+    if (shouldFetch) {
+      fetchData();
+    }
+
+    return () => {
+      isMounted.current = false; // Cancel any state updates on unmount
+    };
+  }, dependencies); // dependencies provided via options
 
   return { data, loading, error, refetch: fetchData };
 };

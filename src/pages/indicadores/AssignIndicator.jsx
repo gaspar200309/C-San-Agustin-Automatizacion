@@ -1,160 +1,142 @@
 import React, { useState } from 'react';
-import { getIndicator, getUsers, assignCoordinatorToIndicator, removeCoordinatorFromIndicator, getIndicatorAssignements } from '../../api/api';
 import useFetchData from '../../hooks/useFetchData';
-import Modal from '../../components/modal/Modal';
-import Switch from '../../components/selected/Switch';
-import { Button } from '../../components/buttons/Button';
-import './AssignIndicator.css';
+import { getIndicator, getUserByIdIndicator, removeCoordinatorFromIndicator, getUsers, assignCoordinatorToIndicator } from '../../api/api';
 import LinkButton from '../../components/buttons/LinkButton';
+import Modal from '../../components/modal/Modal';
+import { FaTrash } from 'react-icons/fa';
+import { toast, Toaster } from 'sonner';
+import './AssignIndicator.css';
 
 export default function AssignIndicator() {
   const { data: indicators, loading: loadingIndicator, error: errorIndicator } = useFetchData(getIndicator);
   const { data: users, loading: loadingUsers, error: errorUsers } = useFetchData(getUsers);
-  const {
-    data: assignedIndicators,
-    loading: loadingAssignments,
-    error: errorAssignments,
-    refetch: refetchAssignments
-  } = useFetchData(getIndicatorAssignements);
-
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedIndicator, setSelectedIndicator] = useState(null);
-  const [pendingChanges, setPendingChanges] = useState({});
+  const [assignedUsers, setAssignedUsers] = useState([]);
+  const [loadingDetails, setLoadingDetails] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const toggleModal = () => {
     setModalOpen(!isModalOpen);
-    if (!isModalOpen) {
-      setPendingChanges({});
-    }
   };
 
-  const handleOpenModal = (indicator) => {
+  const handleViewDetails = async (indicator) => {
     setSelectedIndicator(indicator);
-    toggleModal();
-  };
-
-  // Verifica si un usuario está asignado a un indicador
-  const isUserAssigned = (indicatorId, userId) => {
-    const indicator = assignedIndicators?.find(ind => ind.id === indicatorId);
-    return indicator?.coordinators.some(coord => coord.id === userId) || false;
-  };
-
-  const handleSwitchChange = (indicatorId, userId, isSelected) => {
-    setPendingChanges(prev => ({
-      ...prev,
-      [userId]: {
-        value: isSelected,
-        original: isUserAssigned(indicatorId, userId)
-      }
-    }));
-  };
-
-  const handleUpdate = async () => {
-    if (!selectedIndicator) return;
-
+    setLoadingDetails(true);
     try {
-      const updatePromises = Object.entries(pendingChanges).map(([userId, change]) => {
-        if (change.value !== change.original) {
-          return change.value
-            ? assignCoordinatorToIndicator(selectedIndicator.id, parseInt(userId))
-            : removeCoordinatorFromIndicator(selectedIndicator.id, parseInt(userId));
-        }
-        return Promise.resolve();
-      });
-
-      await Promise.all(updatePromises);
-      await refetchAssignments();
-      toggleModal();
+      const response = await getUserByIdIndicator(indicator.id);
+      setAssignedUsers(response.data || []);
     } catch (error) {
-      console.error('Error actualizando las asignaciones:', error);
+      console.error('Error al cargar los usuarios asignados:', error);
+      setAssignedUsers([]);
+    } finally {
+      setLoadingDetails(false);
+      toggleModal();
     }
   };
 
-  const hasChanges = Object.values(pendingChanges).some(
-    change => change.value !== change.original
-  );
+  const handleRemoveCoordinator = async (indicatorId, userId) => {
+    try {
+      await removeCoordinatorFromIndicator(indicatorId, userId);
+      setAssignedUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
+      toast.success('Coordinador eliminado correctamente.');
+    } catch (error) {
+      console.error('Error al eliminar coordinador:', error);
+      toast.error('No se pudo eliminar al coordinador.');
+    }
+  };
 
-  if (loadingIndicator || loadingUsers || loadingAssignments) {
+  const handleAddCoordinator = async () => {
+    if (!selectedUser) {
+      toast.warning('Por favor, selecciona un usuario para asignar.');
+      return;
+    }
+    try {
+      await assignCoordinatorToIndicator(selectedIndicator.id, selectedUser.id);
+      setAssignedUsers((prevUsers) => [...prevUsers, selectedUser]);
+      toast.success('Coordinador asignado correctamente.');
+    } catch (error) {
+      console.error('Error al asignar coordinador:', error);
+      toast.error('No se pudo asignar al coordinador, porque ya fue asignado  .');
+    }
+  };
+
+  if (loadingIndicator) {
     return <p>Cargando...</p>;
   }
 
-  if (errorIndicator || errorUsers || errorAssignments) {
+  if (errorIndicator) {
     return <p>Error cargando los datos.</p>;
   }
 
   return (
     <div className="assign-indicator-container">
+      <Toaster position="top-right" />
       <LinkButton to="registerIndicator" className="indicador-button">
         Registrar indicador
       </LinkButton>
-      <h2>Lista de Indicadores</h2>
       <ul className="indicator-list">
         {indicators.map((indicator) => (
           <li key={indicator.id} className="indicator-card">
             <div className="indicator-content">
               <h3>{indicator.name}</h3>
-              <div className="coordinator-tags">
-                {assignedIndicators
-                  ?.find(ind => ind.id === indicator.id)
-                  ?.coordinators.map(coord => (
-                    <span key={coord.id} className="coordinator-tag">
-                      {coord.username}
-                    </span>
-                  )) || <span>No hay coordinadores asignados</span>}
-              </div>
-              <Button onClick={() => handleOpenModal(indicator)}>
-                Asignar Coordinadores
-              </Button>
+              <button
+                className="view-details-button"
+                onClick={() => handleViewDetails(indicator)}
+              >
+                Ver Detalles
+              </button>
             </div>
           </li>
         ))}
       </ul>
 
-
-      <Modal
-        isOpen={isModalOpen}
-        onClose={toggleModal}
-        title={`Asignar Coordinadores a: ${selectedIndicator?.name}`}
-      >
-        {selectedIndicator && (
-          <div className="modal-content">
-            <h4>{selectedIndicator.name}</h4>
-            <ul className="users-list">
-              {users.map(user => {
-                // Verificar si el usuario ya está asignado al indicador seleccionado
-                const isAssigned = isUserAssigned(selectedIndicator.id, user.id);
-                const isPending = pendingChanges[user.id]?.value;
-
-                return (
-                  <li key={user.id} className="user-item">
-                    <span className="user-name">{user.username}</span>
-                    <Switch
-                      label="Asignar"
-                      // Mostrar el estado correcto del switch
-                      value={isPending !== undefined ? isPending : isAssigned}
-                      onChange={(e) => handleSwitchChange(
-                        selectedIndicator.id,
-                        user.id,
-                        e.target.checked
-                      )}
-                    />
+      <Modal isOpen={isModalOpen} onClose={toggleModal} title="Detalles del Indicador">
+        {loadingDetails ? (
+          <p>Cargando detalles...</p>
+        ) : (
+          selectedIndicator && (
+            <div className="modal-conten">
+              <h3>{selectedIndicator.name}</h3>
+              <ul className="assigned-users-list">
+                {assignedUsers.map((user) => (
+                  <li key={user.id} className="assigned-user-item">
+                    <img src={user.photo} alt={user.name} className="user-photo" />
+                    <span>{user.name}</span>
+                    <button
+                      className="remove-button"
+                      onClick={() => handleRemoveCoordinator(selectedIndicator.id, user.id)}
+                    >
+                      <FaTrash />
+                    </button>
                   </li>
-                );
-              })}
-            </ul>
-            <div className="modal-actions">
-              <Button
-                onClick={handleUpdate}
-                disabled={!hasChanges}
-                className={!hasChanges ? 'button-disabled' : ''}
-              >
-                Actualizar
-              </Button>
+                ))}
+              </ul>
+
+              <div className="assign-user-section">
+                <select
+                  value={selectedUser ? selectedUser.id : ""}
+                  onChange={(e) => {
+                    const userId = parseInt(e.target.value, 10);
+                    const user = users.find((u) => u.id === userId);
+                    setSelectedUser(user);
+                  }}
+                >
+                  <option value="">Selecciona un usuario</option>
+                  {users.map((user) => (
+                    <option key={user.id} value={user.id}>
+                      {user.name}
+                    </option>
+                  ))}
+                </select>
+                <button className="assign-button" onClick={handleAddCoordinator}>
+                  Asignar Usuario
+                </button>
+              </div>
             </div>
-          </div>
+          )
         )}
       </Modal>
-
     </div>
   );
 }

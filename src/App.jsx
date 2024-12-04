@@ -6,6 +6,7 @@ import { LanguageProvider } from "./context/LanguageContext";
 import Navbar from "./components/navbar/Navbar";
 import AppRoutes from "./routes/AppRoutes";
 import { CourseProvider } from "./context/CourseProvider";
+import { TeacherProvider } from "./context/TeacherProvider";
 
 const LoadingComponent = () => <div className="loading-spinner">Cargando...</div>;
 
@@ -14,6 +15,7 @@ function App() {
     <AuthProvider>
       <ThemeProvider>
         <LanguageProvider>
+        <TeacherProvider>
         <CourseProvider>
           <BrowserRouter>
             <Navbar />
@@ -22,6 +24,7 @@ function App() {
             </Suspense>
           </BrowserRouter>
           </CourseProvider>
+          </TeacherProvider>
         </LanguageProvider>
       </ThemeProvider>
     </AuthProvider>
